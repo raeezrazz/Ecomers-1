@@ -1,0 +1,62 @@
+<% if(typeof order !== 'undefined') { %>
+                                            <div class="order">
+                                                <div class="table-responsive">
+                                                    <table id="tablePagination" class="table table-bordered table-hover table-striped">
+                                                        <thead class="thead-dark">
+                                                            <tr>
+                                                                <th scope="col">
+                                                                    <center>Sl.No.</center>
+                                                                </th>
+                                                                <th scope="col">
+                                                                    <center>Date</center>
+                                                                </th>
+                                                                <th scope="col">
+                                                                    <center>Product</center>
+                                                                </th>
+                                                                <th scope="col">
+                                                                    <center>Amount</center>
+                                                                </th>
+                                                                <th scope="col">
+                                                                    <center>Payment Method</center>
+                                                                </th>
+                                                                <th scope="col">
+                                                                    <center>Details</center>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <% console.log(order, "hiii"); %>
+                                                        <tbody>
+                                                            <% for (let i = 0; i < order.length; i++) { %>
+                                                                <tr>
+                                                                    <td align="center">
+                                                                        <%= i + 1 %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= order[i].orderDate.toLocaleDateString('en-US', {
+                                                                            weekday: 'short', year: 'numeric', month: 'short',
+                                                                            day: 'numeric'
+                                                                        }) %>
+                                                                    </td>
+                                                                    <td align="center">
+                                                                       
+                                                                    </td>
+                                                                    <td align="center">
+                                                                        <%= order[i].subtotal %>
+                                                                    </td>
+                                                                    <td align="center">
+                                                                        <%= order[i].payment %>
+                                                                    </td>
+                                                                    <td align="center">
+                                                                        <a href="/ordercancel?id=<%= order[i]._id %>">
+                                                                            <button class="btn btn-md rounded">View</button>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            <% } %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        <% } else { %>
+                                            <p>No order has been made yet.</p>
+                                        <% } %>

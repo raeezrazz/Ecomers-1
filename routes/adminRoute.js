@@ -1,0 +1,66 @@
+const express = require('express');
+const admin_route = express();
+const multer = require('../middleware/multer');
+const session = require('express-session');
+const config = require('../config/config');
+
+
+admin_route.use(session({
+    secret: config.sessionSecret,
+    resave:false,
+    saveUninitialized:true
+}))
+
+const bodyParser = require('body-parser');
+admin_route.use(bodyParser.json());
+admin_route.use(bodyParser.urlencoded({extended:true}));
+
+
+admin_route.set('view engine','ejs');
+admin_route.set('views','./views/admin');
+
+const path = require('path');
+
+const auth = require('../middleware/adminAuth')
+const adminController = require('../controllers/adminController');
+const productController = require('../controllers/productController')
+const OrderController=require('../controllers/OrderController')
+
+admin_route.get('/',auth.isLogout,adminController.loadLogin)
+
+admin_route.post('/',adminController.verifyLoginAdmin)
+admin_route.get('/logout',auth.isLogout,adminController.logout)
+
+
+admin_route.get('/home',auth.isLogin,adminController.loadDashboard)
+admin_route.get('/users_list',auth.isLogin,adminController.LoadUsers)
+admin_route.patch('/blockusers/:id',auth.isLogin,adminController.blockUser)
+
+//categories
+admin_route.get('/categories',auth.isLogin,adminController.loadCategories)
+admin_route.get('/addCategories',auth.isLogin,adminController.loadAddCategories)
+admin_route.post('/submitCategory',auth.isLogin,adminController.addCategory)
+admin_route.patch('/blockcategories/:id',auth.isLogin,adminController.blockCategories)
+admin_route.get('/edit-categories',auth.isLogin,adminController.LoadUpdateCategories)
+admin_route.post('/subCat',auth.isLogin,adminController.updateCategories)
+admin_route.post('/delete-cat',auth.isLogin,adminController.deleteCategories)
+
+//products
+admin_route.get('/products',auth.isLogin,adminController.loadProducts)
+admin_route.get('/add-products',productController.addProductsLoad)
+admin_route.post('/submit-product',multer.uploadproduct,productController.addingProduct)
+admin_route.get('/editproduct',productController.loadEditProduct)
+admin_route.post('/submiteditproduct',productController.subEditProduct)
+admin_route.post('/removeProduct',productController.removeProduct)
+
+//Orders
+admin_route.get('/orders',OrderController.loadOrders)
+admin_route.get('/adminOrderDetails/:index',OrderController.detailedPageLoad)
+admin_route.post('/updatestatus',OrderController.updateStatus)
+
+
+
+admin_route.get('/try',adminController.users)
+
+
+   module.exports=admin_route

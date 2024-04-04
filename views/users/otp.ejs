@@ -245,7 +245,9 @@
                             </form>
                             <form action="/resendotp" method="post">
                                 <input type="hidden" name="userId" value="<%= email  %>">
-                               
+                                <% if(typeof forgot !=='undefined'){%>
+                                    <input type="hidden" name="forgot" value="<%= forgot %>">
+                                  <% }%>
                                 <!-- <input type="hidden" name="userId" value="<%= userId  %>"> -->
                                 <button  type="submit">resend otp</button>
                             </form>

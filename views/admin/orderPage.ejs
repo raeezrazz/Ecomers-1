@@ -64,6 +64,18 @@
                         </a>
                     </li>
                     <li class="menu-item">
+                        <a class="menu-link" href="coupons">
+                            <i class="icon material-icons md-comment"></i>
+                            <span class="text" >Coupons</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="offer">
+                            <i class="icon material-icons md-comment"></i>
+                            <span class="text" >Offer</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
                         <a class="menu-link" href="/admin/logout">
                             <i class="icon material-icons md-exit_to_app"></i>
                             <span class="text" >Logout</span>
@@ -138,35 +150,14 @@
                     </div>
                 </div>
                 <div class="card mb-4">
-                    <header class="card-header">
-                        <div class="row gx-3">
-                            <div class="col-lg-4 col-md-6 me-auto">
-                                <input type="text" placeholder="Search..." class="form-control" />
-                            </div>
-                            <div class="col-lg-2 col-md-3 col-6">
-                                <select class="form-select">
-                                    <option>Status</option>
-                                    <option>Active</option>
-                                    <option>Disabled</option>
-                                    <option>Show all</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-2 col-md-3 col-6">
-                                <select class="form-select">
-                                    <option>Show 20</option>
-                                    <option>Show 30</option>
-                                    <option>Show 40</option>
-                                </select>
-                            </div>
-                        </div>
-                    </header>
+                  
                     <!-- card-header end// -->
                     <div class="card-body">
                         <div class="table-responsive">
                             <% if(typeof order!== 'undefined'){%>
                             <table class="table table-hover">
                                 <thead>
-                                    <div class="card mt-4">
+                                    
                                         <div class="table-data">
                                             <div class="order">
                                               
@@ -177,11 +168,9 @@
                                                                     <th scope="col">
                                                                         <center>Sl.No.</center>
                                                                     </th>
+                                                                    
                                                                     <th scope="col">
-                                                                        <center>Order Id</center>
-                                                                    </th>
-                                                                    <th scope="col">
-                                                                        <center>Date</center>
+                                                                        <p style="padding-left: 80px;">Date</p>
                                                                     </th>
                                                                     
                                                                     <th scope="col">
@@ -202,9 +191,7 @@
                                                                         <td style=" padding-left: 5%">
                                                                          <%= index+ 1%>
                                                                         </td>
-                                                                        <td style="padding-left: 5%;">
-                                                                            <%= order._id%>
-                                                                        </td>
+                                                                        
                                                                         <td style=" padding-left: 5%">
                                                                             <%= order.orderDate.toLocaleDateString('en-US', {
                                                                                 weekday: 'short', year: 'numeric', month: 'short',
@@ -219,7 +206,7 @@
                                                                         </td>
                                                                       
                                                                         <td align="center">
-                                                                            <a href="/admin/adminOrderDetails/<%= index %>">
+                                                                            <a href="/admin/adminOrderDetails/<%= order._id %>">
                                                                                View
                                                                             </a>
                                                                         </td>
@@ -236,7 +223,7 @@
                             
                                             </div>
                                         </div>
-                                    </div>
+                              
                     
                                     
                                     <tbody>

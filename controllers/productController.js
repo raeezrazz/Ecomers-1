@@ -7,8 +7,8 @@ const Products = require('../models/productModel')
 const { find, findOne } = require('../models/userVerification');
 
 const sharp = require('sharp')
-
-
+const Wishlist =require('../models/whishlistModal')
+const Coupon =require('../models/couponModel')
 
 
 
@@ -98,7 +98,7 @@ const removeProduct = async(req,res)=>{
   try {
     const productId = req.body.id 
     await Products.deleteOne({_id:productId})
-    res.redirect('/admin/products')
+    res.json({remove:true})
   } catch (error) {
     console.log(error.message);
   }
@@ -163,9 +163,16 @@ const subEditProduct= async (req,res)=>{
 // user side
 const loadProducts =async(req,res)=>{
   try {
-      const products = await Products.find()
+      const products = await Products.find().populate({path:'offer',model:'offer' }).populate('categoryId')
       const category = await Category.find({})
-      res.render('products',{products,category})
+      const wishlist = await Wishlist.find()
+
+      const old = new Date();
+      old.setDate(old.getDate() - 5);
+      
+
+      console.log(products,"uhygtfrcyh8ewu")
+      res.render('products',{products,category,old,wishlist})
   
   } catch (error) {
       console.log(error.message);
@@ -180,7 +187,7 @@ const loadProducts =async(req,res)=>{
           const id = req.params.id
         
           console.log(id,"this is id");
-          const data = await Products.findOne({_id:id})
+          const data = await Products.findOne({_id:id}).populate('categoryId')
           console.log(data,"data is here");
           const images = data.images
           console.log(images);
@@ -197,8 +204,14 @@ const loadProducts =async(req,res)=>{
         console.log("frgf",query);
         const search = req.query.search
 
+        const old = new Date();
+      old.setDate(old.getDate() - 5);
         const category = await Category.find({})
-        
+        if(query == 'all'){
+          
+          const  product =await Products.find({})
+         res.redirect('/loadProducts')
+        }else{
         let products
         if(!search && !query){
          const  product =await Products.find({})
@@ -217,9 +230,9 @@ const loadProducts =async(req,res)=>{
           console.log("empty");
           res.render('products',{message:"No products found",products,category})
         }else{
-          res.render('products',{products,category})
+          res.render('products',{products,category,old})
         }
-
+      }
       }catch(error){
         console.log(error.message)
       }
@@ -228,6 +241,8 @@ const loadProducts =async(req,res)=>{
         try{
           
           const sort = req.body.sortby
+          const old = new Date();
+      old.setDate(old.getDate() - 5);
           // console.log(sort);
           const category = await Category.find({})
           let products
@@ -237,13 +252,19 @@ const loadProducts =async(req,res)=>{
             console.log("lowtoHigh");
             products = await Products.find().sort({price:1})
           }else if(sort == 'New'){
-            products = await Products.find().sort({createdAt:-1})
+            products = await Products.find().sort({createdAt:-1}).limit(3)
             console.log(products,"new  sorting");
-          }
+          } else if (sort === 'A-Z') {
+            products = await Products.find().sort({ name: 1 }).collation({ locale: "en", caseLevel: false });
+        } else if (sort === 'Z-A') {
+            products = await Products.find().sort({ name: -1 }).collation({ locale: "en", caseLevel: false });
+        }else if (sort =='popularity'){
+          products = await Products.find().sort({ popularity:-1})
+        }
           // console.log("empty",products,category,"ende");
           if (products && category) {
             console.log("Products , category available");
-            res.render('products', { products, category });
+            res.render('products', { products, category,old });
         } else {
             // Handle case where products or category are not available
             console.log("Products or category not available");

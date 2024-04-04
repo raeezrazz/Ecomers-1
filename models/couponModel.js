@@ -21,7 +21,7 @@ const CouponSchema = new mongoose.Schema({
         required:true
     },
     criteriaAmount:{
-        type:Number,
+        type:Number, 
         required:true
     },
     usedUser:{
@@ -36,4 +36,4 @@ const CouponSchema = new mongoose.Schema({
 })
 
 const CouponModel = mongoose.model("coupon",CouponSchema);
-model.exports = CouponModel
+module.exports = CouponModel

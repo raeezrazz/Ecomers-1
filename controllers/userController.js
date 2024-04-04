@@ -12,6 +12,9 @@ const Products=require('../models/productModel')
 const Address = require('../models/addressModel')
 const Order = require('../models/orderModel')
 const googleUser=require('../models/googleModel')
+const Wishlist =require('../models/whishlistModal')
+const Coupon =require('../models/couponModel');
+const whishlistModal = require('../models/whishlistModal');
 // const { find,findOne } = require('../models/userVerification');
 
 
@@ -67,10 +70,10 @@ const transporter = nodemailer.createTransport({
 
 
 
-const sendOtpVerificationEmail = async(result,res)=>{
+const sendOtpVerificationEmail = async(result,forgot,res)=>{
     try {
         const otp =`${Math.floor(1000 + Math.random() * 9000)}`
-        console.log(otp,"THIS IS THE OTP");
+        console.log(otp,"THIS IS THE OTP",forgot);
 //mail option
 const mailOption = {
         from : process.env.AUTH_EMAIL,
@@ -95,7 +98,21 @@ console.log(typeof otp, 'dkfdhf')
     });
     //save otp record
     await newOTPVerification.save();
-    }
+}
+    if(forgot){
+ 
+await transporter.sendMail(mailOption);
+res.render('otp',{message:"Verification otp  sented",
+       
+        email:result.email,
+        userId:result._id,forgot
+        
+        
+    
+    
+})
+    }else{
+   
     await transporter.sendMail(mailOption);
     res.render('otp',{message:"Verification otp  sented",
            
@@ -106,58 +123,14 @@ console.log(typeof otp, 'dkfdhf')
         
         
     })
-
+    }
     } catch (error) {
       console.log(error.message);
     }
 }
 
 
-const ForgotPasswordOTPSent = async(result,res)=>{
-    try {
-        const otp =`${Math.floor(1000 + Math.random() * 9000)}`
-        console.log(otp,"THIS IS THE OTP");
-//mail option
-const mailOption = {
-        from : process.env.AUTH_EMAIL,
-        to: result.email,
-        subject:"Verify Your Email",
-        html: `<p>Enter the <b>${otp}</b> to verify your email address and complete the sign up</p>`
-    }
-    const saltRounds = 10 ;
-    const userOtpVerificationRecord = await userOtpVerification.findOne({ userId: result._id });
-    
-    if (userOtpVerificationRecord) {
-        await userOtpVerification.updateOne({ userId: result._id }, { otp: hashedOtp, createAt: Date.now() });
-    } else {
-    const newhash = await bcrypt.hash(otp,saltRounds)
-console.log(typeof otp, 'dkfdhf')
-    
-    const newOTPVerification  = await new userOtpVerification({
-        userId: result._id,
-        otp: newhash,
-        createdAt: Date.now(),
-        expiresAt: Date.now()+3600000,
-    });
-    //save otp record
-    await newOTPVerification.save();
-    }
-    await transporter.sendMail(mailOption);
-    res.render('otp',{message:"Verification otp  sented",
-           
-            email:result.email,
-            userId:result._id,
-            forgot:"yes"
-            
-            
-        
-        
-    })
 
-    } catch (error) {
-      console.log(error.message);
-    }
-}
 const loadHome = async(req,res)=>{
     try {
            const userId=req.session.userId
@@ -170,7 +143,7 @@ const loadHome = async(req,res)=>{
     }
 }
 
-const sendResentOtpVerificationEmail = async(result,res)=>{
+const  sendResentOtpVerificationEmail = async(result,forgot,res)=>{
     try {
         const otp =`${Math.floor(1000 + Math.random() * 9000)}`
         console.log(otp,"THIS IS THE OTP");
@@ -199,6 +172,17 @@ console.log(typeof otp, 'dkfdhf')
     //save otp record
     await newOTPVerification.save();
     }
+    if(forgot){
+        await transporter.sendMail(mailOption);
+    res.render('otp',{message:"Otp sended Again",
+           
+            email:result.email,
+            userId:result._id,forgot
+            
+        
+        
+    })
+    }else{
     await transporter.sendMail(mailOption);
     res.render('otp',{message:"Otp sended Again",
            
@@ -208,7 +192,7 @@ console.log(typeof otp, 'dkfdhf')
         
         
     })
-
+}
     } catch (error) {
       console.log(error.message);
     }
@@ -343,7 +327,8 @@ const userOtpVerify = async(req,res)=>{
         
         console.log("otp verification running");
         const{userId,otp,email,forgot}=req.body;
-        // console.log(req.session.userId);
+       
+        console.log(forgot,"uhfiwysbm;k,bae,bc aejhfv ,jmc ,s kzb,zbdk dkj");
 
         // console.log(await bcrypt.hash(otp, 10),'aaaaa')
         
@@ -377,17 +362,28 @@ const userOtpVerify = async(req,res)=>{
                         console.log(typeof otp)
                         const validOTP = await bcrypt.compare(otp,hashedOTP);
                         console.log(validOTP,otp);
+                        req.session.userId=userId
                         if(!validOTP){
                             //supplied otp is wrong
                             throw new Error("Invalid code passed.Check your OTP again");
                         }else{
                             //succes
+                            if(forgot){
+                                console.log(userId,typeof(userId));
+
+                                
+    
+                                await userOtpVerification.deleteMany({userId});
+                                res.render('newpass',{log:"hi"})
+
+                            }else{
                             console.log(userId,typeof(userId));
 
                             await User.updateOne({_id:userId},{verified: true})
 
                             await userOtpVerification.deleteMany({userId});
                             res.render('home',{log:"hi"})
+                            }
                         }
                     }
                 }
@@ -411,12 +407,12 @@ const forgotPassword = async(req,res)=>{
         console.log(req.body.email);
         const email = req.body.email
         const result = await User.findOne({email:email})
-    
+        const forgot = 1
 
        if(result){
-        
+        req.session.userId=result._id
         console.log("no user found");
-        ForgotPasswordOTPSent(result,res);
+        sendOtpVerificationEmail(result,forgot,res);
        }else{
         res.render('login1',{message:"No Use found on the provided Email"})
        }
@@ -428,26 +424,44 @@ const forgotPassword = async(req,res)=>{
     }
 }
 
-const loadDashboard = async(req,res)=>{
+const loadDashboard = async(req, res) => {
     try {
-        const userId = req.session.userId
-        const address= await Address.findOne({user:userId})
-        const order = await Order.find({user:userId}).populate('products.productId')
-        
-        const user = await User.findOne({_id:userId})
-        console.log("start",user    ); 
-        res.render('dashboard',{address,user,order})
+        const userId = req.session.userId;
+
+        // Fetch address details
+        const address = await Address.findOne({ user: userId });
+
+        // Fetch order details
+        const order = await Order.find({ user: userId }).populate('products.productId').sort({ orderDate: -1 });
+
+        // Fetch user details including wallet
+        const user = await User.findOne({ _id: userId }).select('wallet walletHistory');
+
+        // Pagination
+        const page = parseInt(req.query.page) || 1; // Current page number
+        const limit = 5; // Number of items per page
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+
+        const total = user.walletHistory.length;
+        const totalPages = Math.ceil(total / limit);
+
+        user.walletHistory = user.walletHistory.slice(startIndex, endIndex);
+
+        // Render dashboard view with fetched data and pagination info
+        res.render('dashboard', { address, user, order, totalPages, currentPage: page });
+
     } catch (error) {
         console.log(error.message);
     }
 }
-
 
 const editProfile = async(req,res)=>{
     try {
         const name = req.body.name
         const phone = req.body.phone
         const userId = req.session.userId
+        console.log(name,phone,userId);
         await User.updateOne({_id:userId},{$set:{name:name,mobile:phone}})    
         res.redirect('/dashboard') 
     } catch (error) {
@@ -524,10 +538,10 @@ const resentOTPVerification = async(req,res)=>{
     try {
         console.log("ethi   ihiyghqfjqevphofubufjepiv");
       const email=req.body.userId
-      
+      const forgot=req.body.forgot
        console.log(req.body);
     //    console.log(req.session.email,"helloemail");
-       console.log(req.session.userId," ","sessionnnnnnnnnnn");
+       console.log(req.session.userId," ","sessionnnnnnnnnnn",email,forgot);
        const userId = req.session.userId
        console.log(userId)
         if(!userId || !email){
@@ -535,7 +549,7 @@ const resentOTPVerification = async(req,res)=>{
         }else{
             //delete existing records and resend
             await userOtpVerification.deleteMany({userId});
-            sendResentOtpVerificationEmail({_id:userId,email,},res);
+            sendResentOtpVerificationEmail({_id:userId,email,},forgot,res);
         }
     } catch (error) {
         console.log(error.message);
@@ -594,6 +608,105 @@ const registerWithGoogle =  async (oauthUser) => {
     //   };
     //   return { failure };
     // },
+const changePassword = async(req,res)=>{
+    try{
+        console.log(req.session.userId);
+        const userId = req.session.userId
+        const user = await User.findOne({_id:userId})
+        const password=req.body.password
+        console.log(user);
+        const saltRounds=10;
+        console.log("before");
+        const hashedPassword = await bcrypt.hash(password,saltRounds)
+        console.log(hashedPassword,"eu",password);
+        await  User.findOneAndUpdate({_id:userId},{$set:{password:hashedPassword}})
+        
+        console.log("finished");
+        res.redirect('/logining')
+    }catch(error){
+        console.log(error.message);
+    }
+}
+const loadWhishlist = async (req, res) => {
+    try {
+        const userId = req.session.userId;
+
+        const wishlist = await Wishlist.findOne({ user: userId })
+            .populate({ path: 'products.productId', model: 'Product', populate: { path: 'offer', model: 'offer' } });
+
+        console.log(wishlist, "it is here");
+        res.render('whishlist', { wishlist });
+
+    } catch (error) {
+        console.log(error.message);
+      
+    }
+}
+
+const addToWishlist= async(req,res)=>{
+    try{
+        console.log("hello widhlist",req.body.id);
+        const productId = req.body.id
+        const userId=req.session.userId
+        if(!userId){
+            res.json({removed:true , message:"Please login "})
+        }else{
+        const exist = await Wishlist.findOne({user:userId})
+        console.log("hello widhlist",exist);
+        if(!exist){
+            const newWishlist = new Wishlist({
+                user: userId,
+                products: [{productId:productId}]
+            })
+            await newWishlist.save();
+            console.log(newWishlist,"hello")
+            console.log("added");
+            res.json({ added: true, message: 'Item added to wishlist' })
+        }else{
+            console.log("user Exist");
+            const productExist = await Wishlist.findOne({user:userId,'products.productId':productId})
+            console.log("her is the product xist ",productExist);
+            if(productExist){
+                console.log("user product Exist");
+                await Wishlist.findOneAndUpdate(
+                    { user: userId, 'products.productId': productId }, 
+                    { $pull: { products: { productId: productId } } }, 
+                    { new: true })
+                    console.log("removed");
+                    res.json({remove:true,message:'Item Removed from Wishlist'})
+            }else{
+                    await Wishlist.findOneAndUpdate({
+                        user:userId },
+                        {$addToSet:{products:{productId:productId}}},
+                        {upsert:true,new:true})
+                        console.log("added");
+                    res.json({ added: true, message: 'Item added to wishlist' })
+            }
+        }
+ 
+    }
+    }catch(error){
+        console.log(error.message)
+    }
+}
+const removeWishlist = async(req,res)=>{
+    try {
+        const id = req.body.id 
+        const userId = req.session.userId
+
+        const wishRemove =await whishlistModal.findOneAndUpdate({user:userId},
+            { $pull: { products: { productId: id} } }, 
+            { new: true })
+
+        
+        res.json({remove:true})
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+
+
 
 module.exports ={
     verifyRegister,
@@ -609,6 +722,10 @@ module.exports ={
     forgotPassword,
     loadDashboard,
     editProfile,
+    changePassword,
+    loadWhishlist,
+    addToWishlist,
+    removeWishlist,
    
     user,
    registerWithGoogle,

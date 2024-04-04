@@ -1,218 +1,280 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>Nest Dashboard</title>
-        <meta http-equiv="x-ua-compatible" content="ie=edge" />
-        <meta name="description" content="" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta property="og:title" content="" />
-        <meta property="og:type" content="" />
-        <meta property="og:url" content="" />
-        <meta property="og:image" content="" />
-        <!-- Favicon -->
-        <link rel="shortcut icon" type="image/x-icon" href="assets admin/imgs/theme/favicon.svg" />
-        <!-- Template CSS -->
-        <link href="/assets admin/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
-    </head>
 
-    <body>
-        <div class="screen-overlay"></div>
-        <aside class="navbar-aside" id="offcanvas_aside">
-            <div class="aside-top">
-                <a href="index.html" class="brand-wrap">
-                    <img src="assets admin/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" />
-                </a>
-                <div>
-                    <button class="btn btn-icon btn-aside-minimize"><i class="text-muted material-icons md-menu_open"></i></button>
-                </div>
+<head>
+    <meta charset="utf-8" />
+    <title>Nest Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:title" content="" />
+    <meta property="og:type" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="assets admin/imgs/theme/favicon.svg" />
+    <!-- Template CSS -->
+    <link href="/assets admin/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="index.html" class="brand-wrap">
+                <img src="assets admin/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" />
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"><i
+                        class="text-muted material-icons md-menu_open"></i></button>
             </div>
-            <nav>
-                <ul class="menu-aside">
-                    <li class="menu-item active">
-                        <a class="menu-link" href="home">
-                            <i class="icon material-icons md-home"></i>
-                            <span class="text">Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="menu-item has-submenu">
-                        <a class="menu-link" href="users_list">
-                            <i class="icon material-icons md-shopping_bag"></i>
-                            <span class="text">Users</span>
-                        </a>
-                        
-                    </li>
-                  
-                    <li class="menu-item">
-                        <a class="menu-link" href="categories">
-                            <i class="icon material-icons md-comment"></i>
-                            <span class="text" >Categories</span>
-                        </a>
-                    </li>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item active">
+                    <a class="menu-link" href="home">
+                        <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="users_list">
+                        <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Users</span>
+                    </a>
 
-                    <li class="menu-item">
-                        <a class="menu-link" href="orders">
-                            <i class="icon material-icons md-comment"></i>
-                            <span class="text" >Orders</span>
+                </li>
+
+                <li class="menu-item">
+                    <a class="menu-link" href="categories">
+                        <i class="icon material-icons md-comment"></i>
+                        <span class="text">Categories</span>
+                    </a>
+                </li>
+
+                <li class="menu-item">
+                    <a class="menu-link" href="orders">
+                        <i class="icon material-icons md-comment"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                </li>
+
+                <li class="menu-item">
+                    <a class="menu-link" href="products">
+                        <i class="icon material-icons md-comment"></i>
+                        <span class="text">Products</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="coupons">
+                        <i class="icon material-icons md-comment"></i>
+                        <span class="text">Coupons</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="offer">
+                        <i class="icon material-icons md-comment"></i>
+                        <span class="text">Offer</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/logout">
+                        <i class="icon material-icons md-exit_to_app"></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </ul>
+
+            <br />
+            <br />
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+                <form class="searchform">
+                    <div class="input-group">
+                        <input list="search_terms" type="text" class="form-control" placeholder="Search term" />
+                        <button class="btn btn-light bg" type="button"><i class="material-icons md-search"></i></button>
+                    </div>
+                    <datalist id="search_terms">
+                        <option value="Categories"></option>
+                        <option value="New orders"></option>
+                        <option value="Apple iphone"></option>
+                        <option value="Ahmed Hassan"></option>
+                    </datalist>
+                </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"><i
+                        class="material-icons md-apps"></i></button>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon" href="#">
+                            <i class="material-icons md-notifications animation-shake"></i>
+                            <span class="badge rounded-pill">3</span>
                         </a>
                     </li>
-                   
-                    <li class="menu-item">
-                        <a class="menu-link" href="products">
-                            <i class="icon material-icons md-comment"></i>
-                            <span class="text" >Products</span>
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i>
                         </a>
                     </li>
-                    <li class="menu-item">
-                        <a class="menu-link" href="/admin/logout">
-                            <i class="icon material-icons md-exit_to_app"></i>
-                            <span class="text" >Logout</span>
-                        </a>
+                    <li class="nav-item">
+                        <a href="#" class="requestfullscreen nav-link btn-icon"><i
+                                class="material-icons md-cast"></i></a>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage"
+                            aria-expanded="false"><i class="material-icons md-public"></i></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
+                            <a class="dropdown-item text-brand" href="#"><img src="assets admin/imgs/theme/flag-us.png"
+                                    alt="English" />English</a>
+                            <a class="dropdown-item" href="#"><img src="assets admin/imgs/theme/flag-fr.png"
+                                    alt="Français" />Français</a>
+                            <a class="dropdown-item" href="#"><img src="assets admin/imgs/theme/flag-jp.png"
+                                    alt="Français" />日本語</a>
+                            <a class="dropdown-item" href="#"><img src="assets admin/imgs/theme/flag-cn.png"
+                                    alt="Français" />中国人</a>
+                        </div>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount"
+                            aria-expanded="false"> <img class="img-xs rounded-circle"
+                                src="assets admin/imgs/people/avatar-2.png" alt="User" /></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit
+                                Profile</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account
+                                Settings</a>
+                            <a class="dropdown-item" href="#"><i
+                                    class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help
+                                center</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="#"><i
+                                    class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
                     </li>
                 </ul>
-               
-                <br />
-                <br />
-            </nav>
-        </aside>
-        <main class="main-wrap">
-            <header class="main-header navbar">
-                <div class="col-search">
-                    <form class="searchform">
-                        <div class="input-group">
-                            <input list="search_terms" type="text" class="form-control" placeholder="Search term" />
-                            <button class="btn btn-light bg" type="button"><i class="material-icons md-search"></i></button>
-                        </div>
-                        <datalist id="search_terms">
-                            <option value="Categories"></option>
-                            <option value="New orders"></option>
-                            <option value="Apple iphone"></option>
-                            <option value="Ahmed Hassan"></option>
-                        </datalist>
-                    </form>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="content-header">
+                <h2 class="content-title">Categories list</h2>
+                <div>
+                    <a href="/admin/addCategories" class="btn btn-primary"><i class="material-icons md-plus"></i> Create
+                        Category</a>
                 </div>
-                <div class="col-nav">
-                    <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"><i class="material-icons md-apps"></i></button>
-                    <ul class="nav">
-                        <li class="nav-item">
-                            <a class="nav-link btn-icon" href="#">
-                                <i class="material-icons md-notifications animation-shake"></i>
-                                <span class="badge rounded-pill">3</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
-                        </li>
-                        <li class="dropdown nav-item">
-                            <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
-                                <a class="dropdown-item text-brand" href="#"><img src="assets admin/imgs/theme/flag-us.png" alt="English" />English</a>
-                                <a class="dropdown-item" href="#"><img src="assets admin/imgs/theme/flag-fr.png" alt="Français" />Français</a>
-                                <a class="dropdown-item" href="#"><img src="assets admin/imgs/theme/flag-jp.png" alt="Français" />日本語</a>
-                                <a class="dropdown-item" href="#"><img src="assets admin/imgs/theme/flag-cn.png" alt="Français" />中国人</a>
-                            </div>
-                        </li>
-                        <li class="dropdown nav-item">
-                            <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="assets admin/imgs/people/avatar-2.png" alt="User" /></a>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                                <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
-                                <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
-                                <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
-                                <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
-                                <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item text-danger" href="#"><i class="material-icons md-exit_to_app"></i>Logout</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </header>
-            <section class="content-main">
-                <div class="content-header">
-                    <h2 class="content-title">Categories list</h2>
-                    <div>
-                        <a href="/admin/addCategories" class="btn btn-primary"><i class="material-icons md-plus"></i> Create Category</a>
-                    </div>
-                </div>
-                <div class="card mb-4">
-                    
-                    <!-- card-header end// -->
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>No.</th>
-                                        <th>Name</th>
-                                       
-                                       
-                                        
-                                        <th>Update</th>
+            </div>
+            <div class="card mb-4">
 
-                                        <th class="">Remove</th>
-                                    </tr>
-                                    
-                                    <tbody>
-                                        <% if(categories.length > 0){%>
-                                            <% for (let i =0 ; i < categories.length ; i++) { %> 
-                                                <tr>
-                                                    <td><%=i+1 %></td>
-                                                    <td><%=categories[i].name %></td>
-                                                  
-                                                       
-                                                        </td> 
-                                                        <td>
-                                                            <a href="/admin/edit-categories?id=<%= categories[i]._id %>">Edit</a>
-                                                        </td>
-                                                        <td>
-                                                            <form action="/admin/delete-cat" method="post">
-                                                                <input type="hidden" name="id" value="<%= categories[i]._id %>">
-                                                            <button type="submit" >Remove</button>
-                                                        </form>
-                                                        </td>
+                <!-- card-header end// -->
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Name</th>
+                                    <th>Offer</th>
+                                    <th>Select</th>
+
+
+
+                                    <th>Update</th>
+
+                                    <th class="">Remove</th>
+                                </tr>
+
+                            <tbody>
+                                <% if(categories.length> 0){%>
+                                    <% for (let i=0 ; i < categories.length ; i++) { %>
+                                        <tr>
+                                            <td style="font-weight: bold;">
+                                                <%=i+1 %>
+                                            </td>
+                                            <td style="font-weight: bold;">
+                                                <%=categories[i].name %>
+                                            </td>
+                                            <%if(categories[i].offer ){%>
+                                                <td class="text-success font-xs" style="font-weight:900 ;">
+                                                    <%=categories[i].offer.name%>
+                                                </td>
+                                                <%}else{%>
+                                                    <td class="text-danger">
+                                                        No Offer Selected
+                                                    </td>
                                                     <%}%>
-                                                    <%}%>
-                                </thead>
-                                <tbody>
-                                       
-                   </tbody>
-                            </table>
-                            <!-- table-responsive.// -->
-                        </div>
+                                                        <%if(categories[i].offer ){%>
+                                                            <td >
+                                                                <button
+                                                                    class="badge badge-primary btn-danger rounded-pill border-0"
+                                                                    onclick="removeCategoryOffer('<%=categories[i]._id%>')"><a>Remove</a></button>
+                                                            </td>
+                                                            <%}else{%>
+                                                                <td>
+                                                                    <button class="badge btn-primary border-0"
+                                                                        style="background-color:#3BB77E ; height: 30px;"
+                                                                        onclick="chooseOffer('<%=categories[i]._id%>')"><a>Choose</a></button>
+                                                                </td>
+                                                                <%}%>
+
+                                                                    <td style="font-weight: bold;">
+                                                                        <a
+                                                                            href="/admin/edit-categories?id=<%= categories[i]._id %>">Edit</a>
+                                                                    </td>
+                                                                    <td style="font-weight: bold;">
+
+                                                                        <button
+                                                                            style="border: none;"
+                                                                            onclick="removeCategory('<%=categories[i]._id%>')"
+                                                                            type="submit"><span
+                                                                                class="text-danger">X</span></button>
+
+                                                                    </td>
+                                                                    <%}%>
+                                                                        <%}%>
+                                                                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                        <!-- table-responsive.// -->
                     </div>
-                    <!-- card-body end// -->
                 </div>
-                <!-- card end// -->
-              
-            </section>
-   
-            <!-- content-main end// -->
-            <footer class="main-footer font-xs">
-                <div class="row pb-30 pt-15">
-                    <div class="col-sm-6">
-                        <script>
-                            document.write(new Date().getFullYear());
-                        </script>
-                        &copy; Nest - HTML Ecommerce Template .
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="text-sm-end">All rights reserved</div>
-                    </div>
+                <!-- card-body end// -->
+            </div>
+            <!-- card end// -->
+
+        </section>
+
+        <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                        document.write(new Date().getFullYear());
+                    </script>
+                    &copy; Nest - HTML Ecommerce Template .
                 </div>
-            </footer>
-        </main>
-        <script src="assets admin/js/vendors/jquery-3.6.0.min.js"></script>
-        <script src="assets admin/js/vendors/bootstrap.bundle.min.js"></script>
-        <script src="assets admin/js/vendors/select2.min.js"></script>
-        <script src="assets admin/js/vendors/perfect-scrollbar.js"></script>
-        <script src="assets admin/js/vendors/jquery.fullscreen.min.js"></script>
-        <!-- Main Script -->
-        <script src="assets admin/js/main.js?v=1.1" type="text/javascript"></script>
-        
-        <!-- <script>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">All rights reserved</div>
+                </div>
+            </div>
+        </footer>
+    </main>
+    <script src="assets admin/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="assets admin/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="assets admin/js/vendors/select2.min.js"></script>
+    <script src="assets admin/js/vendors/perfect-scrollbar.js"></script>
+    <script src="assets admin/js/vendors/jquery.fullscreen.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <!-- Main Script -->
+    <script src="assets admin/js/main.js?v=1.1" type="text/javascript"></script>
+
+    <!-- <script>
             function confirmDelete(userId) {
                 var confirmDelete = confirm("Are you sure you want to delete this user?");
                 if (confirmDelete) {
@@ -220,42 +282,207 @@
                 }
             }
         </script> -->
-       <script>
-        const swalWithBootstrapButtons = Swal.mixin({
-  customClass: {
-    confirmButton: "btn btn-success",
-    cancelButton: "btn btn-danger"
-  },
-  buttonsStyling: false
-});
-swalWithBootstrapButtons.fire({
-  title: "Are you sure?",
-  text: "You won't be able to revert this!",
-  icon: "warning",
-  showCancelButton: true,
-  confirmButtonText: "Yes, delete it!",
-  cancelButtonText: "No, cancel!",
-  reverseButtons: true
-}).then((result) => {
-  if (result.isConfirmed) {
-    swalWithBootstrapButtons.fire({
-      title: "Deleted!",
-      text: "Your file has been deleted.",
-      icon: "success"
-    });
-  } else if (
-    /* Read more about handling dismissals below */
-    result.dismiss === Swal.DismissReason.cancel
-  ) {
-    swalWithBootstrapButtons.fire({
-      title: "Cancelled",
-      text: "Your imaginary file is safe :)",
-      icon: "error"
-    });
-  }
-});
 
-       </script>
-    </body>
+
+        <script>
+            var categoryId;
+            async function chooseOffer(val) {
+                categoryId = val
+                console.log(categoryId,":prdcrinide",val)
+                Swal.fire({
+                    title: 'Choose Offer',
+                    
+                    showConfirmButton:false,
+                    html:
+                        '<%if(typeof offer!=="undefined"){%>' +
+                        '<table class="table table-hover">' +
+    
+                        '<thead>' +
+                        '           <tr>' +
+                        '<th>No.</th>' +
+                        '<th>Name</th>' +
+    
+                        '<th>Discount</th>' +
+    
+                        '<th>StartDate</th>' +
+                        '<th>ExpiryDate</th>' +
+                        '<th class=""></th>' +
+                        '</tr>' +
+                        ' </thead>' +
+                        '<tbody>' +
+                            '<% offer.forEach((val,index)=>{ %>' +
+                        '<tr>' +
+    
+                        
+                        '<td style="font-weight: bold;">' +
+                        '<%= index+1 %>' +
+                        '</td>' +
+                        '<td style="font-weight: bold;">' +
+                        '<%= val.name%>' +
+                        '</td>' +
+    
+                        '<td style="font-weight: bold;">' +
+                        '₹ <%=val.discountAmount %>' +
+                        '</td>' +
+                        '<td style="font-weight: bold;">' +
+                        "<%= val.activationDate.toLocaleDateString('en-US', { weekday: 'short' ,year: 'numeric' , month: 'short' , day: 'numeric' }) %>" +
+                        '</td>' +
+                        ' <td>' +
+                        " <%= val.expiryDate.toLocaleDateString('en-US', { weekday: 'short' ,year: 'numeric' , month: 'short' , day: 'numeric' }) %>" +
+                        ' </td>' +
+                        ' <td><button type="button" onclick = "offerSelect(\'<%=val._id%>\')" class="badge border-0 btn-success" style="background-color:#3BB77E;">Apply</button></td>' +
+                        
+                        ' </tr>' +
+                        '<%})%>' +
+    
+    
+    
+    
+                        
+                        '  <tbody>' +
+    
+                        '  </tbody>' +
+                        ' </table>' +
+                       
+                        '<%}else{%>' +
+                        '<h6 class="text-danger">No Offer Found Currently</h6>' +
+                        '<%}%>'
+    
+                });
+            }
+            async function offerSelect(val){
+                console.log(val,categoryId)
+                const response = await fetch('/admin/applyCategoryOffer',{
+                    method:'PATCH',
+                    headers:{
+                        'Content-Type':'application/json'
+                    },
+                    body:JSON.stringify({val,categoryId})
+                }).then(response=> response.json())
+                .then(response=>{
+                    if(response.applied===true){
+                        Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Offer Applied Successfull",
+      showConfirmButton: false,
+      timer: 2000
+    }).then(()=>{
+        location.reload()
+    })
+                    }else{
+                        Swal.fire({
+      position: "center",
+      icon: "warning",
+      title: "Something went Wrong",
+      showConfirmButton: false,
+      timer: 1500
+    });
+                        console.log("else Running")
+                    }
+                })
+            }
+        </script>
+
+
+   
+
+    <script>
+        function removeCategoryOffer(val) {
+            const categoryId = val
+            console.log(categoryId)
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    console.log("is confirm")
+
+                    const response = await fetch('/admin/removeCategoryOffer', {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ categoryId })
+
+                    }).then(response => response.json())
+                        .then(data => {
+                            if (data.remove === true) {
+                                Swal.fire({
+                                    title: "Deleted!",
+                                    text: "Your file has been deleted.",
+                                    icon: "success",
+                                    timer: 3000
+                                })
+                                    .then(() => {
+                                        location.reload()
+                                    })
+                            }
+
+
+
+                        })
+
+
+
+                }
+            });
+        }
+    </script>
+
+
+
+    <script>
+        function removeCategory(val) {
+            const id = val
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    console.log("is confirm")
+
+                    const response = await fetch('/admin/removeCategory', {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ id })
+
+                    }).then(response => response.json())
+                        .then(data => {
+                            if (data.remove === true) {
+                                Swal.fire({
+                                    title: "Deleted!",
+                                    text: "Your file has been deleted.",
+                                    icon: "success",
+                                    timer: 3000
+                                })
+                                    .then(() => {
+                                        location.reload()
+                                    })
+                            }
+
+
+
+                        })
+
+
+
+                }
+            });
+        }
+    </script>
+</body>
+
 </html>
-       

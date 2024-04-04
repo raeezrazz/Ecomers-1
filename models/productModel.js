@@ -20,7 +20,8 @@ const productSchema = mongoose.Schema({
         require: true
     }, 
     offer:{
-        type: String,
+        type: ObjectId,
+        ref:'offer',
         require: false
     },
     description:{
@@ -29,7 +30,7 @@ const productSchema = mongoose.Schema({
     },
     images:[{
         type:String 
-}]
+    }]
     ,
     createdAt:{
         type: Date,
@@ -44,6 +45,11 @@ const productSchema = mongoose.Schema({
         type: Boolean,
         default: false,
         required: true
+    },
+    popularity:{
+        type: Number,
+        default:0,
+        required:true
     }
 });
 

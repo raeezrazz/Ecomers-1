@@ -217,16 +217,16 @@
                                     <%detials.products.forEach((user,index)=>{%>
                                  <tr>
                                  
-                                 <td>
-                                     
-                                 </td>
+                                    <td style="width:22% ;"><div class="col-md-6" ><img class="" src="/multerImage/sharp/<%= user.productId.images[0]%>" alt=""></div></td>
                                  
-                                 <td><%=user.price%></td>
+                                 <td><%=user.productId.price%></td>
                                  <td><%=user.quantity%></td>
                                  
-                                 <td><%=user.totalPrice%></td>
                                  <td>
-                                    <% if (user.productStatus === 'placed') { %>
+                                        <%=user.totalPrice%>
+                                       </td>
+                                 <td>
+                                    <% if (user.productId.productStatus === 'placed') { %>
                                         <span class="badge rounded-pill alert-primary text-primary ">placed</span>
                                         <% } else if (user.productStatus === 'shipped') { %>
                                             <span class="badge rounded-pill alert-info text-info">Shipped</span>
@@ -240,7 +240,9 @@
                                             <span class="badge rounded-pill alert-danger  text-danger ">Returned</span>
                                         <% } %>
                                  </td>
-                                 <%if(user.productStatus!=="returned" &&user.productStatus!=="cancelled"){%>
+                                 <%if(user.productStatus=="cancelled" || user.productStatus=="returned"){%>
+
+                                 <%}else{%>
                                  <td><select  id="<%=detials._id%><%=user._id%>"onchange="status('<%=detials._id%>', '<%=user._id%>')">
                                     <option value="placed" <% if
                                     (user.productStatus=='placed' ) { %> selected <% } %>
@@ -259,7 +261,7 @@
                                        
                                 </select></td>
                               
-                                <%}%>
+                              <%}%>
 
 </tr>
                                 <%})%>

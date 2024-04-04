@@ -3,8 +3,11 @@ const User = require('../models/userModel');
 const bcrypt = require('bcrypt')
 const Category = require('../models/categoriesModel');
 const Products = require('../models/productModel')
+const Wishlist =require('../models/whishlistModal')
 const { find, findOne } = require('../models/userVerification');
-
+const Coupon =require('../models/couponModel')
+const Offer = require('../models/offerModel')
+const Order = require('../models/orderModel')
 
 
 
@@ -72,7 +75,11 @@ const verifyLoginAdmin = async (req, res) => {
 const loadDashboard = async (req, res) => {
     try {
         const userData = await User.findById({ _id: req.session.user_id })
-        res.render('home', { admin: userData });
+        const products= await Products.find()
+        const categoreis = await Category.find()
+        const orders = await Order.find()
+        const monthly = 
+        res.render('home', { admin: userData ,products,categoreis,orders });
 
     } catch (error) {
         console.log(error.message);
@@ -110,9 +117,10 @@ const loadCategories =async(req,res)=>{
 
     try {
         // console.log("first");
-        const categories = await Category.find()
+        const categories = await Category.find().populate('offer')
+        const offer = await Offer.find()
         // console.log(categories);
-        res.render('categories',{categories})
+        res.render('categories',{categories,offer})
     } catch (error) {
         console.log(error.message);
     }
@@ -217,23 +225,32 @@ const deleteCategories = async (req,res)=>{
         const id = req.body.id;
         await Category.deleteOne({ _id: id });
         
-        res.redirect('/admin/categories')
+        res.json({remove:true})
 
     } catch (error) {
         console.log(error.message);
     }
 }
 
+
+
+
+
+
+//products
+
+
 const loadProducts =async(req,res)=>{
 
     try {
-        const products = await Products.find().populate('categoryId', 'name');
+        const products = await Products.find().populate({path:'categoryId',model:'categories'}).populate('offer')
         const category = await Category.find()
+        const offer = await Offer.find()
         console.log(category);
         
-        res.render('products',{products,category})
+        res.render('products',{products,category,offer})
     } catch (error) {
-        console.log(error.message);
+       log
     }
 }
 const addProducts = async (req,res)=>{
@@ -280,5 +297,7 @@ module.exports ={
     deleteCategories,
     loadProducts,
     addProducts,
+    
+
     users
 }

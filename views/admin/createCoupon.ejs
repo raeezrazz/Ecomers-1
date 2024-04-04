@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Nest Dashboard</title>
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:title" content="" />
+        <meta property="og:type" content="" />
+        <meta property="og:url" content="" />
+        <meta property="og:image" content="" />
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href="assets admin/imgs/theme/favicon.svg" />
+        <!-- Template CSS -->
+        <link href="/assets admin/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    </head>
+
+    <body>
+        <div class="screen-overlay"></div>
+        <aside class="navbar-aside" id="offcanvas_aside">
+            <div class="aside-top">
+                <a href="index.html" class="brand-wrap">
+                    <img src="assets admin/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" />
+                </a>
+                <div>
+                    <button class="btn btn-icon btn-aside-minimize"><i class="text-muted material-icons md-menu_open"></i></button>
+                </div>
+            </div>
+            <nav>
+                <ul class="menu-aside">
+                    <li class="menu-item active">
+                        <a class="menu-link" href="home">
+                            <i class="icon material-icons md-home"></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <a class="menu-link" href="users_list">
+                            <i class="icon material-icons md-shopping_bag"></i>
+                            <span class="text">Users</span>
+                        </a>
+                        
+                    </li>
+                  
+                    <li class="menu-item">
+                        <a class="menu-link" href="categories">
+                            <i class="icon material-icons md-comment"></i>
+                            <span class="text" >Categories</span>
+                        </a>
+                    </li>
+                   
+                    <li class="menu-item">
+                        <a class="menu-link" href="products">
+                            <i class="icon material-icons md-comment"></i>
+                            <span class="text" >Products</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/logout">
+                            <i class="icon material-icons md-exit_to_app"></i>
+                            <span class="text" >Logout</span>
+                        </a>
+                    </li>
+                </ul>
+               
+                <br />
+                <br />
+            </nav>
+        </aside>
+        <main class="main-wrap">
+            <header class="main-header navbar">
+                <div class="col-search">
+                    <form class="searchform">
+                        <div class="input-group">
+                            <input list="search_terms" type="text" class="form-control" placeholder="Search term" />
+                            <button class="btn btn-light bg" type="button"><i class="material-icons md-search"></i></button>
+                        </div>
+                        <datalist id="search_terms">
+                            <option value="Categories"></option>
+                            <option value="New orders"></option>
+                            <option value="Apple iphone"></option>
+                            <option value="Ahmed Hassan"></option>
+                        </datalist>
+                    </form>
+                </div>
+                <div class="col-nav">
+                    <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"><i class="material-icons md-apps"></i></button>
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link btn-icon" href="#">
+                                <i class="material-icons md-notifications animation-shake"></i>
+                                <span class="badge rounded-pill">3</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+                        </li>
+                        <li class="dropdown nav-item">
+                            <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
+                                <a class="dropdown-item text-brand" href="#"><img src="assets admin/imgs/theme/flag-us.png" alt="English" />English</a>
+                                <a class="dropdown-item" href="#"><img src="assets admin/imgs/theme/flag-fr.png" alt="Français" />Français</a>
+                                <a class="dropdown-item" href="#"><img src="assets admin/imgs/theme/flag-jp.png" alt="Français" />日本語</a>
+                                <a class="dropdown-item" href="#"><img src="assets admin/imgs/theme/flag-cn.png" alt="Français" />中国人</a>
+                            </div>
+                        </li>
+                        <li class="dropdown nav-item">
+                            <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="assets admin/imgs/people/avatar-2.png" alt="User" /></a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                                <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                                <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                                <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                                <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                                <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-danger" href="#"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+            <section class="content-main">
+                <div class="content-header">
+                    <h2 class="content-title">Add Coupon </h2>
+                   
+                </div>
+                <% if(typeof message !== 'undefined'){%>
+                   
+                    <h4 class="text-danger"><%= message%></h4>
+                     <%}%>
+                <div class="card mb-4">
+                    <header class="card-header">
+                        <div class="row gx-3">
+                            <form action="/admin/submitCoupon" method="post">
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="couponName" class="text">Coupon Name</label>
+                                        <input class="form-control" type="text" name="name" id="coupName" placeholder="Enter the Coupon Name" required>
+                                    </div>
+                                    <div class="col">
+                                        <label for="couponCode" class="text">Coupon Code</label>
+                                        <input class="form-control" type="text" name="code" id="coupCode" placeholder="Enter the Coupon Code" required>
+                                    </div>
+                                </div>
+                                <br>
+
+                                <% if(typeof criteria !== 'undefined'){%>
+                                    <div class="row">
+                                    <div class="col-6"></div>
+                                    <div class="col-6"><h6 class="text-danger"> <%= criteria %></h6></div>
+                                    </div>
+                                    <%}%>
+                                     
+                                <% if(typeof discount !== 'undefined'){%>
+                                    <div class="row">
+                                    <div class="col-6"><h6 class="text-danger"> <%= discount %></h6></div>
+                                    <div class="col-6"><h6 class="text-danger"></h6></div>
+                                    </div>
+                                    <%}%>
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="discountAmount" class="text">Discount Percentage</label>
+                                        <input class="form-control" type="number" name="discount" id="discAmount" placeholder="Enter the Discount Amount" required>
+                                    </div>
+                                  
+                                    <div class="col">
+                                        
+                                        <label for="criteriaAmount" class="text">Criteria Amount</label>
+                                        <input class="form-control" type="number" name="criteria" id="criteria" placeholder="Enter the Criteria Amount" required>
+                                    </div>
+                                   
+                                </div>
+                                <br>
+                                
+                                <% if(typeof start !== 'undefined'){%>
+                                    <div class="row">
+                                    <div class="col-6"></div>
+                                    <div class="col-6"><h6 class="text-danger"> <%= start %></h6></div>
+                                    </div>
+                                    <%}%>
+                                    <% if(typeof expiry !== 'undefined'){%>
+                                        <div class="row">
+                                        <div class="col-6"></div>
+                                        <div class="col-6"><h6 class="text-danger"> <%=expiry%></h6></div>
+                                        </div>
+                                        <%}%>
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="startingDate" class="text">Starting Date</label>
+                                        <input class="form-control" type="date" name="start" id="startDate" required>
+                                    </div>
+                                    <div class="col">
+                                        <label for="expiryDate" class="text">Expiry Date</label>
+                                        <input class="form-control" type="date" name="expiry" id="startDate" required>
+                                    </div>
+                                </div>
+                                <br>
+                                <button type="submit" class="border-1" style="background-color: rgb(134, 134, 234); color: white;">Submit</button>
+                            </form>
+                            
+                    </div>
+                    <!-- card-body end// -->
+                </div>
+                <!-- card end// -->
+               
+            </section>
+            <!-- content-main end// -->
+            <footer class="main-footer font-xs">
+                <div class="row pb-30 pt-15">
+                    <div class="col-sm-6">
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                        &copy; Nest - HTML Ecommerce Template .
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-end">All rights reserved</div>
+                    </div>
+                </div>
+            </footer>
+        </main>
+        <script src="assets admin/js/vendors/jquery-3.6.0.min.js"></script>
+        <script src="assets admin/js/vendors/bootstrap.bundle.min.js"></script>
+        <script src="assets admin/js/vendors/select2.min.js"></script>
+        <script src="assets admin/js/vendors/perfect-scrollbar.js"></script>
+        <script src="assets admin/js/vendors/jquery.fullscreen.min.js"></script>
+        <!-- Main Script -->
+        <script src="assets admin/js/main.js?v=1.1" type="text/javascript"></script>
+        <script>
+            const today = new Date();
+            
+            const adjustedDate = new Date(today);
+            adjustedDate.setDate(today.getDate() + 1);
+            
+            const formattedAdjustedDate = adjustedDate.toISOString().split('T')[0];
+            
+            document.getElementById('startDate').setAttribute('min', formattedAdjustedDate);
+        </script>
+       
+    </body>
+</html>
+       

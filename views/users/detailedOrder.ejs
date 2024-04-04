@@ -579,61 +579,53 @@
 	                		<aside class="col-md-4 col-lg-3">
 	                			<ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
 								    <li class="nav-item">
-								        <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="true">Dashboard</a>
+								        <a class="nav-link active" style="font-weight: bold;" id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="true">Dashboard</a>
 								    </li>
 								    <li class="nav-item">
-								        <a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders" role="tab" aria-controls="tab-orders" aria-selected="false">Orders</a>
+								        <a class="nav-link" style="font-weight: bold;" id="tab-orders-link" data-toggle="tab" href="#tab-orders" role="tab" aria-controls="tab-orders" aria-selected="false">Orders</a>
 								    </li>
 								    <li class="nav-item">
-								        <a class="nav-link" id="tab-downloads-link" data-toggle="tab" href="#tab-downloads" role="tab" aria-controls="tab-downloads" aria-selected="false">Downloads</a>
+								        <a class="nav-link x" style="font-weight: bold;" id="tab-downloads-link" data-toggle="tab" href="#tab-downloads" role="tab" aria-controls="tab-downloads" aria-selected="false">Downloads</a>
 								    </li>
 								    <li class="nav-item">
-								        <a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address" role="tab" aria-controls="tab-address" aria-selected="false">Adresses</a>
+								        <a class="nav-link " style="font-weight: bold;" id="tab-address-link" data-toggle="tab" href="#tab-address" role="tab" aria-controls="tab-address" aria-selected="false">Adresses</a>
 								    </li>
 								    <li class="nav-item">
-								        <a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account" role="tab" aria-controls="tab-account" aria-selected="false">Account Details</a>
+								        <a class="nav-link" style="font-weight: bold;" id="tab-account-link" data-toggle="tab" href="#tab-account" role="tab" aria-controls="tab-account" aria-selected="false">Account Details</a>
 								    </li>
 								    <li class="nav-item">
-								        <a class="nav-link" href="#">Sign Out</a>
+								        <a class="nav-link" style="font-weight: bold;" href="#">Sign Out</a>
 								    </li>
 								</ul>
 	                		</aside><!-- End .col-lg-3 -->
                             <div class="col-8 " style=" margin-left: 38px; margin-top: -20px;">
-                                <div class="content-header">
-                                    <div>
-                                        <h2 class="content-title card-title"></h2>
-                                      
-                                    </div>
                                 
-                                </div>
                                 <div class="card mb-4">
                     
                                     <header class="card-header">
                                         <div class="row align-items-center">
-                                            <div class="col col-check flex-grow-0">
-                                                
-                                            </div>
+                                           
                                             
-                                            <div class="col-md-4 col-6">
+                                            <div class="col-md-4 col-6 ">
                                                 <p style="font-size: 15px;"  class="form-control" >
-                                                    <a style="color: black;">   name:</a>  <%=detials.delivery_address.name%><br>
-                                                    <a style="color: black;">  Address:</a> <%=detials.delivery_address.address%>
+                                                    <a style="color: black; font-size: small; font-weight: bold;">   Name:</a>  <%=detials.delivery_address.name%><br>
+<a style="color: black; font-size: small; font-weight: bold;">   Address:</a> <%=detials.delivery_address.address%>
                     
                                                     
                                                 </p>
                                             </div>
-                                            <div class="col-md-4 col-6">
+                                            <div class="col-md-4 col-6 address-card">
                                                 <p style="font-size: 15px;" class="form-control" >
-                                                 <a style="color: black;">   Email: </a> <%=detials.delivery_address.email%><br>
-                                                 <a style="color: black;">   LandMark:</a><%=detials.delivery_address.landmark%><br>
-                                                 <a style="color: black;">    State:</a><%=detials.delivery_address.state%>
+                                                 <a style="color: black; font-size: small; font-weight: bold; ">    Email: </a>  <%=detials.delivery_address.email%><br>
+                                                 <a style="color: black; font-size: small; font-weight: bold;">    LandMark:</a><%=detials.delivery_address.landmark%><br>
+                                                 <a style="color: black; font-size: small; font-weight: bold; ">     State:</a><%=detials.delivery_address.state%>
                                                     
                                                 </p>
                                             </div>
-                                            <div class="col-md-3 col-6">
+                                            <div class="col-md-3 col-6 address-card">
                                                 <p style="font-size: 15px;"   class="form-control" >
-                                                    <a style="color: black;">    Phone:</a>  <%=detials.delivery_address.phone%><br>
-                                                    <a style="color: black;">  Pincode:</a> <%=detials.delivery_address.pincode%>
+<a style="color: black; font-size: small; font-weight: bold;">     Phone:</a>  <%=detials.delivery_address.phone%><br>
+<a style="color: black; font-size: small; font-weight: bold;">   Pincode:</a> <%=detials.delivery_address.pincode%>
                                                     
                                                 </p>
                                             </div>
@@ -641,36 +633,48 @@
                                         </div>
                                     </header>
                                     <!-- card-header end// -->
-                                    <div class="card-body">
-                                        <div class="table-responsive" style="margin-top: 80px;">
+                                    <div class="card-body ">
+                                        <div class="table-responsive " style="margin-top: 80px;">
                                         
                                                 <div id="reloadDiv">
-                                                <table  class="table table-hover">
+                                                <table  class="table table-hover address-card">
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col">product</th>
-                                                            <th scope="col">Images</th>
-                                                            <th scope="col">Unit price</th>
-                                                            <th scope="col">Quantity</th>
-                                                            <th scope="col">Total</th>
-                                                            <th scope="col">Status</th>
+                                                            <th scope="col" class="text-info">product</th>
+                                                            <th scope="col" class="text-info">Images</th>
+                                                            <th scope="col" class="text-info">Unit price</th>
+                                                            <th scope="col" class="text-info">Quantity</th>
+                                                            <th scope="col" class="text-info">Total</th>
+                                                            <th scope="col" class="text-info">Status</th>
+                                                            <th scope="col" class="text-info">Action</th>
                                                            
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <%detials.products.forEach((user,index)=>{%>
+                                                        <%detials.products.forEach((product,index)=>{%>
                                                      <tr>
                                                      
-                                                     <td>
-                                                        <%= user.productId.name%> 
+                                                        <td style="font-weight: bold;">
+                                                        <%= product.productId.name%> 
                                                      </td >
-                                                     <td style="width:22% ;"><div class="col-md-6" ><img class="" src="/multerImage/sharp/<%= user.productId.images[0]%>" alt=""></div></td>
-                                                     <td><%=user.price%></td>
-                                                     <td><%=user.quantity%></td>
+                                                     <td style="width:22% ;"><div class="col-md-6" ><img class="" src="/multerImage/sharp/<%= product.productId.images[0]%>" alt=""></div></td>
+                                                     <td style="font-weight: bold;"><%=product.price%></td>
+                                                     <td style="font-weight: bold;"><%=product.quantity%></td>
                                                      
-                                                     <td><%=user.totalPrice%></td>
-                                                    <td style="color: red;"><%= user.productStatus%></td>
-                    </tr>
+                                                     <td style="font-weight: bold;"><%=product.totalPrice%></td>
+                                                    <td style="color: red;"><%= product.productStatus%></td>
+                                                    <td style="font-weight: bold;">
+                                                        <%if(product.productStatus=='cancelled'||product.productStatus=='returned'){%>
+
+                                                        <%}else if(product.productStatus=='delivered'){%>
+                                                            <a href="" onclick="returnOrder('<%= product._id %>',event)"  style="font-weight: bolder; color: darkred;">Return</a>
+                                                        <%}else{%>
+                                                        <a href="" onclick="cancelOrder('<%= product._id %>','<%=detials._id%>',event)"  style="font-weight: bolder; color: darkred;">Cancel</a>
+
+                                                        <%}%>
+                                                    </td>
+
+                                                </tr>   
                                                     <%})%>
                                                     </tbody>
                                                 </table>
@@ -1057,8 +1061,111 @@
     <script src="assets/js/jquery.waypoints.min.js"></script>
     <script src="assets/js/superfish.min.js"></script>
     <script src="assets/js/owl.carousel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
+    <script>
+        function cancelOrder(id,orderId,event) {
+            event.preventDefault()
+            const productId = id;
+            const order = orderId
+            console.log(productId);
+            Swal.fire({
+                title: 'Enter Cancel reason',
+                input: 'text',
+                inputLabel: "Cancel Reason",
+                inputPlaceholder: 'Please enter the Cancel for Return',
+                showCancelButton: true, 
+                confirmButtonText: 'Cancel Order',
+                cancelButtonText: 'Cancel', 
+                preConfirm: (returnReason) => {
+                    if (!returnReason) {
+                        Swal.showValidationMessage('Cancel reason is required');
+                    }
+                    return returnReason;
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const data = {
+                        productId: productId,
+                        returnReason: result.value,
+                        orderId:order
+                    };
+                    
+               
+                    fetch('/cancelOrder', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.cancel) {
+                            location.reload();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+     <script>
+        function returnOrder(id,event) {
+            event.preventDefault()
+            const productId = id;
+            console.log(productId);
+            Swal.fire({
+                title: 'Enter Return reason',
+                input: 'text',
+                inputLabel: "Return Reason",
+                inputPlaceholder: 'Please enter the reason for Return',
+                showCancelButton: true, 
+                confirmButtonText: 'Return Order',
+                cancelButtonText: 'Cancel', 
+                preConfirm: (returnReason) => {
+                    if (!returnReason) {
+                        Swal.showValidationMessage('Return reason is required');
+                    }
+                    return returnReason;
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const data = {
+                        productId: productId,
+                        returnReason: result.value
+                    };
+                    
+               
+                    fetch('/returnOrder', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.return) {
+                            location.reload();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+    
+    
 </body>
 
 

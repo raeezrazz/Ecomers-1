@@ -10,6 +10,7 @@ const productController=require('../controllers/productController')
 const cartController = require('../controllers/cartController')
 const addressController = require('../controllers/addressController')
 const orderController = require('../controllers/OrderController')
+const couponController = require('../controllers/couponController')
 
 //session
 const session = require('express-session');
@@ -218,6 +219,7 @@ user_route.post('/forgotPassword',userController.forgotPassword)
 
 user_route.get('/dashboard',userController.loadDashboard)
 user_route.post('/editProfile',userController.editProfile)
+user_route.post('/changePassword',userController.changePassword)
 // user products
 user_route.get('/loadProducts',productController.loadProducts)
 user_route.get('/eachproduct/:id',productController.loadeachProducts)
@@ -226,21 +228,37 @@ user_route.post('/sort',productController.sortProducts)
 
 //cart
 user_route.get('/loadCart',cartController.loadCart)
-user_route.get('/addCart/:id',cartController.addCart)
-user_route.get('/cartRemove/:id',cartController.removeCart)
+user_route.post('/addCart',cartController.addCart)
+user_route.patch('/cartRemove',cartController.removeCart)
 user_route.get('/loadCheckout',cartController.loadCheckout)
 user_route.post('/updateQuantity',cartController.updateQuantity)
 
+//Coupon
+user_route.post('/applyCoupon',orderController.applyCoupon)
+user_route.patch('/removeCoupon',orderController.removeCoupon)
+
 //order
 user_route.post('/placeOrder',orderController.placeOrder)
-user_route.get('/successPage',orderController.loadSuccess)
+user_route.get('/successOrder',orderController.loadSuccess)
 user_route.get('/orderdetails/:id',orderController.loadOrderDetails)
 user_route.get('/fullOrder/:id',orderController.viewFullOrder)
-
+user_route.post('/cancelOrder',orderController.cancelOrder)
+user_route.post('/returnOrder',orderController.returnOrder)
+user_route.post('/verifypayment',orderController.verifyPayment)
 //address
 user_route.post('/addAddress',addressController.addAddress)
 user_route.post('/edit-address',addressController.editAddress)
+user_route.post('/deleteAddress',addressController.deleteAddress)
 
+//whishlist
+user_route.get('/whishlist',userController.loadWhishlist)
+user_route.post('/addToWishlist',userController.addToWishlist)
+user_route.patch('/removeWishlist',userController.removeWishlist)
+
+
+//payment
+
+user_route.post('/')
 
 user_route.get('/try',userController.user)
 

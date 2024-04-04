@@ -29,6 +29,20 @@ is_admin:{
     type:Number,
     required:true
 },
+wallet:{
+    type:Number,
+    default:0
+},
+walletHistory:[{
+    date:{
+        type:Date
+
+    },
+    amount:{
+        type:Number
+    },
+}]
+,
 
 is_varified:{
     type:Number,

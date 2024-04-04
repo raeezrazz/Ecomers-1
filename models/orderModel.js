@@ -64,17 +64,8 @@ const orderSchema =new mongoose.Schema({
     require:true
 
    },
-   wallet:{
-    type: Number
-   },
-   cancelledProduce: {
-    type : Array,
-    default: []
-   },
-   returnedProduct:{
-    type: Array,
-    default:[]
-   }
+
+   
 })
 
 const Order = mongoose.model('Orders',orderSchema)

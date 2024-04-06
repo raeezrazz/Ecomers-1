@@ -105,7 +105,7 @@ const placeOrder = async(req,res)=>{
              amount = subtotal-(subtotal/couponDiscount)
         }else{
             amount = subtotal
-        }
+        } 
         console.log(subtotal,"ggggggggggggggggggggggg");
 
         const cartItem = productTotal.product

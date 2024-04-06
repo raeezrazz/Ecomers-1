@@ -313,29 +313,27 @@
 									    </a>
 									</h3><!-- End .widget-title -->
 
-									<div class="collapse show" id="qwert">
-										<div class="widget-body">
-											<div class="filter-items filter-items-count">
-                                                <div class="filter-item">
-													
-                                                    <input type="" class="custom-control-input" id="cat-1">
-                                                    <a class="" href="/shopSearch?name=all%>"  for="cat-1" >All</a>
-                                                
-                                            </div><!-- End .filter-item -->
-                                               <% if(typeof category !='undefined'){%>
-                                                <% category.forEach((val)=>{ %>
-                                                    
-												<div class="filter-item">
-													
-														<input type="" class="custom-control-input" id="cat-1">
-														<a class="" href="/shopSearch?name=<%= encodeURIComponent(val._id) %>"  for="cat-1" ><%=val.name%></a>
-													
-												</div><!-- End .filter-item -->
-                                                  <% }) %>
-                                               <% } %>
-											</div><!-- End .filter-items -->
-										</div><!-- End .widget-body -->
-									</div><!-- End .collapse -->
+                                    <div class="collapse show" id="qwert">
+                                        <div class="widget-body">
+                                            <div class="filter-items filter-items-count">
+                                                <form action="/searchProduct" method="get" id="categoryForm">
+                                                    <div class="filter-item">
+                                                        <input type="checkbox" id="cat-all" name="category" value="all">
+                                                        <label for="cat-all">All</label>
+                                                    </div>
+                                                    <% if(typeof category !== 'undefined') { %>
+                                                        <% category.forEach((val) => { %>
+                                                            <div class="filter-item">
+                                                                <input type="checkbox" id="cat-<%= val._id %>" name="category" value="<%= val._id %>">
+                                                                <label for="cat-<%= val._id %>"><%= val.name %></label>
+                                                            </div>
+                                                        <% }); %>
+                                                    <% } %>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
         						</div><!-- End .widget -->
 
         					
@@ -814,6 +812,18 @@
     });
 }
 
+</script>
+<script>
+    // Automatically submit the form when a checkbox is changed
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"][name="category"]');
+        
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                document.getElementById('categoryForm').submit();
+            });
+        });
+    });
 </script>
 
 </body>

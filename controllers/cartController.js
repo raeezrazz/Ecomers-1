@@ -202,12 +202,15 @@ const loadCheckout = async (req, res) => {
         const coupon = await Coupon.find({
             expiryDate: { $gte: currentDate },
             criteriaAmount: { $lte: subtotal },
-            is_blocked: false
+            is_blocked: false,
+            usedUser: { $nin: [userId] }
         });
+        
         console.log(coupon,"hdajdkvnlkjnvnjkas")
         if (address) {
          
             const data = address.address
+            console.log(coupon,"fuewosdfjo")
             res.render('checkout', { data, address,product, subtotal,coupon,couponDiscount,wallet})
         } else {
             const data = null

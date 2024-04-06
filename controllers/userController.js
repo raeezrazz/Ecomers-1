@@ -428,18 +428,15 @@ const loadDashboard = async(req, res) => {
     try {
         const userId = req.session.userId;
 
-        // Fetch address details
         const address = await Address.findOne({ user: userId });
 
-        // Fetch order details
         const order = await Order.find({ user: userId }).populate('products.productId').sort({ orderDate: -1 });
+        const user = await User.findOne({ _id: userId })
+        const wallet = await User.findOne({ _id: userId }).select('wallet walletHistory');
+        const coupon = await Coupon.find({})
 
-        // Fetch user details including wallet
-        const user = await User.findOne({ _id: userId }).select('wallet walletHistory');
-
-        // Pagination
-        const page = parseInt(req.query.page) || 1; // Current page number
-        const limit = 5; // Number of items per page
+        const page = parseInt(req.query.page) || 1; 
+        const limit = 5;
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
 
@@ -448,8 +445,7 @@ const loadDashboard = async(req, res) => {
 
         user.walletHistory = user.walletHistory.slice(startIndex, endIndex);
 
-        // Render dashboard view with fetched data and pagination info
-        res.render('dashboard', { address, user, order, totalPages, currentPage: page });
+        res.render('dashboard', { address, user, order, totalPages, currentPage: page ,coupon,wallet});
 
     } catch (error) {
         console.log(error.message);

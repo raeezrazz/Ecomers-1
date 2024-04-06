@@ -608,7 +608,19 @@
                                             
                                             <div class="col-md-4 col-6 ">
                                                 <p style="font-size: 15px;"  class="form-control" >
-                                                    <a style="color: black; font-size: small; font-weight: bold;">   Name:</a>  <%=detials.delivery_address.name%><br>
+                                                    <a style="color: black; font-size: small; font-weight: bold;"> 
+                                                        OrderID:</a> <h7 style="font-size: small;"><%=detials._id%><br>
+                                                            <a style="color: black; font-size: small; font-weight: bold;"> 
+                                                         
+                                                                Date:</a>  <%=detials.orderDate.toLocaleDateString('en-US', {
+                                                                    year: 'numeric',
+                                                                    month: 'short',
+                                                                    day:'numeric',
+                                                                })%><br>
+                                                    <a style="color: black; font-size: small; font-weight: bold;"> 
+                                                         
+                                                          Name:</a>  <%=detials.delivery_address.name%><br>
+                                                         
 <a style="color: black; font-size: small; font-weight: bold;">   Address:</a> <%=detials.delivery_address.address%>
                     
                                                     
@@ -658,10 +670,10 @@
                                                         <%= product.productId.name%> 
                                                      </td >
                                                      <td style="width:22% ;"><div class="col-md-6" ><img class="" src="/multerImage/sharp/<%= product.productId.images[0]%>" alt=""></div></td>
-                                                     <td style="font-weight: bold;"><%=product.price%></td>
+                                                     <td style="font-weight: bold;"><%=product.productId.price%></td>
                                                      <td style="font-weight: bold;"><%=product.quantity%></td>
                                                      
-                                                     <td style="font-weight: bold;"><%=product.totalPrice%></td>
+                                                     <td style="font-weight: bold;"><%=product.productId.price * product.quantity%></td>
                                                     <td style="color: red;"><%= product.productStatus%></td>
                                                     <td style="font-weight: bold;">
                                                         <%if(product.productStatus=='cancelled'||product.productStatus=='returned'){%>

@@ -168,16 +168,23 @@
                                         <br>
                                         <div class="col-lg-2 col-md-6 rounded-image-preview">
                                             <div style="display: flex; flex-wrap: nowrap;">
-                                                <% for (let i = 0; i < length; i++) { %>
-                                                <div style="margin-right: 5px;">
-                                                    <input name="image1" type="file" accept="image/*" id="imageInput<%= i + 1 %>" class="imageInput">
-                                                    <label for="imageInput<%= i + 1 %>" class="image-label">
-                                                        <img src="/multerImage/sharp/<%= product.images[i] %>" style="width: 76px;" alt="">
-                                                    </label>
-                                                </div>
+                                                <% for(let i = 0; i < product.images.length; i++) { %>
+                                                    <div style="margin-right: 5px;">
+                                                        <input name="image1" type="file" accept="image/*" id="imageInput<%= i + 1 %>" class="imageInput" onchange="previewImage(event,'<%= i + 1 %>')">
+                                                        <label for="imageInput<%= i + 1 %>" class="image-label">
+                                                            <img 
+                                                                id="imagePreview<%= i + 1 %>" 
+                                                                src="/multerImage/sharp/<%= product.images[i] %>" 
+                                                                data-original-src="/multerImage/sharp/<%= product.images[i] %>"
+                                                                style="width: 76px;" 
+                                                                alt=""
+                                                            >
+                                                        </label>
+                                                    </div>
                                                 <% } %>
                                             </div>
                                         </div>
+                                        
                                         <div class="form-group mt-3">
                                             <button type="button" class="btn btn-primary" onclick="validateForm()">Submit</button>
                                         </div>
@@ -382,6 +389,29 @@
            $("#addForm").submit();
        }
    </script>
+
+<script>
+    function previewImage(event, imageIndex) {
+        const input = event.target;
+        
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            
+            reader.onload = function (e) {
+                const imagePreview = document.getElementById('imagePreview' + imageIndex);
+                
+                // Store the uploaded image in a data attribute
+                imagePreview.setAttribute('data-uploaded-src', e.target.result);
+                
+                // Update the image source to the uploaded image
+                imagePreview.src = e.target.result;
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
    
     </body>
 </html>

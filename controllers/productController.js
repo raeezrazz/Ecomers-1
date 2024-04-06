@@ -123,6 +123,7 @@ const subEditProduct= async (req,res)=>{
       console.log("hi",req.body,"end");
       const id = req.body.id
       const new1 = req.body
+      
       const oldProduct = await Products.findOne({_id:id}).populate('categoryId');
       const oldImage = oldProduct.images
       console.log(oldImage);

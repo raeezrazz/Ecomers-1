@@ -314,6 +314,7 @@
                         <button type="button" class="btn btn-danger" onclick="removeAppliedCoupon('<%= product.couponDiscount._id %>')">Remove Coupon</button>
                 </div>
                 <% }else{ %>
+                    
                     <div class="checkout-discount">
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#couponModal">
                             View Available Coupons
@@ -322,6 +323,8 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
+                                    <% if (coupon && coupon.length > 0) { %>
+                                       
                                     <h5 class="modal-title" id="couponModalLabel">Available Coupons</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
@@ -329,6 +332,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <select class="form-control" id="coupon-dropdown">
+                                        
                                         <% coupon.forEach(coupon => { %>
                                             <option value="<%= coupon._id %>"><%= coupon.name %></option>
                                         <% }); %>
@@ -341,6 +345,14 @@
                             </div>
                         </div>
                     </div>
+                                    <%}else{%>
+                                    <h5 class="modal-title" id="couponModalLabel">No Coupon Available </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <%}%>
+
                 <%}%>
             </div>
             

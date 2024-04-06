@@ -33,6 +33,9 @@
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <!-- Main CSS File -->
     <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        body{background-color: #eee}.card{border:none;position: relative}.off{font-size: 60px;margin-top: -16px !important;color: blue}.flat{font-size: 20px}.star{margin-top: 25px !important;font-size: 28px}.line{padding-right: 8rem!important;padding-left: 8rem!important}.line hr{height: 2px}
+    </style>
 </head>
 <style>
     .profile-container {
@@ -49,6 +52,7 @@
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         text-align: center;
     }
+    
 
     .profile-card h2 {
         color: #333;
@@ -332,6 +336,11 @@
                                     </li>
                                     <li class="nav-item">
                                         <a style="font-weight: bold;" class="nav-link" id="tab-wallet-link"
+                                            data-toggle="tab" href="#tab-coupon" role="tab" aria-controls="tab-wallet"
+                                            aria-selected="false">Coupon</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a style="font-weight: bold;" class="nav-link" id="tab-wallet-link"
                                             data-toggle="tab" href="#tab-wallet" role="tab" aria-controls="tab-wallet"
                                             aria-selected="false">Wallet</a>
                                     </li>
@@ -378,7 +387,7 @@
                                         aria-labelledby="tab-orders-link">
                                         <% if(typeof order !=='undefined' ) { %>
                                             <div class="order-container">
-                                                <div class="order-table">
+                                                <div class="order-table" style="width: 112%;">
                                                     <div class="table-responsive">
                                                         <table id="tablePagination"
                                                             class="table table-bordered table-hover table-striped">
@@ -390,6 +399,7 @@
                                                                     <th scope="col">Amount</th>
                                                                     <th scope="col">Payment Method</th>
                                                                     <th scope="col">Details</th>
+                                                                    <th scope="col">Download</th>
                                                                 </tr>
                                                             </thead>
                                                             <% console.log(order, "hiii" ); %>
@@ -495,10 +505,10 @@
                                                     <h2>My Wallet</h2>
                                                     <div class="wallet-details">
                                                         <p><strong>Balance:</strong> ₹<span id="wallet-balance">
-                                                                <%= user.wallet%>
+                                                                <%= wallet.wallet%>
                                                             </span></p>
                                                     </div>
-                                                    <h4>Wallet Amount: ₹<%= user.wallet %>
+                                                    <h4>Wallet Amount: ₹<%= wallet.wallet %>
                                                     </h4>
 
                                                     <div class="wallet-actions">
@@ -516,7 +526,7 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <% user.walletHistory.forEach((val,index)=>{%>
+                                                                <% wallet.walletHistory.forEach((val,index)=>{%>
                                                                     <tr>
                                                                         <td style="font-weight: bold;">
                                                                             <%= index + 1 %>
@@ -572,6 +582,118 @@
                                         </div>
 
                                     </div>
+                                    <div class="tab-pane fade" id="tab-coupon" role="tabpanel" aria-labelledby="tab-wallet-link">
+                                        <div class="wallet-tab">
+                                            <div class="wallet-container ">
+                                                <div class="wallet-card ">
+                                                    <h2>My Coupon</h2>
+                                                    
+                                                  
+                                                    <div style="max-width: 100vw; display: grid; grid-template-columns: repeat(auto-fill, minmax(23%, 1fr)); gap: 20px; padding: 20px;">
+                                                        <% coupon.forEach((val, index) => { %>
+                                                            <% if( val.expiryDate < new Date() ){ %>
+                                                                <div class="card" style="width: 100%; padding: 15px; margin-bottom: 20px; background-color: #f2f2f2; border: 1px solid #ccc;">
+                                                                    <div class="text-right p-2"></div>
+                                                                    <div class="text-center mb-1" style="font-size: 1.5rem; font-weight: bolder; color: #888;">
+                                                                        <h7 style="font-weight: bolder; text-decoration: line-through;"><%= val.name %></h7>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-center px-2">
+                                                                        <div class="d-flex flex-row">
+                                                                            <h1 class="mt-0 off" style="font-size: 2rem; color: #888;"><%= val.discountAmount %>% OFF</h1>
+                                                                            <sup class="mt-2 text-primary star" style="font-size: 1rem; color: #888;">*</sup>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="line"></div>
+                                                                    <div class="text-center">
+                                                                        <span class="text-uppercase" style="font-size: 0.8rem; color: #888;">Start from <%= val.activationDate.toLocaleDateString('en-US', {
+                                                                            year: 'numeric',
+                                                                            month: 'short',
+                                                                            day:'numeric'
+                                                                        }) %></span>
+                                                                    </div>
+                                                                    <div class="text-center">
+                                                                        <span class="text-uppercase" style="font-size: 0.8rem; color: #888;">Valid till <%= val.expiryDate.toLocaleDateString('en-US', {
+                                                                            year: 'numeric',
+                                                                            month: 'short',
+                                                                            day:'numeric'
+                                                                        }) %></span>
+                                                                    </div>
+                                                                    <div class="text-center" style="color: red; font-weight: bold;">
+                                                                        <span>Expired</span>
+                                                                    </div>
+                                                                </div>
+                                                                <%}else if(val.usedUser.includes(user._id) ){%> 
+                                                                    <div class="card" style="width: 100%; padding: 15px; margin-bottom: 20px; background-color: #f2f2f2; border: 1px solid #ccc;">
+                                                                        <div class="text-right p-2"></div>
+                                                                        <div class="text-center mb-1" style="font-size: 1.5rem; font-weight: bolder; color: #888;">
+                                                                            <h7 style="font-weight: bolder; text-decoration: line-through;"><%= val.name %></h7>
+                                                                        </div>
+                                                                        <div class="d-flex justify-content-center px-2">
+                                                                            <div class="d-flex flex-row">
+                                                                                <h1 class="mt-0 off" style="font-size: 2rem; color: #888;"><%= val.discountAmount %>% OFF</h1>
+                                                                                <sup class="mt-2 text-primary star" style="font-size: 1rem; color: #888;">*</sup>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="line"></div>
+                                                                        <div class="text-center">
+                                                                            <span class="text-uppercase" style="font-size: 0.8rem; color: #888;">Start from <%= val.activationDate.toLocaleDateString('en-US', {
+                                                                                year: 'numeric',
+                                                                                month: 'short',
+                                                                                day:'numeric'
+                                                                            }) %></span>
+                                                                        </div>
+                                                                        <div class="text-center">
+                                                                            <span class="text-uppercase" style="font-size: 0.8rem; color: #888;">Valid till <%= val.expiryDate.toLocaleDateString('en-US', {
+                                                                                year: 'numeric',
+                                                                                month: 'short',
+                                                                                day:'numeric',
+                                                                            }) %></span>
+                                                                        </div>
+                                                                        <div class="text-center" style="color: red; font-weight: bold;">
+                                                                            <span>Already Used</span>
+                                                                        </div>
+                                                                    </div>
+                                                            <% } else { %>
+                                                                <!-- Active coupon design -->
+                                                                <div class="card" style="width: 100%; padding: 15px; margin-bottom: 20px;">
+                                                                    <div class="text-right p-2"></div>
+                                                                    <div class="text-center mb-1" style="font-size: 1.5rem; font-weight: bolder;">
+                                                                        <h7 style="font-weight: bolder;"><%= val.name %></h7>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-center px-2">
+                                                                        <div class="d-flex flex-row">
+                                                                            <h1 class="mt-0 off" style="font-size: 2rem;"><%= val.discountAmount %>% OFF</h1>
+                                                                            <sup class="mt-2 text-primary star" style="font-size: 1rem;">*</sup>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="line"></div>
+                                                                    <div class="text-center">
+                                                                        <span class="text-uppercase" style="font-size: 0.8rem;">Start from <%= val.activationDate.toLocaleDateString('en-US', {
+                                                                            year: 'numeric',
+                                                                            month: 'short',
+                                                                            day:'numeric',
+                                                                        }) %></span>
+                                                                    </div>
+                                                                    <div class="text-center">
+                                                                        <span class="text-uppercase" style="font-size: 0.8rem;">Valid till <%= val.expiryDate.toLocaleDateString('en-US', {
+                                                                            year: 'numeric',
+                                                                            month: 'short',
+                                                                            day:'numeric',
+                                                                        }) %></span>
+                                                                        <div class="text-center" style="color: green; font-weight: bold;">
+                                                                            <span>Available</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            <% } %>
+                                                        <% }) %>
+                                                    </div>
+                                                    
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
 
                                 </div>
 

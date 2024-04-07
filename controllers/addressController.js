@@ -28,7 +28,7 @@ const addAddress=async(req,res)=>{
                     phone:data.phone,
                     email:data.email
                 }]
-            }})
+            }}) 
             if(req.body.redirect ==='checkout'){
                 res.redirect('/loadCheckout')
             }else{

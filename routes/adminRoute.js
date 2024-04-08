@@ -1,5 +1,5 @@
 const express = require('express');
-const admin_route = express();
+const admin_route = express(); 
 const multer = require('../middleware/multer');
 const session = require('express-session');
 const config = require('../config/config');

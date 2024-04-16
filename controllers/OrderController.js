@@ -112,7 +112,7 @@ const placeOrder = async (req, res) => {
         } else {
             amount = subtotal
         }
-        console.log(subtotal, "ggggggggggggggggggggggg");
+        console.log(subtotal,"g");
 
         const cartItem = productTotal.product
         const addressIndex = req.body.Address

@@ -242,39 +242,39 @@
         <script src="assets admin/js/vendors/jquery.fullscreen.min.js"></script>
         <!-- Main Script -->
         <script src="assets admin/js/main.js?v=1.1" type="text/javascript"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                document.querySelectorAll('.block-user, .Unblock-user').forEach(function (Element) {
-                    console.log("F");
-                    Element.addEventListener('click', function (event) {
-                        event.preventDefault();
-        
-                        const userId = Element.getAttribute('data-user-id');
-                        const action = Element.classList.contains('block-user') ? 'block' : 'Unblock';
-        
-                        fetch(`/admin/blockusers/${userId}`, {
-                            method: 'PATCH',
-                        })
-                            .then(Response => Response.json())
-                            .then(data => {
-                                if (data.block == true) {
-                                    console.log('final');
-        
-                                    Element.querySelector('span').classList.toggle('alert-success');
-                                    Element.querySelector('span').classList.toggle('alert-warning');
-                                    Element.querySelector('span').innerText = action === 'block' ? 'unblock' : 'block';
-        
-                                    Element.classList.remove(action === 'block' ? 'block-user' : 'unblock-user');
-                                    Element.classList.add(action === 'block' ? 'unblock-user' : 'block-user');
-                                }
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    document.querySelectorAll('.block-user, .Unblock-user').forEach(function (Element) {
+                        console.log("F");
+                        Element.addEventListener('click', function (event) {
+                            event.preventDefault();
+            
+                            const userId = Element.getAttribute('data-user-id');
+                            const action = Element.classList.contains('block-user') ? 'block' : 'Unblock';
+            
+                            fetch(`/admin/blockusers/${userId}`, {
+                                method: 'PATCH',
                             })
-                            .catch((error) => {
-                                console.log(error.message);
-                            });
+                                .then(Response => Response.json())
+                                .then(data => {
+                                    if (data.block == true) {
+                                        console.log('final');
+            
+                                        Element.querySelector('span').classList.toggle('alert-success');
+                                        Element.querySelector('span').classList.toggle('alert-warning');
+                                        Element.querySelector('span').innerText = action === 'block' ? 'unblock' : 'block';
+            
+                                        Element.classList.remove(action === 'block' ? 'block-user' : 'unblock-user');
+                                        Element.classList.add(action === 'block' ? 'unblock-user' : 'block-user');
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.log(error.message);
+                                });
+                        });
                     });
                 });
-            });
-        </script>
+            </script>
     </body>
 </html>
        

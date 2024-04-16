@@ -172,15 +172,26 @@
                                                                 </td>
                                                                 <td align="center">
                                                                     <%= products[i].categoryId.name %>
+                                                                    <%if(products[i].categoryId.offer ){%>
+                                                                        <br>
+                                                                        <h7 class="text-success font-xs" style="font-weight:900 ;"><%=products[i].categoryId.offer.name%></h7>
+                                                                    <%}%>
                                                                 </td>
                                                                 <td align="center">
                                                                     ₹<%= products[i].price %>
                                                                 </td>
                                                                 <%if(products[i].offer ){%>
+                                                                    <% if(products[i].offer.expiryDate >= new Date()){ %>
                                                                     <td class="text-success font-xs"
                                                                         style="font-weight:900 ;">
                                                                         <%=products[i].offer.name%>
                                                                     </td>
+                                                                <%}else{%>
+                                                                    <td class="text-success font-xs"
+                                                                    style="font-weight:900 ;">
+                                                                    <%=products[i].offer.name%>[<h7 class="text-danger">Expired</h7>]
+                                                                </td>
+                                                                <%}%>
                                                                     <%}else{%>
                                                                         <td class="text-danger">
                                                                             No Offer Selected
@@ -258,15 +269,21 @@
             <div class="pagination-area mt-15 mb-50">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-start">
-                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                        <li class="page-item"><a class="page-link" href="#">02</a></li>
-                        <li class="page-item"><a class="page-link" href="#">03</a></li>
-                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#">16</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
-                        </li>
-                    </ul>
+
+                    <%for (let i = 1; i <= totalPages; i++){%>
+                        <% if (i === currentPage){%>
+                            <li class="page-item active" aria-current="page">
+                                <a class="page-link" href="#"><%= i %></a>
+                            </li>
+                        <% }else{%>
+                            <li class="page-item">
+                                <a class="page-link" href="/admin/products?page=<%= i %>"><%= i %></a>
+                            </li>
+                        <% } %>
+                    <% } %>
+                </ul>
+
+                   
                 </nav>
             </div>
         </section>
@@ -293,6 +310,41 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <!-- Main Script -->
     <script src="assets admin/js/main.js?v=1.1" type="text/javascript"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.block-user, .unblock-user').forEach(function (Element) {
+                console.log("F");
+                console.log("kiklaojvnosk")
+                Element.addEventListener('click', function (event) {
+                    event.preventDefault();
+    console.log("hello")
+                    const productId = Element.getAttribute('data-user-id');
+                    const action = Element.classList.contains('block-user') ? 'block' : 'Unblock';
+    console.log(productId,action)
+                    fetch(`/admin/blockproduct/${productId}`, {
+                        method: 'PATCH',
+                    })
+                        .then(Response => Response.json())
+                        .then(data => {
+                            if (data.block == true) {
+                                console.log('final');
+    
+                                Element.querySelector('span').classList.toggle('alert-success');
+                                Element.querySelector('span').classList.toggle('alert-warning');
+                                Element.querySelector('span').innerText = action === 'block' ? 'unblock' : 'block';
+    
+                                Element.classList.remove(action === 'block' ? 'block-user' : 'unblock-user');
+                                Element.classList.add(action === 'block' ? 'unblock-user' : 'block-user');
+                            }
+                        })
+                        .catch((error) => {
+                            console.log(error.message);
+                        });
+                });
+            });
+        });
+    </script>
 
     <script>
         var productId;

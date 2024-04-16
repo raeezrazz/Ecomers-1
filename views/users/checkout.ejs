@@ -438,12 +438,12 @@
 		                						
 		                						<tr class="summary-subtotal">
 		                							<td>Subtotal:</td>
-		                							<td style="font-weight:900; color: black;">₹<%= subtotal %></td>
+		                							<td style="font-weight:900; color: black;">₹<%= subtotal.toFixed(0) %></td>
 		                						</tr><!-- End .summary-subtotal -->
                                                 <tr>
                                                     <td>Discount:</td>
                                                     <td><% if (couponDiscount && couponDiscount !== 0) { %>
-                                                        <%= subtotal / couponDiscount %>
+                                                        <%= (subtotal / couponDiscount).toFixed(0) %>
                                                     <% } else { %>
                                                         <!-- Handle the case where couponDiscount is 0, null, or undefined -->
                                                        0
@@ -456,7 +456,7 @@
 		                						<tr class="summary-total">
 		                							<td>Total:</td>
 		                							<td style="font-weight:900; color: black;"><% if (couponDiscount && couponDiscount !== 0) { %>
-                                                        ₹<%= subtotal -(subtotal / couponDiscount) %>
+                                                        ₹<%= (subtotal -(subtotal / couponDiscount)).toFixed(0) %>
                                                     <% } else { %>
                                                         <!-- Handle the case where couponDiscount is 0, null, or undefined -->
                                                      <%=subtotal%>
@@ -473,7 +473,7 @@
                                             <div class="card">
                                                 <!-- Razor Pay Radio Button -->
                                                 <div class="card-header" id="heading-1">
-                                                    <input type="radio" value="Razor Pay" name="methode" id="RazorPay">
+                                                    <input type="radio" value="Razor Pay" name="methode" id="RazorPay" checked>
                                                     <label for="RazorPay">Razor Pay</label>
                                                 </div><!-- End .card-header -->
                                             
@@ -489,13 +489,21 @@
                                                         <h7 class="text-success">Balance : ₹<%= wallet.wallet %></h7>
                                                     <% } %>
                                                 </div><!-- End .card-header -->
-                                            
+                                            <% if(subtotal <= 1000){%>
                                                 <!-- Cash on Delivery Radio Button -->
                                                 <div class="card-header" id="heading-3">
                                                     <input type="radio" value="Cash on Delivery" name="methode" id="cod" checked>
                                                     <label for="cod">Cash On Delivery</label>
                                                 </div><!-- End .card-header -->
-                                            
+                                            <%}else{%>
+                                                <div class="card-header" id="heading-3">
+                                                    <input type="radio" value="Cash on Delivery" name="methode" id="cod" disabled>
+                                                    <label for="cod">Cash On Delivery</label>
+                                                    <div>
+                                                       <h7 style="font-size: smaller; font-weight: 400;">Cash on delivery only applicable <br>for Order below 1000</h7>
+                                                    </div>
+                                                </div><!-- End .card-header -->
+                                                <%}%>
                                                 <!-- Collapse Content -->
                                                 <div id="collapse-3" class="collapse" aria-labelledby="heading-3" data-parent="#cod">
                                                     <div class="card-body">Quisque volutpat mattis eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros.</div><!-- End .card-body -->
@@ -1340,8 +1348,8 @@ console.log(formData,"gd");
     </script>
 
     <script> 
-    function razorpayPayment(order){
-        console.log(order);
+   async function razorpayPayment(order){
+        console.log(order,"joojojoj");
 var options = {
     "key": "rzp_test_ALMHXTFiHgePY1", // Enter the Key ID generated from the Dashboard
     "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
@@ -1367,11 +1375,12 @@ var options = {
 };
 console.log("razor pay reached here")
 var rzp1 = new Razorpay(options);
-rzp1.open()
-
+await rzp1.open()
 
     }
-    function verifyPayment(payment, order) {
+     function verifyPayment(payment, order) {
+        console.log(payment,order,"huhuhuhuhuhuhuhuhuh")
+    
         console.log(payment, order, 'hgghjhg');
 
         $.ajax({
@@ -1385,6 +1394,8 @@ rzp1.open()
             if (response.success) {
               console.log("helooo");
               location.href = '/successOrder'
+            }else{
+                location.href = '/products'
             }
           }
 

@@ -36,17 +36,23 @@ const submitOffer = async(req,res)=>{
 
         const exist = await Offer.findOne({name:name})
         if(exist){
+console.log("exist")
+
+            res.json({success:false})
 
         }else{
+console.log("not")
+
             const newOffer = new Offer({
                 name:name,
                 discountAmount:discount,
                 activationDate:start,
+                
                 expiryDate:expiry
             }).save()
-
+console.log("reached")
             console.log(newOffer)
-            res.redirect('/admin/offer')
+            res.json({success:true})
         }
 
     } catch (error) {

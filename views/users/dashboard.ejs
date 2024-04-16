@@ -53,7 +53,10 @@
         text-align: center;
     }
     
-
+    .pagination .btn {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
     .profile-card h2 {
         color: #333;
         font-size: 28px;
@@ -399,7 +402,7 @@
                                                                     <th scope="col">Amount</th>
                                                                     <th scope="col">Payment Method</th>
                                                                     <th scope="col">Details</th>
-                                                                    <th scope="col">Download</th>
+                                                                    <th scope="col">Invoice</th>
                                                                 </tr>
                                                             </thead>
                                                             <% console.log(order, "hiii" ); %>
@@ -420,7 +423,12 @@
                                                                                     order[i].subtotal %>
                                                                             </td>
                                                                             <td style="font-weight: bold;">
+                                                                                <% if(order[i].orderStatus ==='pending' ){ %>
+                                                                                <%= order[i].payment %>[<a href="" class="text-danger">Pending</a>]
+                                                                                <%}else{%>
                                                                                 <%= order[i].payment %>
+
+                                                                                <%}%>
                                                                             </td>
                                                                             <td style="font-weight: bold;">
                                                                                 <a
@@ -428,6 +436,9 @@
                                                                                     <button
                                                                                         class="btn btn-outline-primary-2">View</button>
                                                                                 </a>
+                                                                            </td>
+                                                                            <td>
+                                                                                <a href="/pdf/<%=order[i]._id%>">Downlaod</a>
                                                                             </td>
                                                                         </tr>
                                                                         <% } %>
@@ -505,76 +516,94 @@
                                                     <h2>My Wallet</h2>
                                                     <div class="wallet-details">
                                                         <p><strong>Balance:</strong> ₹<span id="wallet-balance">
-                                                                <%= wallet.wallet%>
+                                                            <%= wallet.wallet.toFixed(0) %>
                                                             </span></p>
                                                     </div>
-                                                    <h4>Wallet Amount: ₹<%= wallet.wallet %>
-                                                    </h4>
+                                                    
 
-                                                    <div class="wallet-actions">
-                                                        <table id="tablePagination"
-                                                            class="table table-bordered table-hover table-striped">
+                                                   
+<div class="wallet-actions">
+    <table id="tablePagination"
+        class="table table-bordered table-hover table-striped">
 
-                                                            <thead class="thead-dark">
-                                                                <tr>
-                                                                    <th scope="col">Sl.No.</th>
-                                                                    <th scope="col">Date</th>
-
-                                                                    <th scope="col">Amount</th>
-
-                                                                    <th scope="col">Details</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <% wallet.walletHistory.forEach((val,index)=>{%>
-                                                                    <tr>
-                                                                        <td style="font-weight: bold;">
-                                                                            <%= index + 1 %>
-                                                                        </td>
-                                                                        <td style="font-weight: bold;">
-                                                                            <%= val.date.toLocaleDateString('en-US', {
-                                                                                weekday: 'short',
-                                                                                year: 'numeric',
-                                                                                month: 'short',
-                                                                                day: 'numeric',
-                                                                                hour: '2-digit',
-                                                                                minute: '2-digit'
-                                                                            }) %>
-                                                                        </td>
-
-
-                                                                        <%if(val.amount>0){%>
-                                                                            <td class="text-success"
-                                                                                style="font-weight: bold;">₹<%=
-                                                                                    val.amount %>
-                                                                            </td>
-                                                                            <td style="font-weight: bold;">
-                                                                                <h7 class="text-success">Credited</h7>
-                                                                                <%}else{%>
-                                                                            <td class="text-danger"
-                                                                                style="font-weight: bold;">₹<%=
-                                                                                    Math.abs(val.amount) %>
-                                                                            </td>
-                                                                            <td style="font-weight: bold;">
-                                                                                <h7 class="text-danger">Debited</h7>
-
-                                                                                <%}%>
-                                                                            </td>
-                                                                    </tr>
-                                                                    <% }) %>
-                                                            </tbody>
-                                                        </table>
-
-                                                        <div class="pagination">
-                                                            <% if (currentPage> 1) { %>
-                                                                <a href="/dashboard?page=<%= currentPage - 1 %>"
-                                                                    class="btn btn-primary">Previous</a>
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Sl.No.</th>
+                <th scope="col">Date</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% const limit = 10; %>
+            <% const startingIndex = (currentPage - 1) * limit + 1; %>
+            <% slicedWalletHistory.forEach((val, index) => { %>
+                <tr>
+                    <td style="font-weight: bold;">
+                        <%= startingIndex + index %>
+                    </td>
+                    <td style="font-weight: bold;">
+                        <%= val.date.toLocaleDateString('en-US', {
+                            weekday: 'short',
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }) %>
+                    </td>
+                    <% if(val.amount > 0) { %>
+                        <td class="text-success" style="font-weight: bold;">₹<%= val.amount.toFixed(0) %></td>
+                        <td style="font-weight: bold;">
+                            <h7 class="text-success">Credited</h7>
+                        </td>
+                    <% } else { %>
+                        <td class="text-danger" style="font-weight: bold;">₹<%= Math.abs(val.amount).toFixed(0) %></td>
+                        <td style="font-weight: bold;">
+                            <h7 class="text-danger">Debited</h7>
+                        </td>
+                    <% } %>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>                                                        <div class="pagination">
+                                                            <% const maxVisiblePages = 5; %>
+                                                            <% const half = Math.floor(maxVisiblePages / 2); %>
+                                                        
+                                                            <% const startPage = Math.max(1, currentPage - half); %>
+                                                            <% const endPage = Math.min(startPage + maxVisiblePages - 1, totalPages); %>
+                                                        
+                                                            <% if (startPage > 1) { %>
+                                                                <a href="/dashboard?page=1" class="btn btn-sm btn-outline-primary">1</a>
+                                                                <% if (startPage > 2) { %>
+                                                                    <span class="btn btn-sm btn-outline-secondary">...</span>
                                                                 <% } %>
-                                                                    <% if (currentPage < totalPages) { %>
-                                                                        <a href="/dashboard?page=<%= currentPage + 1 %>"
-                                                                            class="btn btn-primary">Next</a>
-                                                                        <% } %>
+                                                            <% } %>
+                                                        
+                                                            <% for (let i = startPage; i <= endPage; i++) { %>
+                                                                <% if (i === currentPage) { %>
+                                                                    <span class="btn btn-sm btn-outline-secondary"><%= i %></span>
+                                                                <% } else { %>
+                                                                    <a href="/dashboard?page=<%= i %>" class="btn btn-sm btn-outline-primary"><%= i %></a>
+                                                                <% } %>
+                                                            <% } %>
+                                                        
+                                                            <% if (endPage < totalPages) { %>
+                                                                <% if (endPage < totalPages - 1) { %>
+                                                                    <span class="btn btn-sm btn-outline-secondary">...</span>
+                                                                <% } %>
+                                                                <a href="/dashboard?page=<%= totalPages %>" class="btn btn-sm btn-outline-primary"><%= totalPages %></a>
+                                                            <% } %>
                                                         </div>
+                                                        
+                                                        
+                                                        
+                                                        
+
+                                                        
+                                                     
+                                                        
+
                                                     </div>
 
                                                 </div>
@@ -1182,6 +1211,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <script src="assets/js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function populateModal() {
             var userName = document.getElementById('profile-name').innerText;
@@ -1430,6 +1460,30 @@
         }
 
     </script>
+    <script>
+        $(document).ready(function() {
+            function loadWalletContent(page) {
+                $.ajax({
+                    url: '/dashboard',
+                    type: 'GET',
+                    data: { page: page },
+                    success: function(data) {
+                        var walletContent = $(data).find('#tab-wallet').html();
+                        $('.wallet-tab').html(walletContent);
+                    }
+                });
+            }
+    
+            loadWalletContent(1);
+    
+            $(document).on('click', '.pagination a', function(e) {
+                e.preventDefault();
+                var page = $(this).attr('href').split('page=')[1];
+                loadWalletContent(page);
+            });
+        });
+    </script>
+    
     <script>
         function deleteAddress(id) {
             const addressId = { id }

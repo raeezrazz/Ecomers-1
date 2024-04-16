@@ -8,6 +8,7 @@ const orderSchema =new mongoose.Schema({
     },
     delivery_address:{
         type: Object,
+        ref: 'address', 
         require:true
 
     },

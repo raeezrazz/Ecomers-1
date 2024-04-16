@@ -154,7 +154,7 @@
                                                             </h3>
                                                         </div>
                                                     </td>
-                                                    <% if (val.productId.offer && val.productId.offer.discountAmount) {
+                                                    <% if (val.productId.offer && val.productId.offer.discountAmount && val.productId.offer.expiryDate > new Date()) {
                                                         %>
                                                         <td class="price-col text-success"> ₹<%=val.productId.price -
                                                                 val.productId.offer.discountAmount %> <del
@@ -178,8 +178,8 @@
                                                             </td>
                                                             
                                                                 <% if (val.productId.offer &&
-                                                                    val.productId.offer.discountAmount) { %>
-                                                                    <td id="tot" class="total-col text-success">₹
+                                                                    val.productId.offer.discountAmount &&val.productId.offer.expiryDate > new Date()) { %>
+                                                                    <td id="tot-<%= val.productId._id %>" class="total-col text-success">₹
                                                                         <%=(val.productId.price -
                                                                             val.productId.offer.discountAmount) *
                                                                             val.quantity %>
@@ -205,12 +205,8 @@
                                         <div class="cart-discount">
                                             <form action="#">
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" required
-                                                        placeholder="coupon code">
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-outline-primary-2" type="submit"><i
-                                                                class="icon-long-arrow-right"></i></button>
-                                                    </div><!-- .End .input-group-append -->
+                                                    
+                                                    
                                                 </div><!-- End .input-group -->
                                             </form>
                                         </div><!-- End .cart-discount -->
@@ -701,13 +697,13 @@
                     const remainingStock = response.remainingStock;
                     const subtotal = response.subtotal; 
                     const total = response.total;
-                $('#tot').text(`₹ ${total}`); 
+                $(`#tot-${productId}`).text(`₹ ${total}`); 
 
                 $('#kif').text(`₹ ${subtotal}`); 
                 $('#kif2').text(`₹ ${subtotal}`);
 
                     $(`#quantity-${productId}`).val(newQuantity); 
-                    $(`#quantity-text-${productId}`).text(newQuantity); 
+                  
                     if (remainingStock !== undefined && remainingStock - newQuantity < 3) {
                 $(`#quantity-text-${productId}`).text('Only few Stock left...!'); 
                 $(`#quantity-text-${productId}`).addClass('text-danger'); 

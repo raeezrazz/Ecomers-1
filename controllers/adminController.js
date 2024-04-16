@@ -78,8 +78,75 @@ const loadDashboard = async (req, res) => {
         const products= await Products.find()
         const categoreis = await Category.find()
         const orders = await Order.find()
-        const monthly = 
-        res.render('home', { admin: userData ,products,categoreis,orders });
+        const razporPayCount = await Order.countDocuments({payment: "Razor Pay","products.productStatus": "delivered"});
+        const codCount = await Order.countDocuments({payment: "Cash on Delivery","products.productStatus": "delivered"});
+        const walletCount = await Order.countDocuments({payment: "wallet","products.productStatus": "delivered"});
+        
+        const filter = req.query.filter
+        const revenue = await Order.aggregate([
+            {$match:{'products.productStatus':"delivered"}},
+            {
+                $group:{
+                    _id:null,revenue:{$sum:"$subtotal"}
+                }
+            }
+        ]);
+
+        console.log(revenue,"nuaoj")
+
+
+        const sellingProduct = await Order.aggregate([
+            {$match:{'products.productStatus':'delivered'}},
+            {$unwind:'$products'},
+            {
+                $lookup:{
+                    from:"products",
+                    localField:"products.productId",
+                    foreignField:"_id",
+                    as:"joinedProduct"
+                }
+            },{$unwind:"$joinedProduct"},
+            {$group:{
+                _id:"$joinedProduct._id",
+                productName:{$first:"$joinedProduct.name"},
+                totalSold:{$sum:"$products.quantity"},
+            }},
+            {$sort:{totalSold:-1}},
+            {$limit:3}
+        ])
+
+
+
+        const sellingCategory = await Order.aggregate([
+            {$match:{'products.productStatus':'delivered'}},
+            {$unwind:'$products'},
+            {
+                $lookup:{
+                    from:"products",
+                    localField:"products.productId",
+                    foreignField:"_id",
+                    as:"joinedProduct"
+                }
+            },{$unwind:"$joinedProduct"},
+            {
+                $lookup: { 
+                  from: "categories",
+                  localField: "joinedProduct.categoryId", 
+                  foreignField: "_id",
+                  as: "joinedCategory"
+                }
+              },
+            {$group:{
+                _id:"$joinedCategory._id",
+                categoryName:{$first:"$joinedCategory.name"},
+                totalSold:{$sum:"$products.quantity"},
+            }},
+            {$sort:{totalSold:-1}},
+            {$limit:3}
+        ])
+
+        
+        res.render('home', { admin: userData ,products,categoreis,orders ,razporPayCount,codCount,walletCount,sellingProduct,sellingCategory});
 
     } catch (error) {
         console.log(error.message);
@@ -99,12 +166,8 @@ const blockUser =async(req,res)=>{
         const user = req.params.id
         // console.log(user);
         const value = await User.findOne({_id:user})
-        if(value.is_blocked){
-            await User.updateOne({_id:user},{$set:{is_blocked:false}})
-            
-        }else if(value.is_blocked ==false){
-            await User.updateOne({_id:user},{$set:{is_blocked:true}})
-        }
+        value.is_blocked = !value.is_blocked
+        await value.save()
         res.json({block:true})
     } catch (error) {
         console.log(error.message);
@@ -243,14 +306,26 @@ const deleteCategories = async (req,res)=>{
 const loadProducts =async(req,res)=>{
 
     try {
-        const products = await Products.find().populate({path:'categoryId',model:'categories'}).populate('offer')
+        console.log(req.query,"profdi nfijd")
+        const page = parseInt(req.query.page) || 1; 
+        const limit = 10; // Display 12 products per page
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+
+        
+  
+        const products = await Products.find().populate({ path: 'categoryId', model: 'categories', populate: { path: 'offer', model: 'offer' } }).populate('offer').skip(startIndex).limit(limit);
         const category = await Category.find()
-        const offer = await Offer.find()
+        const totalProducts = await Products.countDocuments();
+        const totalPages = Math.ceil(totalProducts / limit);
+  
+        const today = new Date()
+        const offer = await Offer.find({ expiryDate: { $gte: today } });
         console.log(category);
         
-        res.render('products',{products,category,offer})
+        res.render('products',{products,category,offer,totalPages,currentPage: page})
     } catch (error) {
-       log
+       console.log(error.message)
     }
 }
 const addProducts = async (req,res)=>{

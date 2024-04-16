@@ -59,7 +59,7 @@
             labels: ["900", "1200", "1400", "1600"],
             datasets: [
                 {
-                    label: "US",
+                    label: "COD",
                     backgroundColor: "#5897fb",
                     barThickness:10,
                     data: [233,321,783,900]

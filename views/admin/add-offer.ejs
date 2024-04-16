@@ -136,11 +136,13 @@
                 <div class="card mb-4">
                     <header class="card-header">
                         <div class="row gx-3">
-                            <form action="/admin/submitOffer" method="post">
+                            <form >
                                 <div class="row">
                                     <div class="col">
                                         <label for="couponName" class="text">Offer Name</label>
-                                        <input class="form-control" type="text" name="name" id="offerName" placeholder="Enter the Offer Name" required>
+                                        <input class="form-control" type="text" name="name" id="offerName" placeholder="Enter the Offer Name" >
+                                        <div id="nameError" class="text-danger"></div> <!-- Error Message -->
+
                                     </div>
                                 
                                 </div>
@@ -149,22 +151,25 @@
                                     <div class="col">
                                         <label for="discountAmount" class="text">Discount Amount</label>
                                         <input class="form-control" type="number" name="discount" id="discAmount" placeholder="Enter the Discount Amount" required>
+                                        <div id="discountError" class="text-danger"></div> <!-- Error Message -->
                                     </div>
-                                    
+                                   
                                 </div>
                                 <br>
                                 <div class="row">
                                     <div class="col">
                                         <label for="startingDate" class="text">Starting Date</label>
                                         <input class="form-control" type="date" name="start" id="startDate" required>
+                                        <div id="startDateError" class="text-danger"></div> <!-- Error Message -->
                                     </div>
                                     <div class="col">
                                         <label for="expiryDate" class="text">Expiry Date</label>
-                                        <input class="form-control" type="date" name="expiry" id="expDate" required>
+                                        <input class="form-control" type="date" name="expiry" id="expiryDate" required>
+                                        <div id="expiryDateError" class="text-danger"></div> <!-- Error Message -->
                                     </div>
                                 </div>
                                 <br>
-                                <button type="submit" class="border-1" style="background-color: rgb(134, 134, 234); color: white;">Submit</button>
+                                <button type="submit" onclick="validateForm(event)" class="border-1" style="background-color: rgb(134, 134, 234); color: white;">Submit</button>
                             </form>
                             
                     </div>
@@ -195,7 +200,104 @@
         <script src="assets admin/js/vendors/jquery.fullscreen.min.js"></script>
         <!-- Main Script -->
         <script src="assets admin/js/main.js?v=1.1" type="text/javascript"></script>
-       
+        <script>
+            const today = new Date();
+            
+            const adjustedDate = new Date(today);
+            adjustedDate.setDate(today.getDate() );
+            
+            const formattedAdjustedDate = adjustedDate.toISOString().split('T')[0];
+            
+            document.getElementById('startDate').setAttribute('min', formattedAdjustedDate);
+        </script>
+       <script>
+        function validateForm(event) {
+            event.preventDefault();
+            console.log("hloo")
+            const nameInput = document.getElementById('offerName');
+            const discountInput = document.getElementById('discAmount');
+            // const criteriaInput = document.getElementById('criteria');
+            const startDateInput = document.getElementById('startDate');
+            const expiryDateInput = document.getElementById('expiryDate');
+            console.log("hloo")
+    
+            // Reset previous error messages
+            document.getElementById('nameError').textContent = '';
+            document.getElementById('discountError').textContent = '';
+            // document.getElementById('criteriaError').textContent = '';
+            document.getElementById('startDateError').textContent = '';
+            document.getElementById('expiryDateError').textContent = '';
+        
+            let isValid = true;
+    
+            if (!nameInput.value ||(nameInput.value).trim() ==="" ) {
+                document.getElementById('nameError').textContent = 'Offer Name is required';
+                isValid = false;
+            }
+    
+          
+    
+            if (!discountInput.value) {
+                document.getElementById('discountError').textContent = 'Discount Percentage is required';
+                isValid = false;
+            }
+    
+            // if (!criteriaInput.value) {
+            //     document.getElementById('criteriaError').textContent = 'Criteria Amount is required';
+            //     isValid = false;
+            // }
+    
+            if (!startDateInput.value) {
+                document.getElementById('startDateError').textContent = 'Starting Date is required';
+                isValid = false;
+            }
+    
+            if (!expiryDateInput.value) {
+                document.getElementById('expiryDateError').textContent = 'Expiry Date is required';
+                isValid = false;
+            }
+            if (discountInput.value <= 0 ||discountInput.value >1000) {
+                document.getElementById('discountError').textContent = 'Give Discount amount between 1 to 1000';
+                isValid = false;
+            }
+            // if (criteriaInput.value < discountInput.value) {
+            //     document.getElementById('criteriaError').textContent = 'Criteria Amount must be above Discount amount';
+            //     isValid = false;
+            // }
+            if (expiryDateInput.value <= startDateInput.value ) {
+                document.getElementById('expiryDateError').textContent = 'Expiry Date must be above start Date';
+                isValid = false;    
+            }
+    
+            if (!isValid) {
+                return; // Exit function if validation fails
+            }
+           const name=nameInput.value
+           const discount =discountInput.value
+        //    const criteria=criteriaInput.value
+           const start =startDateInput.value
+           const expiry=expiryDateInput.value
+    console.log("killed")
+            console.log("kkkkoi",nameInput)
+            fetch('/admin/submitOffer',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({name,discount,start,expiry})
+            }).then(response=>response.json())
+            .then(data=>{
+                if(data.success ==true){
+                    window.location.href='/admin/offer'
+                }else if(data.success === false){
+                    console.log("kjfhakv")
+                    document.getElementById('nameError').textContent = 'Offer Name already Exist';
+                }
+            })
+    
+            // Your existing validation and form submission logic here
+        }
+    </script>
     </body>
 </html>
        

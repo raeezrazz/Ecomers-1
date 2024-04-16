@@ -209,6 +209,8 @@ user_route.get('/signout', (req, res) => {
 
 user_route.post('/verifyRegister',userController.verifyRegister)
 user_route.post('/verifyingOtp',userController.userOtpVerify)
+user_route.post('/verifyingForgotOtp',userController.userForgotOtpVerify)
+
 user_route.get('/',userController.userHome)
 user_route.get('/logining',userController.loadLogin)
 user_route.get('/loadHome',userController.loadHome)
@@ -224,7 +226,7 @@ user_route.post('/changePassword',userController.changePassword)
 user_route.get('/loadProducts',productController.loadProducts)
 user_route.get('/eachproduct/:id',productController.loadeachProducts)
 user_route.get('/shopSearch',productController.searchProduct)
-user_route.post('/sort',productController.sortProducts)
+user_route.get('/sort',productController.sortProducts)
 
 //cart
 user_route.get('/loadCart',cartController.loadCart)
@@ -245,6 +247,9 @@ user_route.get('/fullOrder/:id',orderController.viewFullOrder)
 user_route.post('/cancelOrder',orderController.cancelOrder)
 user_route.post('/returnOrder',orderController.returnOrder)
 user_route.post('/verifypayment',orderController.verifyPayment)
+user_route.post('/retryOrder',orderController.retryOrder)
+user_route.get('/pdf/:id',orderController.downloadPdf)
+
 //address
 user_route.post('/addAddress',addressController.addAddress)
 user_route.post('/edit-address',addressController.editAddress)

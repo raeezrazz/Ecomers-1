@@ -53,7 +53,7 @@ const submitCoupon = async(req,res)=>{
             }).save()
            
                 console.log(newCoupon,"f")
-                res.redirect('/admin/coupons')
+                res.json({success:true})
        
         
     }else{
@@ -72,17 +72,18 @@ const submitCoupon = async(req,res)=>{
 
     }else if(expiry<=start){
         console.log("fuedj");
-        res.render('createCoupon',{expiry:"Expiry Date must be abov start date"})
+        res.json({result:expired})
 
     }else{
-        res.render('createCoupon',{message:"Something went wron"})
+        res.json({result:exist})
 
     }
 }
 }else{
     console.log("not in")
 
-    res.render('createCoupon',{message:"Coupon already exist"})
+           res.json({success:false})
+
 
 }
     } catch (error) {
@@ -105,9 +106,41 @@ const removeCoupon= async(req,res)=>{
     }
 }
 
+const editCoupon=async(req,res)=>{
+    try{
+        const couponId = req.params.id
+        console.log(req.params,couponId)
+        const coupon = await Coupon.findOne({_id:couponId})
+        res.render('edit-coupon',{coupon})
+    }catch(error){
+        console.log(error.message)
+    }
+}
+
+const submitCouponEdit =async(req,res)=>{
+    try{
+        console.log(req.body,"dcjoki")
+        const{couponId,name,code,discount,criteria,start,expiry}=req.body
+        const exist = await Coupon.findOne({_id:couponId,couponCode:code})
+        if(exist){
+            res.json({success:false})
+        }else{
+        const coupon = await Coupon.findOneAndUpdate({_id:couponId},{$set:{name:name,couponCode:code,discountAmount:discount,criteriaAmount:criteria,activationDate:start,expiryDate:expiry}})
+        console.log(coupon)
+    
+            res.json({success:true})
+       
+    }
+    }catch(error){
+        console.log(error.message)
+    }
+}
+
 module.exports={
     loadCoupon,
     loadCreateCoupon,
     submitCoupon,
-    removeCoupon
+    removeCoupon,
+    editCoupon,
+    submitCouponEdit
 }

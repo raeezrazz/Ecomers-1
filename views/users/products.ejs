@@ -204,7 +204,7 @@
                 					<div class="toolbox-sort address-card">
                                         <label for="sortby">Sort by:</label>
                                         <div class="select-custom">
-                                            <select name="sortby" id="sortby" class="form-control">
+                                            <select name="sortby" id="sortby" class="form-control" onchange="sortProducts(value)">
                                                 <option value="">Select</option>
                                                 <option value="LowToHigh">Price: Low to High</option>
                                                 <option value="HighToLow">Price: High to Low</option>
@@ -220,12 +220,13 @@
                 			</div><!-- End .toolbox -->
 
                             <div class="products mb-3 d-flex flex-wrap" id="kjh">
-                                <% for(let i = 0 ; i < products.length ; i ++ ){ %>
+                                <% if (typeof products !== 'undefined' && products.length > 0) { %>
+                                    <% for (let i = 0; i < products.length; i++) { %>
                                     <div class="col-6 col-md-4 col-lg-4">
                                         <div class="product product-7 text-center address-card">
                                             <figure class="card-body">
 
-                                                <% if( products[i].quantity<=0 ){ %>
+                                                <% if( products[i].quantity<=0 ||products[i].is_blocked === true ){ %>
                                                     <span class="product-label " style="background-color: grey;">Out Of Stock</span>
                                                 <%}else if(products[i].popularity > 3) {%>
                                                     <span class="product-label label-new" style="background-color: lightblue;">Popular</span>
@@ -276,26 +277,50 @@
                                             </div><!-- End .product-body -->
                                         </div><!-- End .product -->
                                     </div><!-- End .col-sm-6 col-lg-4 -->
-                                    <%}%>   
+                                    <%}%>  
+                                    <%}%>  
+                                     <!-- Pagination -->
+       
+                                   
+
                                 </div>
                        
 
                 			<nav aria-label="Page navigation">
+
 							    <ul class="pagination justify-content-center">
-							        <li class="page-item disabled">
-							            <a class="page-link page-link-prev" href="#" aria-label="Previous" tabindex="-1" aria-disabled="true">
-							                <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
-							            </a>
-							        </li>
-							        <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
-							        <li class="page-item"><a class="page-link" href="#">2</a></li>
-							        <li class="page-item"><a class="page-link" href="#">3</a></li>
-							        <li class="page-item-total">of 6</li>
-							        <li class="page-item">
-							            <a class="page-link page-link-next" href="#" aria-label="Next">
-							                Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
-							            </a>
-							        </li>
+
+							       
+                <% if(currentPage > 1){%>
+                    <li class="page-item">
+                        <a class="page-link page-link-prev" href="/loadProducts?page=<%= currentPage - 1 %>" aria-label="Previous">
+                            <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span> Prev
+                        </a>
+                    </li>
+                <%}%>
+        
+                <!-- Page Numbers -->
+                <%for (let i = 1; i <= totalPages; i++){%>
+                    <% if (i === currentPage){%>
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link" href="#"><%= i %></a>
+                        </li>
+                    <% }else{%>
+                        <li class="page-item">
+                            <a class="page-link" href="/loadProducts?page=<%= i %>"><%= i %></a>
+                        </li>
+                    <% } %>
+                <% } %>
+        
+                <!-- Next Button -->
+                <% if (currentPage < totalPages) { %>
+                    <li class="page-item">
+                        <a class="page-link page-link-next" href="/loadProducts?page=<%= currentPage + 1 %>" aria-label="Next">
+                            Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
+                        </a>
+                    </li>
+            <% } %>
+							        
 							    </ul>
 							</nav>
                 		</div><!-- End .col-lg-9 -->
@@ -312,27 +337,31 @@
 									        Category
 									    </a>
 									</h3><!-- End .widget-title -->
-
                                     <div class="collapse show" id="qwert">
-                                        <div class="widget-body">
-                                            <div class="filter-items filter-items-count">
-                                                <form action="/searchProduct" method="get" id="categoryForm">
-                                                    <div class="filter-item">
-                                                        <input type="checkbox" id="cat-all" name="category" value="all">
-                                                        <label for="cat-all">All</label>
-                                                    </div>
-                                                    <% if(typeof category !== 'undefined') { %>
-                                                        <% category.forEach((val) => { %>
-                                                            <div class="filter-item">
-                                                                <input type="checkbox" id="cat-<%= val._id %>" name="category" value="<%= val._id %>">
-                                                                <label for="cat-<%= val._id %>"><%= val.name %></label>
-                                                            </div>
-                                                        <% }); %>
-                                                    <% } %>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
+										<div class="widget-body">
+											<div class="filter-items filter-items-count">
+                                                <div class="filter-item">
+													
+                                                    <input type="" class="custom-control-input" id="cat-1">
+                                                    <a class="" href="/shopSearch?name=all%>"  for="cat-1" >All</a>
+                                                
+                                            </div><!-- End .filter-item -->
+                                               <% if(typeof category !='undefined'){%>
+                                                <% category.forEach((val)=>{ %>
+                                                    
+												<div class="filter-item">
+													
+														<input type="" class="custom-control-input" id="cat-1">
+														<a class="" href="/shopSearch?name=<%= encodeURIComponent(val._id) %>"  for="cat-1" ><%=val.name%></a>
+													
+												</div><!-- End .filter-item -->
+                                                  <% }) %>
+                                               <% }%>
+											</div><!-- End .filter-items -->
+										</div><!-- End .widget-body -->
+									</div><!-- End .collapse -->
+        						</div><!-- End .widget -->
+
                                     
         						</div><!-- End .widget -->
 
@@ -742,7 +771,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script>
+<!-- <script>
     $(document).ready(function () {
         $('#sortby').on('change', function () {
             var selectedValue = $(this).val();
@@ -757,7 +786,7 @@
                 data: { sortby: value },
                 success: function(response) {
                    
-                    $('#lkj').load('/loadCart','#lkj')
+                    $('#lkj').load('/loadProducts','#lkj')
                 },
                 error: function (error) {
                     console.error('Error:', error);
@@ -765,7 +794,7 @@
             });
         }
     });
-</script>
+</script> -->
 <script>
     function addToWishlist(ids){
         $.ajax({
@@ -814,7 +843,6 @@
 
 </script>
 <script>
-    // Automatically submit the form when a checkbox is changed
     document.addEventListener('DOMContentLoaded', function () {
         const checkboxes = document.querySelectorAll('input[type="checkbox"][name="category"]');
         
@@ -824,6 +852,21 @@
             });
         });
     });
+</script>
+<script>
+    function sortProducts(val){
+     let queryString = window.location.search;
+     let params = new URLSearchParams(queryString)
+        params.delete('sort');
+
+        params.append('sort',val)
+
+        let newQueryString = params.toString();
+        let newUrl = `/sort?${newQueryString}`
+
+        window.location.href = newUrl;
+    }
+    
 </script>
 
 </body>

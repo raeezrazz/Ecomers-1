@@ -9,6 +9,7 @@ const OfferSchema = new mongoose.Schema({
         type:Number,
 
     },
+  
     activationDate:{
         type:Date,
         required:true

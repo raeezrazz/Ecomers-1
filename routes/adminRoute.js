@@ -56,6 +56,7 @@ admin_route.post('/submit-product',multer.uploadproduct,productController.adding
 admin_route.get('/editproduct',productController.loadEditProduct)
 admin_route.post('/submiteditproduct',productController.subEditProduct)
 admin_route.patch('/removeProduct',productController.removeProduct)
+admin_route.patch('/blockproduct/:id',productController.blockProduct)
 
 //Orders
 admin_route.get('/orders',OrderController.loadOrders)
@@ -67,6 +68,8 @@ admin_route.get('/coupons',couponController.loadCoupon)
 admin_route.get('/loadAddCoupon',couponController.loadCreateCoupon)
 admin_route.post('/submitCoupon',couponController.submitCoupon)
 admin_route.get('/removeCoupon/:id',couponController.removeCoupon)
+admin_route.get('/editCoupon/:id',couponController.editCoupon)
+admin_route.post('/submitCouponEdit',couponController.submitCouponEdit)
 
 //Offer
 admin_route.get('/offer',offerController.loadOffer)

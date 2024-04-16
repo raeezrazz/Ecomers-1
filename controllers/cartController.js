@@ -21,7 +21,7 @@ const loadCart = async (req, res) => {
                 console.log(userCart, "hello");
 
                 const subtotal = userCart.product.reduce((acc, val) => {
-                    const discount = val.productId.offer ? val.productId.offer.discountAmount : 0;
+                    const discount = val.productId.offer&&val.productId.offer.expiryDate > new Date() ? val.productId.offer.discountAmount : 0;
                     return acc + (val.productId.price - discount) * val.quantity;
                 }, 0);
             //    const subtotal=3
@@ -192,7 +192,7 @@ const loadCheckout = async (req, res) => {
         const couponDiscount = product.couponDiscount ? product.couponDiscount.discountAmount : 0;
         const wallet = await User.findOne({_id:userId}).select('wallet')
         const subtotal = product.product.reduce((acc, val) => {
-            const discount = val.productId.offer ? val.productId.offer.discountAmount : 0;
+            const discount = val.productId.offer &&val.productId.offer.expiryDate > new Date() ? val.productId.offer.discountAmount : 0;
             return acc + (val.productId.price - discount) * val.quantity;
         }, 0);   
 
@@ -259,13 +259,13 @@ const updateQuantity = async (req, res) => {
         const allCart = await Cart.findOne({user:userId}).populate({ path: 'product.productId', model: 'Product', populate: { path: 'offer', model: 'offer' } });
         const quantity=Allquantity.product[0].quantity
         const stock =product.quantity
-        const discount = Allquantity.product[0].productId.offer ? Allquantity.product[0].productId.offer.discountAmount : 0;
+        const discount = Allquantity.product[0].productId.offer&&Allquantity.product[0].productId.offer.expiryDate > new Date() ? Allquantity.product[0].productId.offer.discountAmount : 0;
 
         const price = Allquantity.product[0].productId.price
         const total = (price-discount)*quantity
 
         const subtotal = allCart.product.reduce((acc, val) => {
-            const discount = val.productId.offer ? val.productId.offer.discountAmount : 0;
+            const discount = val.productId.offer &&val.productId.offer.expiryDate > new Date() ? val.productId.offer.discountAmount : 0;
             return acc + (val.productId.price - discount) * val.quantity;
         }, 0);
      

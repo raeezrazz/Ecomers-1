@@ -609,7 +609,7 @@
                                             <div class="col-md-4 col-6 ">
                                                 <p style="font-size: 15px;"  class="form-control" >
                                                     <a style="color: black; font-size: small; font-weight: bold;"> 
-                                                        OrderID:</a> <h7 style="font-size: small;"><%=detials._id%><br>
+                                                        OrderID:</a> <a style="font-size: smaller;"><%=detials._id%><br>
                                                             <a style="color: black; font-size: small; font-weight: bold;"> 
                                                          
                                                                 Date:</a>  <%=detials.orderDate.toLocaleDateString('en-US', {
@@ -638,14 +638,19 @@
                                                 <p style="font-size: 15px;"   class="form-control" >
 <a style="color: black; font-size: small; font-weight: bold;">     Phone:</a>  <%=detials.delivery_address.phone%><br>
 <a style="color: black; font-size: small; font-weight: bold;">   Pincode:</a> <%=detials.delivery_address.pincode%>
-                                                    
+
                                                 </p>
+                                                
                                             </div>
-                                            
+                                          
                                         </div>
                                     </header>
                                     <!-- card-header end// -->
-                                    <div class="card-body ">
+                                    <div class="card-body ">  <% if(detials.orderStatus ==='pending' ){ %>
+                                        <div style="text-align: end; padding-top: 10px; padding-right: 15%;" class="">
+                                       <button class="btn-primary" onclick="orderPlace('<%=detials._id%>','<%=detials.subtotal%>',event)" >Pay</button>
+                                    </div>
+                                        <% }%>
                                         <div class="table-responsive " style="margin-top: 80px;">
                                         
                                                 <div id="reloadDiv">
@@ -670,12 +675,35 @@
                                                         <%= product.productId.name%> 
                                                      </td >
                                                      <td style="width:22% ;"><div class="col-md-6" ><img class="" src="/multerImage/sharp/<%= product.productId.images[0]%>" alt=""></div></td>
-                                                     <td style="font-weight: bold;"><%=product.productId.price%></td>
+                                                     <td style="font-weight: bold;">
+                                                    
+                                                        <% if (product.productId.offer && product.productId.offer.discountAmount) {
+                                                            %>
+                                                            <td class="price-col text-success"> ₹<%=product.productId.price -
+                                                                    product.productId.offer.discountAmount %> <del
+                                                                        class="text-danger">₹<%=product.productId.price%></del>
+                                                            </td>
+                                                            <% } else { %>
+    
+                                                                <td class="price-col text-success"> ₹<%=product.productId.price
+                                                                        %>
+                                                                </td>
+                                                                <%}%>
+                                                    </td>
                                                      <td style="font-weight: bold;"><%=product.quantity%></td>
                                                      
                                                      <td style="font-weight: bold;"><%=product.productId.price * product.quantity%></td>
-                                                    <td style="color: red;"><%= product.productStatus%></td>
+                                                    <td style="color: red;">
+                                                       <% if(detials.orderStatus ==='pending' ){ %>
+                                                        Pending
+                                                       <% }else{%>
+                                                        <%= product.productStatus%>
+                                                        <%}%></td>
+
                                                     <td style="font-weight: bold;">
+                                                        <% if(detials.orderStatus ==='pending' ){ %>
+                                                            
+                                                            <% }else{%>
                                                         <%if(product.productStatus=='cancelled'||product.productStatus=='returned'){%>
 
                                                         <%}else if(product.productStatus=='delivered'){%>
@@ -684,10 +712,13 @@
                                                         <a href="" onclick="cancelOrder('<%= product._id %>','<%=detials._id%>',event)"  style="font-weight: bolder; color: darkred;">Cancel</a>
 
                                                         <%}%>
+                                                        <%}%>
+
                                                     </td>
 
                                                 </tr>   
                                                     <%})%>
+                                                   
                                                     </tbody>
                                                 </table>
                                                 </div>
@@ -1074,6 +1105,9 @@
     <script src="assets/js/superfish.min.js"></script>
     <script src="assets/js/owl.carousel.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
     <script>
@@ -1176,8 +1210,86 @@
             });
         }
     </script>
+
+<script>
+
+    function orderPlace(orderId,subtotal,event){
+        console.log(subtotal,orderId)
+      event.preventDefault();
+  
+     
+  
+        
+         
+          $.ajax({
+              url:'/retryOrder',
+              method:'POST',
+              data: {subtotal,orderId},
+              success:(response)=>{
+                   console.log(response)
+                  if(response.success===true){
+                      location.href='/successOrder'
+                  }else{
+                      console.log("reached here")
+                      razorpayPayment(response.order)
+                  }
+              }
+          })
+          }
+      </script>
+    
+    <script> 
+        function razorpayPayment(order){
+            console.log(order,"joojojoj");
+    var options = {
+        "key": "rzp_test_ALMHXTFiHgePY1", // Enter the Key ID generated from the Dashboard
+        "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Fashion Store", //your business name
+        "description": "Test Transaction",
+        "image": "https://example.com/your_logo",
+        "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response) {
+                verifyPayment(response, order)
+              },
+        "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+            "name": "Gaurav Kumar", //your customer's name
+            "email": "gaurav.kumar@example.com",
+            "contact": "9000090000" //Provide the customer's phone number for better conversion rates 
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+    console.log("razor pay reached here")
+    var rzp1 = new Razorpay(options);
+    rzp1.open()
     
     
+        }
+        function verifyPayment(payment, order) {
+            console.log(payment, order, 'hgghjhg');
+    
+            $.ajax({
+              url: "/verifypayment",
+              method: 'post',
+              data: {
+                payment,
+                order
+              },
+              success: (response) => {
+                if (response.success) {
+                  console.log("helooo");
+                  location.reload()
+                }
+              }
+    
+            })
+        }
+    </script>
 </body>
 
 

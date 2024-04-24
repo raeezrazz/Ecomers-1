@@ -231,23 +231,22 @@
                             <h1>Verify</h1>
                             <form action="/verifyingForgotOtp" method="post">
                                 <% if(typeof message !== 'undefined' ){ %>
-                                    <h4> <%=message%></h4>
+                                <h4> <%=message%></h4>
                                 <%}%>
                                 <label for="">Enter the OTP sent to your email address</label>
                                 <input type="hidden" name="userId" value="<%= userId  %>">
                                 <!-- <input type="hidden" name="userId" value="<%= userId  %>"> -->
+            
                                 <input type="number" class="form-control" placeholder="" name="otp" required>
                                 <button type="submit" class="btn btn-outline-primary-2">Verify</button>
+                                <button type="button" class="btn btn-outline-primary-2" id="resendBtn" onclick="redirectToURL()">Resend OTP</button>
+                                <span id="timer"></span>
                             </form>
-                            <!-- Retry button and timer container -->
-                            <div id="retry-container" style="display: none;">
-                                <p>Retry in <span id="timer-countdown"></span></p>
-                                <button type="button" id="retry-button" class="btn btn-outline-primary-2" disabled>Retry</button>
-                            </div> <h5>retrey</h5>
                         </div><!-- End .form-tab -->
                     </div><!-- End .form-box -->
                 </div><!-- End .container -->
             </div><!-- End .login-page section-bg -->
+            
         </main><!-- End .main -->
 
         <footer class="footer">
@@ -358,60 +357,44 @@
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
 
-    <script>
-        // Set the duration of the timer in seconds
-        const timerDuration = 60;
-    
-        // Get references to timer and retry button elements
-        const timerElement = document.getElementById('timer-countdown');
-        const retryButton = document.getElementById('retry-button');
-    
-        // Function to update the timer display
-        function updateTimerDisplay(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-            timerElement.textContent = ` (${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds})`;
-        }
-    
-        // Function to handle timer expiration
-        function handleTimerExpiration() {
-            retryButton.disabled = false;
-        }
-    
-        // Initialize timer countdown
-        let timer = timerDuration;
-        updateTimerDisplay(timer);
-    
-        // Start the timer countdown
-        const timerInterval = setInterval(() => {
-            timer--;
-            updateTimerDisplay(timer);
-    
-            if (timer <= 0) {
-                handleTimerExpiration();
-                clearInterval(timerInterval);
+  <script>
+    function otpVerify(){
+        console.log("fhyainkds")
+    }
+  </script>
+
+<script>
+    // Function to redirect to a specified URL
+    function redirectToURL() {
+        // Redirect to your desired URL
+        window.location.reload()
+    }
+
+    // Function to start the timer
+    function startTimer() {
+        var duration = 30; // 30 seconds
+        var timerDisplay = document.getElementById('timer');
+        var resendBtn = document.getElementById('resendBtn');
+
+        resendBtn.disabled = true;
+
+        var intervalId = setInterval(function () {
+            timerDisplay.textContent = duration;
+            duration--;
+
+            if (duration < 0) {
+                clearInterval(intervalId);
+                timerDisplay.textContent = '';
+                resendBtn.disabled = false;
             }
         }, 1000);
-    
-        // Event listener for retry button
-        retryButton.addEventListener('click', () => {
-            // Add logic here to retry your action
-            // For example, you can resend the OTP
-            retryButton.disabled = true;
-            timer = timerDuration;
-            updateTimerDisplay(timer);
-            setInterval(() => {
-                timer--;
-                updateTimerDisplay(timer);
-    
-                if (timer <= 0) {
-                    handleTimerExpiration();
-                }
-            }, 1000);
-        });
-    </script>
-    
-</body>
+    }
+
+    // Start the timer when the page loads
+    window.onload = function () {
+        startTimer();
+    };
+</script>
 
 
 <!-- molla/login.html  22 Nov 2019 10:04:03 GMT -->

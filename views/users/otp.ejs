@@ -225,29 +225,29 @@
             </nav><!-- End .breadcrumb-nav -->
 
             <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url('assets/images/backgrounds/login-bg.jpg')">
-            	<div class="container">
-            		<div class="form-box">
-            			<div class="form-tab">
-	            			<h1>Verify</h1>
-							<form action="/verifyingOtp" method="post">
+                <div class="container">
+                    <div class="form-box">
+                        <div class="form-tab">
+                            <h1>Verify</h1>
+                            <form action="/verifyingOtp" method="post">
                                 <% if(typeof message !== 'undefined' ){ %>
-                                    <h4> <%=message%></h4>
-                                  <%}%>
+                                <h4> <%=message%></h4>
+                                <%}%>
                                 <label for="">Enter the OTP sent to your email address</label>
                                 <input type="hidden" name="userId" value="<%= userId  %>">
                                 <!-- <input type="hidden" name="userId" value="<%= userId  %>"> -->
-                              
+            
                                 <input type="number" class="form-control" placeholder="" name="otp" required>
                                 <button type="submit" class="btn btn-outline-primary-2">Verify</button>
-                                <!-- <a onclick="" class="text-danger font-weight-normal "  style=" margin-left: 20px; " href="resendotp">Resend OTP </a> -->
+                                <button type="button" class="btn btn-outline-primary-2" id="resendBtn" onclick="redirectToURL()">Resend OTP</button>
+
+                                <span id="timer"></span>
                             </form>
-                            
-							
-						</div><!-- End .form-tab -->
-            		</div><!-- End .form-box -->
-            	</div><!-- End .container -->
-            </div><!-- End .login-page section-bg -->
-        </main><!-- End .main -->
+                        </div><!-- End .form-tab -->
+                    </div><!-- End .form-box -->
+                </div><!-- End .container -->
+            </div>>
+        </main> <!-- End .main -->
 
         <footer class="footer">
         	<div class="footer-middle">
@@ -411,7 +411,39 @@
     </script>
     
 
-
+ 
+    <script>
+        // Function to redirect to a specified URL
+        function redirectToURL() {
+            // Redirect to your desired URL
+            window.location.reload()
+        }
+    
+        // Function to start the timer
+        function startTimer() {
+            var duration = 30; // 30 seconds
+            var timerDisplay = document.getElementById('timer');
+            var resendBtn = document.getElementById('resendBtn');
+    
+            resendBtn.disabled = true;
+    
+            var intervalId = setInterval(function () {
+                timerDisplay.textContent = duration;
+                duration--;
+    
+                if (duration < 0) {
+                    clearInterval(intervalId);
+                    timerDisplay.textContent = '';
+                    resendBtn.disabled = false;
+                }
+            }, 1000);
+        }
+    
+        // Start the timer when the page loads
+        window.onload = function () {
+            startTimer();
+        };
+    </script>
 
 </body>
 

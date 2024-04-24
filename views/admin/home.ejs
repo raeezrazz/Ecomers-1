@@ -36,6 +36,12 @@
                             <span class="text">Dashboard</span>
                         </a>
                     </li>
+                    <li class="menu-item active">
+                        <a class="menu-link" href="sales">
+                            <i class="icon material-icons md-home"></i>
+                            <span class="text">Sales</span>
+                        </a>
+                    </li>
                     <li class="menu-item has-submenu">
                         <a class="menu-link" href="users_list">
                             <i class="icon material-icons md-shopping_bag"></i>
@@ -127,7 +133,7 @@
                                 <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
                                 <div class="text">
                                     <h6 class="mb-1 card-title">Revenue</h6>
-                                    <span>$13,456.5</span>
+                                    <span>₹<%=revenue[0].revenue%></span>
                                     <span class="text-sm"> Shipping fees are not included </span>
                                 </div>
                             </article>
@@ -163,7 +169,7 @@
                                 <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
                                 <div class="text">
                                     <h6 class="mb-1 card-title">Monthly Earning</h6>
-                                    <span>$6,982</span>
+                                    <span>₹<%=monthlyIncome%></span>
                                     <span class="text-sm"> Based in your local time. </span>
                                 </div>
                             </article>
@@ -175,7 +181,8 @@
                         <div class="card mb-4">
                             <article class="card-body">
                                 <h5 class="card-title">Sale statistics</h5>
-                                <select onchange="filterChart(value)" class="form-select" style="width: 100px;">
+                                <select onchange="
+                                loChart(value)" class="form-select" style="width: 100px;">
                                     <option selected>Filter by</option>
                                     <option value="monthly">Monthly</option>
                                     <option value="yearly">Yearly</option>
@@ -237,6 +244,7 @@
 
     /*Sale statistics Chart*/
     if ($('#myChart').length) {
+        console.log(<%=labels%>,"bvfnvojsgk")
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
             // The type of chart we want to create
@@ -244,15 +252,15 @@
             
             // The data for our dataset
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                labels:[<%=labels.toString()%>],
                 datasets: [{
                         label: 'Sales',
                         tension: 0.3,
                         fill: true,
                         backgroundColor: 'rgba(44, 120, 220, 0.2)',
                         borderColor: 'rgba(44, 120, 220)',
-                        data: [18, 17, 4, 3, 2, 20, 25, 31, 25, 22, 20, 9]
-                    },
+                        data: <%= JSON.stringify(graphData) %>
+                    }
                    
 
                 ]
@@ -301,18 +309,21 @@
             }
         });
     } //end if 
+
+    let k = <%=sellingProduct[0].totalSold%>+<%=sellingProduct[1].totalSold%>+<%=sellingProduct[2].totalSold%>
+
     if($('#myChart3').length) {
     var ctx3 = document.getElementById("myChart3");
     var myChart3 = new Chart(ctx3, {
         type: 'pie',
         data: {
-            labels: ["<%=sellingProduct[0].productName%>","<%=sellingProduct[1].productName%>","<%=sellingProduct[2].productName%> Pay"],
+            labels: ["<%=sellingProduct[0].productName%>","<%=sellingProduct[1].productName%>","<%=sellingProduct[2].productName%> Pay","others"],
             datasets: [
                 {
                     label: "payments",
-                    backgroundColor:['#A5E69E', '#a87bc7', '#64b7f6'],
+                    backgroundColor:['#A5E69E', '#a87bc7', '#64b7f6','#6666'],
                     barThickness:20,
-                    data: ["<%=sellingProduct[0].totalSold%>",'<%=sellingProduct[1].totalSold%>','<%=sellingProduct[2].totalSold%>']
+                    data: ["<%=sellingProduct[0].totalSold%>",'<%=sellingProduct[1].totalSold%>','<%=sellingProduct[2].totalSold%>',<%= orders.length%>-k]
                 }
             ]
         },
@@ -332,19 +343,19 @@
         }
     });
 }
-
+let m =<%=sellingCategory[0].totalSold%>+<%=sellingCategory[1].totalSold%>+<%=sellingCategory[2].totalSold%>
 if ($('#myChart4').length) {
     var ctx4 = document.getElementById("myChart4");
     var myChart4 = new Chart(ctx4, {
         type: 'pie',
         data: {
-            labels: ["<%=sellingCategory[0].categoryName%>","<%=sellingCategory[1].categoryName%>","<%=sellingCategory[2].categoryName%>"],
+            labels: ["<%=sellingCategory[0].categoryName%>","<%=sellingCategory[1].categoryName%>","<%=sellingCategory[2].categoryName%>",'Others'],
             datasets: [
                 {
                     label: "payments",
-                    backgroundColor:['#A5E69E', '#a87bc7', '#64b7f6'],
+                    backgroundColor:['#A5E69E', '#a87bc7', '#64b7f6','#6666'],
                     barThickness:20,
-                    data: ["<%=sellingCategory[0].totalSold%>",'<%=sellingCategory[1].totalSold%>','<%=sellingCategory[2].totalSold%>']
+                    data: ["<%=sellingCategory[0].totalSold%>",'<%=sellingCategory[1].totalSold%>','<%=sellingCategory[2].totalSold%>',<%= categoreis.length%>-m]
                 }
             ]
         },

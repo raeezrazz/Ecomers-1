@@ -231,7 +231,13 @@
 							    			<label for="register-password-2"> Confirm Password *</label>
 							    			<input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
 							    		</div><!-- End .form-group -->
-
+                                        <div class="form-group">
+                                            <% if(typeof referal !== 'undefined'){ %>
+                                                <h6 class="text text-danger font-weight-bold"> <%=password1%></h6>
+                                              <%}%>
+							    			<label for="register-password-2"> Referal Code(Optional)</label>
+							    			<input type="password" class="form-control" id="referal" name="referal" >
+							    		</div><!-- End .form-group -->
 							    		<div class="form-footer">
 							    			<button type="submit" class="btn btn-outline-primary-2">
 			                					<span>SIGN UP</span>

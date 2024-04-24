@@ -11,6 +11,7 @@ const passport = require('passport')
 const nocache = require('nocache')
 const Category = require('../models/categoriesModel');
 const Products=require('../models/productModel')
+const Cart = require('../models/cartModel')
 const Address = require('../models/addressModel')
 const Order = require('../models/orderModel')
 const googleUser=require('../models/googleModel')
@@ -109,14 +110,10 @@ console.log(typeof otp, 'dkfdhf')
     res.render('otp',{message:"Verification otp  sented",
            
             email:result.email,
-            userId:result._id
-            
-            
-        
-        
+            userId:result._id     
     })
     
-    }catch (error) {
+    }catch (error) { 
       console.log(error.message);
     }
 }
@@ -124,17 +121,7 @@ console.log(typeof otp, 'dkfdhf')
 
 
 
-const loadHome = async(req,res)=>{
-    try {
-           const userId=req.session.userId
 
-            res.render('home',{userId})
-    
-        
-    } catch (error) {
-        console.log(error.message);
-    }
-}
 
 const  sendResentOtpVerificationEmail = async(result,forgot,res)=>{
     try {
@@ -229,13 +216,15 @@ const verifyRegister = async(req,res)=>{
                             mobile,
                             is_admin:false,
                             password:hashPassword,
-                            verified: false
+                            verified: false,
+                            referalCode:req.body.referal?req.body.referal:null
                         });
+                        
                         console.log(newUser,"new user log");
                         newUser.save()
                         .then((result)=>{
                             console.log(newUser,"new userr",result);
-                            req.session.userId=result._id
+                            // req.session.userId=result._id
                             console.log("hellothere");
                             console.log(result,"reslllllttttttt")
                             sendOtpVerificationEmail(result,res);
@@ -371,11 +360,30 @@ const userOtpVerify = async(req,res)=>{
 
                             }else{
                             console.log(userId,typeof(userId));
-
+                        
+                                const user =  await  User.findOne({_id:userId})
+                                if(user.referalCode !== null){
+                                    const code=user.referalCode
+                                    const data = {
+                                        amount: 1000,
+                                        date: Date.now(),
+                                    }
+                                    const data2 = {
+                                        amount: 200,
+                                        date: Date.now(),
+                                    }
+                                    await User.findOneAndUpdate({referalCode:code}, { $inc: { wallet: 1000 }, $push: { walletHistory: data } })
+                                    await User.findOneAndUpdate({_id:userId}, { $inc: { wallet: 200 }, $push: { walletHistory: data2 } })
+                                    console.log('fs',User.findOne({referalCode:code}),'refera codede')
+                                }
                             await User.updateOne({_id:userId},{verified: true})
+                                let referal = Math.floor(Math.random() * 90000) + 10000;
+                                await User.findOneAndUpdate({_id:userId},{$set:{referalCode:referal,is_varified:true}})
+                                const userData = await User.findOne({_id:userId})
+                            req.session.userId=userId
 
                             await userOtpVerification.deleteMany({userId});
-                            res.render('home',{log:"hi"})
+                            res.redirect('/')
                             }
                         }
                     }
@@ -390,7 +398,13 @@ const userOtpVerify = async(req,res)=>{
 
 
 
-
+const loadHome=async (req,res)=>{
+    try {
+        res.redirect('/')
+    } catch (error) {
+        console.log(error.message)
+    }
+}
 
 
 
@@ -426,7 +440,14 @@ const loadDashboard = async(req, res) => {
         const user = await User.findOne({ _id: userId });
         const wallet = await User.findOne({ _id: userId }).select('wallet walletHistory').sort({walletHistory:-1})
         const coupon = await Coupon.find({});
-
+        const cart= await Cart.findOne({user:userId}).populate('product.productId')
+        let subtotal
+        if(cart){
+            subtotal = cart.product.reduce((acc,curr)=>{
+                return acc +curr.productId.price
+            },0)
+        }
+   
         const page = parseInt(req.query.page) || 1; 
         const limit = 10; // Display 10 wallet history details per page
         const startIndex = (page - 1) * limit;
@@ -437,7 +458,7 @@ const loadDashboard = async(req, res) => {
 
         const slicedWalletHistory = user.walletHistory.slice(startIndex, endIndex);
 
-        res.render('dashboard', { address, user, order, totalPages, currentPage: page, coupon, wallet, slicedWalletHistory });
+        res.render('dashboard', { address,subtotal,cart, user, order, totalPages, currentPage: page, coupon, wallet, slicedWalletHistory });
 
     } catch (error) {
         console.log(error.message);
@@ -463,7 +484,6 @@ const editProfile = async(req,res)=>{
 const userLogout = async(req,res)=>{
 
     try {
-        console.log("ivide ethi  23456789");
         req.session.destroy();
         res.redirect('/');
 
@@ -474,11 +494,23 @@ const userLogout = async(req,res)=>{
 
 const userHome = async(req,res)=>{
     try {
-       
+        const userd=req.session.userId
         
-        res.render('home')
+        const cart= await Cart.findOne({user:userd}).populate('product.productId')
+        const wishlist = await Wishlist.findOne()
+        console.log("rached inside",req.session.userId)
+        let subtotal
+        if(cart){
+            subtotal = cart.product.reduce((acc,curr)=>{
+                return acc +curr.productId.price
+            },0)
+        }
+      
+        console.log(cart," crtttttttttt")
+        res.render('home',{userd,cart,subtotal,wishlist})
+
     } catch (error) {
-        
+        console.log(error.message);
     }
 }
 const loadLogin = async(req,res)=>{
@@ -505,11 +537,17 @@ console.log(email,passport);
 
                 if(userData.is_blocked == true){
                     res.render('login1',{blockMessage:"Your accound has been blocked"})
+                }else if(userData.is_varified == false){
+                    const result = {
+                        _id:userData._id,
+                        email:userData.email
+                    }
+                    sendOtpVerificationEmail(result,res);
                 }else{
                 console.log(userData._id,"here reached")
                req.session.userId=userData._id;
               
-               res.redirect('/loadHome')
+               res.redirect('/')
                 }
             }else{
                 res.render('login1',{message:"Email and passsword are Incorrect"})
@@ -548,7 +586,7 @@ const resentOTPVerification = async(req,res)=>{
 
 
 const user = async(req,res)=>{
-   res.render('zayedLogin')
+console.log(req.body,"uvnij")
    
 }
 
@@ -799,7 +837,7 @@ const userForgotOtpVerify = async(req,res)=>{
 
                         }
                     }
-                }
+                }e
         }
     }catch(error){
         console.log(error.message);
@@ -815,8 +853,8 @@ module.exports ={
     verifyRegister,
     securePassword,
     userHome,
-    loadLogin,
     loadHome,
+    loadLogin,
     userLogout,
     verifyLogin,
     sendOtpVerificationEmail,

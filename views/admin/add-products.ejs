@@ -156,9 +156,7 @@
                                             <span class="text-danger" id="pnameError"> </span> 
                                         </div>
                                         <div class="form-group">
-                                           <% if(typeof errors !== 'undefined'){%>
-                                                <h6 class="text-danger"><%= errors%></h6>
-                                           <%}%>
+                                         
                                             <label for="quantity">Quantity</label>
                                             <input type="number" class="form-control" id="quantity" name="quantity" placeholder="Type here">
                                             <span class="text-danger" id="quantityError"></span>
@@ -167,14 +165,12 @@
                                             <label>Category</label>
                                             <select class="form-control"  name="category">
                                                 <% for (let i = 0; i < category.length; i++) { %>
-                                                        <option value="<%= category[i]._id %>"><%= category[i].name %></option>
-                                                <% } %>
+                                                    <option value="<%= category[i]._id %>"><%= category[i].name %></option>
+                                            <% } %>
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <% if(typeof errors2 !== 'undefined'){%>
-                                                <h6 class="text-danger"><%= errors2%></h6>
-                                           <%}%>
+                                           
                                             <label>Price</label>
                                             <input type="text" id="price" class="form-control" name="price" placeholder="Type here">
                                             <span class="text-danger" id="priceError"> </span> 
@@ -199,7 +195,7 @@
                                         
                                         <div class="form-group mt-3">
                                           
-                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <button type="submit" class="btn btn-primary" onclick="validateForm(event)">Submit</button>
                                            
                                         </div>
                                     </form>
@@ -233,8 +229,61 @@
         <script src="assets admin/js/main.js?v=1.1" type="text/javascript"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-       
+
+        <script>
+         function validateForm(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    let name = $("#product_title").val().trim();
+    let quantity = $("#quantity").val().trim();
+    let price = $("#price").val().trim();
+    let description = $("#description").val().trim();
+    const images = $("#images").val()
+    console.log(images,"here is images")
+
+    // Reset error messages
+    $(".text-danger").text("");
+            let success= true
+    // Check for empty fields
+    if (name === "") {
+        $("#pnameError").text("Product Name is required");
+        success= false
+    } 
+     if (quantity === "") {
+        $("#quantityError").text("Quantity is required");
+        success= false
+    } 
+    if (price === "") {
+        $("#priceError").text("Price is required");
+        success= false
+    } 
+     if (description === "") {
+        $("#descriptionError").text("Description is required");
+        success= false
+    }  
+        // Check for leading spaces
+        if (/^\s/.test(name)) {
+            $("#pnameError").text("Leading spaces are not allowed");
+            success= false
+        } else if (/^\s/.test(quantity)) {
+            $("#quantityError").text("Leading spaces are not allowed");
+            success= false
+        } else if (/^\s/.test(price)) {
+            $("#priceError").text("Leading spaces are not allowed");
+            success= false
+        } else if (/^\s/.test(description)) {
+            $("#descriptionError").text("Leading spaces are not allowed");
+            success= false
+        } 
+        if(success ===true){
+            $("#addForm").submit();
+        }
+    }
+
+
+        </script>   
  
    
 <script>
@@ -246,13 +295,13 @@
         previewDiv.innerHTML = ""; // Clear previous previews
 
         for (let i = 0; i < Math.min(files.length, 3); i++) {
-            console.log(files[i])
             const file = files[i];
             const reader = new FileReader();
 
             reader.onload = function(e) {
                 const img = document.createElement("img");
                 img.src = e.target.result;
+                console.log(img,"jhgfnnnnnnnnnnnnnnnnnnnnn")
 
                 // Create an image container for the original image
                 const originalContainer = document.createElement("div");
@@ -264,13 +313,24 @@
 
                 // Initialize Cropper on the original image container
                 const cropper = new Cropper(img, {
-                    aspectRatio: 1, // You can adjust the aspect ratio as needed
-                    viewMode: 1,
-                    dragMode: 'move',
-                    autoCropArea: 1,
-                    crop: function(event) {
-                        // Update the input field with cropped data if needed
-                    }
+    aspectRatio: 1, // You can adjust the aspect ratio as needed
+    viewMode: 1,
+    dragMode: 'move',
+    autoCropArea: 1,
+    crop: function(event) {
+    const canvas = cropper.getCroppedCanvas(); // Get the cropped canvas
+    const croppedImage = canvas.toDataURL(); // Convert canvas to base64 data URL
+console.log(croppedImage,"kkkkkkkkkkkkkkkkkkk")
+    // Send cropped image data to the backend
+    const formData = new FormData();
+    formData.append('croppedImage', croppedImage);
+
+    // You can append additional data if needed, e.g., product ID
+    // formData.append('productId', productId);
+
+    
+}
+    
                 });
 
                 // Input field for changing image

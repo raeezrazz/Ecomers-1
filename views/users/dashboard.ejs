@@ -224,65 +224,53 @@
                             <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false" data-display="static">
                                 <i class="icon-shopping-cart"></i>
-                                <span class="cart-count">2</span>
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right">
+                                <% if(cart&& cart.length>0){ %>
                                 <div class="dropdown-cart-products">
+                                  
+                                    <%cart.product.forEach((val)=>{ %>
                                     <div class="product">
+                                        
                                         <div class="product-cart-details">
                                             <h4 class="product-title">
-                                                <a href="product.html">Beige knitted elastic runner shoes</a>
+                                                <a href=""><%=val.productId.name%></a>
                                             </h4>
 
                                             <span class="cart-product-info">
-                                                <span class="cart-product-qty">1</span>
-                                                x $84.00
+                                                <span class="cart-product-qty"><%= val.quantity%></span>
+                                                x ₹<%= val.productId.price%>
                                             </span>
                                         </div><!-- End .product-cart-details -->
+                                   
 
                                         <figure class="product-image-container">
                                             <a href="product.html" class="product-image">
-                                                <img src="assets/images/products/cart/product-1.jpg" alt="product">
+                                                <img src="/multerImage/<%=val.productId.images[0]%>" alt="<%=val.productId.name%>">
                                             </a>
                                         </figure>
-                                        <a href="#" class="btn-remove" title="Remove Product"><i
-                                                class="icon-close"></i></a>
+                                        <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
                                     </div><!-- End .product -->
-
-                                    <div class="product">
-                                        <div class="product-cart-details">
-                                            <h4 class="product-title">
-                                                <a href="product.html">Blue utility pinafore denim dress</a>
-                                            </h4>
-
-                                            <span class="cart-product-info">
-                                                <span class="cart-product-qty">1</span>
-                                                x $76.00
-                                            </span>
-                                        </div><!-- End .product-cart-details -->
-
-                                        <figure class="product-image-container">
-                                            <a href="product.html" class="product-image">
-                                                <img src="assets/images/products/cart/product-2.jpg" alt="product">
-                                            </a>
-                                        </figure>
-                                        <a href="#" class="btn-remove" title="Remove Product"><i
-                                                class="icon-close"></i></a>
-                                    </div><!-- End .product -->
+                                    <%})%>
                                 </div><!-- End .cart-product -->
 
                                 <div class="dropdown-cart-total">
                                     <span>Total</span>
-
-                                    <span class="cart-total-price">$160.00</span>
+                                   
+                                    <span class="cart-total-price">₹<%=subtotal%></span>
+                            
                                 </div><!-- End .dropdown-cart-total -->
 
                                 <div class="dropdown-cart-action">
-                                    <a href="cart.html" class="btn btn-primary">View Cart</a>
-                                    <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i
-                                            class="icon-long-arrow-right"></i></a>
+                                    <a href="/loadCart" class="btn btn-primary">View Cart</a>
+                                    <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
                                 </div><!-- End .dropdown-cart-total -->
+                                <%}else{%>
+                                    <h6>No Items in the Cart</h6>
+                                    <a href="/loadCart" class="btn btn-primary">View Cart</a>
+
+                                    <%}%>
                             </div><!-- End .dropdown-menu -->
                         </div><!-- End .cart-dropdown -->
                     </div><!-- End .header-right -->
@@ -322,21 +310,13 @@
                                             data-toggle="tab" href="#tab-orders" role="tab" aria-controls="tab-orders"
                                             aria-selected="false">Orders</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a style="font-weight: bold;" class="nav-link" id="tab-downloads-link"
-                                            data-toggle="tab" href="#tab-downloads" role="tab"
-                                            aria-controls="tab-downloads" aria-selected="false">Downloads</a>
-                                    </li>
+                               
                                     <li class="nav-item">
                                         <a style="font-weight: bold;" class="nav-link" id="tab-address-link"
                                             data-toggle="tab" href="#tab-address" role="tab" aria-controls="tab-address"
                                             aria-selected="false">Adresses</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a style="font-weight: bold;" class="nav-link" id="tab-account-link"
-                                            data-toggle="tab" href="#tab-account" role="tab" aria-controls="tab-account"
-                                            aria-selected="false">Account Details</a>
-                                    </li>
+                                  
                                     <li class="nav-item">
                                         <a style="font-weight: bold;" class="nav-link" id="tab-wallet-link"
                                             data-toggle="tab" href="#tab-coupon" role="tab" aria-controls="tab-wallet"
@@ -371,6 +351,9 @@
                                                         </span></p>
                                                     <p><strong>Mobile:</strong> <span id="profile-mobile">
                                                             <%= user.mobile %>
+                                                        </span></p>
+                                                        <p><strong>Referal Code:</strong> <span id="profile-mobile">
+                                                            <%= user.referalCode %>
                                                         </span></p>
                                                 </div>
                                                 <div class="product-details-action">
@@ -611,10 +594,10 @@
                                         </div>
 
                                     </div>
-                                    <div class="tab-pane fade" id="tab-coupon" role="tabpanel" aria-labelledby="tab-wallet-link">
-                                        <div class="wallet-tab">
-                                            <div class="wallet-container ">
-                                                <div class="wallet-card ">
+                                    <div class="tab-pane fade" id="tab-coupon" role="tabpanel" aria-labelledby="tab-coupon-link">
+                                        <div class="coupon-tab">
+                                            <div class="coupon-container ">
+                                                <div class="coupon-card ">
                                                     <h2>My Coupon</h2>
                                                     
                                                   
@@ -726,7 +709,7 @@
 
                                 </div>
 
-
+                                
                             </div><!-- End .col-lg-9 -->
                         </div><!-- End .row -->
                     </div><!-- End .container -->

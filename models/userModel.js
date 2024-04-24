@@ -51,6 +51,10 @@ is_varified:{
 is_blocked:{
     type:Boolean,
     default:false
+},
+referalCode:{
+    type:Number,
+    
 }
 
 });

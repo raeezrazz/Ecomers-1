@@ -365,8 +365,10 @@
        }
        </script>
    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+   
    <script>
-       function validateForm() {
+       function validateForm(zzz) {
            var name = $("#product_title").val();
            var quantity = $("#quantity").val();
            var price = $("#price").val();
@@ -382,7 +384,7 @@
                $("#priceError").text("Price is required");
            }else if (description.trim() === "") {
                $("#descriptionError").text("Description is required");
-           }
+           }else{
            if (/^\s/.test(name)) {
             $("#pnameError").text("Leading spaces are not allowed");
         } else if (/^\s/.test(quantity)) {
@@ -391,9 +393,12 @@
             $("#priceError").text("Leading spaces are not allowed");
         } else if (/^\s/.test(description)) {
             $("#descriptionError").text("Leading spaces are not allowed");
-        }
+        }else{
+            console.log("kkfkiau")
+            $("#addForm").submit();
+
+        }}
    
-           $("#addForm").submit();
        }
    </script>
 

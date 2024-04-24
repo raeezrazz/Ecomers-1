@@ -11,7 +11,8 @@ const cartController = require('../controllers/cartController')
 const addressController = require('../controllers/addressController')
 const orderController = require('../controllers/OrderController')
 const couponController = require('../controllers/couponController')
-
+const multer = require('multer');
+const upload = multer();
 //session
 const session = require('express-session');
 
@@ -212,60 +213,60 @@ user_route.post('/verifyingOtp',userController.userOtpVerify)
 user_route.post('/verifyingForgotOtp',userController.userForgotOtpVerify)
 
 user_route.get('/',userController.userHome)
-user_route.get('/logining',userController.loadLogin)
-user_route.get('/loadHome',userController.loadHome)
+user_route.get('/logining',auth.isLogout,userController.loadLogin)
 user_route.post('/login',userController.verifyLogin)
 user_route.get('/logout',auth.isLogin,userController.userLogout)
+user_route.get('/loadHome',userController.loadHome)
 user_route.post('/resendotp',userController.resentOTPVerification)
 user_route.post('/forgotPassword',userController.forgotPassword)
+user_route.post('/verifyingForgotOtp',userController.userForgotOtpVerify)
 
-user_route.get('/dashboard',userController.loadDashboard)
-user_route.post('/editProfile',userController.editProfile)
-user_route.post('/changePassword',userController.changePassword)
+user_route.get('/dashboard',auth.isLogin,userController.loadDashboard)
+user_route.post('/editProfile',auth.isLogin,userController.editProfile)
+user_route.post('/changePassword',auth.isLogin,userController.changePassword)
 // user products
-user_route.get('/loadProducts',productController.loadProducts)
+user_route.get('/loadProducts',productController.loadProducts) 
 user_route.get('/eachproduct/:id',productController.loadeachProducts)
 user_route.get('/shopSearch',productController.searchProduct)
 user_route.get('/sort',productController.sortProducts)
 
 //cart
-user_route.get('/loadCart',cartController.loadCart)
-user_route.post('/addCart',cartController.addCart)
-user_route.patch('/cartRemove',cartController.removeCart)
-user_route.get('/loadCheckout',cartController.loadCheckout)
-user_route.post('/updateQuantity',cartController.updateQuantity)
+user_route.get('/loadCart',auth.isLogin,cartController.loadCart)
+user_route.post('/addCart',auth.isLogin,cartController.addCart)
+user_route.patch('/cartRemove',auth.isLogin,cartController.removeCart)
+user_route.get('/loadCheckout',auth.isLogin,cartController.loadCheckout)
+user_route.post('/updateQuantity',auth.isLogin,cartController.updateQuantity)
 
 //Coupon
-user_route.post('/applyCoupon',orderController.applyCoupon)
-user_route.patch('/removeCoupon',orderController.removeCoupon)
+user_route.post('/applyCoupon',auth.isLogin,orderController.applyCoupon)
+user_route.patch('/removeCoupon',auth.isLogin,orderController.removeCoupon)
 
 //order
-user_route.post('/placeOrder',orderController.placeOrder)
-user_route.get('/successOrder',orderController.loadSuccess)
-user_route.get('/orderdetails/:id',orderController.loadOrderDetails)
-user_route.get('/fullOrder/:id',orderController.viewFullOrder)
-user_route.post('/cancelOrder',orderController.cancelOrder)
-user_route.post('/returnOrder',orderController.returnOrder)
-user_route.post('/verifypayment',orderController.verifyPayment)
-user_route.post('/retryOrder',orderController.retryOrder)
-user_route.get('/pdf/:id',orderController.downloadPdf)
+user_route.post('/placeOrder',auth.isLogin,orderController.placeOrder)
+user_route.get('/successOrder',auth.isLogin,orderController.loadSuccess)
+user_route.get('/orderdetails/:id',auth.isLogin,orderController.loadOrderDetails)
+user_route.get('/fullOrder/:id',auth.isLogin,orderController.viewFullOrder)
+user_route.post('/cancelOrder',auth.isLogin,orderController.cancelOrder)
+user_route.post('/returnOrder',auth.isLogin,orderController.returnOrder)
+user_route.post('/verifypayment',auth.isLogin,orderController.verifyPayment)
+user_route.post('/retryOrder',auth.isLogin,orderController.retryOrder)
+user_route.get('/pdf/:id',auth.isLogin,orderController.downloadPdf)
 
 //address
-user_route.post('/addAddress',addressController.addAddress)
-user_route.post('/edit-address',addressController.editAddress)
-user_route.post('/deleteAddress',addressController.deleteAddress)
+user_route.post('/addAddress',auth.isLogin,addressController.addAddress)
+user_route.post('/edit-address',auth.isLogin,addressController.editAddress)
+user_route.post('/deleteAddress',auth.isLogin,addressController.deleteAddress)
 
 //whishlist
-user_route.get('/whishlist',userController.loadWhishlist)
-user_route.post('/addToWishlist',userController.addToWishlist)
-user_route.patch('/removeWishlist',userController.removeWishlist)
+user_route.get('/whishlist',auth.isLogin,userController.loadWhishlist)
+user_route.post('/addToWishlist',auth.isLogin,userController.addToWishlist)
+user_route.patch('/removeWishlist',auth.isLogin,userController.removeWishlist)
 
 
 //payment
 
-user_route.post('/')
 
-user_route.get('/try',userController.user)
+user_route.post('/try',upload.none(),userController.user)
 
 
 module.exports = user_route;

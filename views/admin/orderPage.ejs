@@ -35,6 +35,12 @@
                             <span class="text">Dashboard</span>
                         </a>
                     </li>
+                    <li class="menu-item ">
+                        <a class="menu-link" href="sales">
+                            <i class="icon materi.al-icons md-home"></i>
+                            <span class="text">Sales</span>
+                        </a>
+                    </li>
                     <li class="menu-item has-submenu">
                         <a class="menu-link" href="users_list">
                             <i class="icon material-icons md-shopping_bag"></i>
@@ -241,14 +247,37 @@
                 <div class="pagination-area mt-15 mb-50">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-start">
-                            <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                            <li class="page-item"><a class="page-link" href="#">02</a></li>
-                            <li class="page-item"><a class="page-link" href="#">03</a></li>
-                            <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                            <li class="page-item"><a class="page-link" href="#">16</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
-                            </li>
+                            			       
+                <% if(currentPage > 1){%>
+                    <li class="page-item">
+                        <a class="page-link page-link-prev" href="/admin/orders?page=<%= currentPage - 1 %>" aria-label="Previous">
+                            <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span> Prev
+                        </a>
+                    </li>
+                <%}%>
+        
+                <!-- Page Numbers -->
+                <%for (let i = 1; i <= totalPages; i++){%>
+                    <% if (i === currentPage){%>
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link" href="#"><%= i %></a>
+                        </li>
+                    <% }else{%>
+                        <li class="page-item">
+                            <a class="page-link" href="/admin/orders?page=<%= i %>"><%= i %></a>
+                        </li>
+                    <% } %>
+                <% } %>
+        
+                <!-- Next Button -->
+                <% if (currentPage < totalPages) { %>
+                    <li class="page-item">
+                        <a class="page-link page-link-next" href="/admin/orders?page=<%= currentPage + 1 %>" aria-label="Next">
+                            Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
+                        </a>
+                    </li>
+            <% } %>
+                           
                         </ul>
                     </nav>
                 </div>

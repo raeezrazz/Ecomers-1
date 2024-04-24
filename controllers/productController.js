@@ -9,7 +9,7 @@ const { find, findOne } = require('../models/userVerification');
 const sharp = require('sharp')
 const Wishlist =require('../models/whishlistModal')
 const Coupon =require('../models/couponModel')
-
+const Cart = require('../models/cartModel')
 
 
 
@@ -166,7 +166,14 @@ const loadProducts = async (req, res) => {
 
       const category = await Category.find({});
       const wishlist = await Wishlist.find();
-
+      const cart = await Cart.findOne({user:req.session.userId}).populate('product.productId')
+      let subtotal
+      if(cart){
+        subtotal = cart.product.reduce((acc,curr)=>{
+          return acc +curr.productId.price
+      },0)
+      }
+     
       const old = new Date();
       old.setDate(old.getDate() - 5);
 
@@ -176,13 +183,15 @@ const loadProducts = async (req, res) => {
           products,
           category,
           old,
+          cart,
+          subtotal,
           wishlist,
           totalPages,
           currentPage: page
       });
   } catch (error) {
       console.log(error.message);
-      res.status(500).send('Error loading products');
+      
   }
 }
 
@@ -210,7 +219,14 @@ const loadProducts = async (req, res) => {
         const query = req.query.name
         console.log("frgf",query);
         const search = req.query.search
-
+        const cart = await Cart.findOne({user:req.session.userId}).populate('product.productId')
+      let subtotal
+      if(cart){
+        subtotal = cart.product.reduce((acc,curr)=>{
+          return acc +curr.productId.price
+      },0)
+      }
+     
         const old = new Date();
       old.setDate(old.getDate() - 5);
         const category = await Category.find({})
@@ -234,9 +250,9 @@ const loadProducts = async (req, res) => {
         
         if(products.lenght ==0){
           console.log("empty");
-          res.render('products',{message:"No products found",products,category,currentPage:20,totalPages:2})
+          res.render('products',{message:"No products found",products,cart,subtotal,category,currentPage:20,totalPages:2})
         }else{
-          res.render('products',{products,category,old,currentPage:20,totalPages:2})
+          res.render('products',{products,category,old,currentPage:20,cart,subtotal,totalPages:2})
         }
       }
       }catch(error){
@@ -247,7 +263,14 @@ const sortProducts = async(req,res)=>{
         try{
           console.log("kkkkkkkk")
           
-          
+          const cart = await Cart.findOne({user:req.session.userId}).populate('product.productId')
+      let subtotal
+      if(cart){
+        subtotal = cart.product.reduce((acc,curr)=>{
+          return acc +curr.productId.price
+      },0)
+      }
+     
           const sort = req.query.sort
           const old = new Date();
       old.setDate(old.getDate() - 5);
@@ -273,7 +296,7 @@ const sortProducts = async(req,res)=>{
           if (products && category) {
             console.log("this si srunning")
             console.log("Products , ",products,"category available");
-            res.render('products', { products, category,old ,currentPage:20,totalPages:2});
+            res.render('products', { products, category,old ,cart,subtotal,currentPage:20,totalPages:2});
         } else {
             // Handle case where products or category are not available
             console.log("Products or category not available");

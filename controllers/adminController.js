@@ -81,8 +81,34 @@ const loadDashboard = async (req, res) => {
         const razporPayCount = await Order.countDocuments({payment: "Razor Pay","products.productStatus": "delivered"});
         const codCount = await Order.countDocuments({payment: "Cash on Delivery","products.productStatus": "delivered"});
         const walletCount = await Order.countDocuments({payment: "wallet","products.productStatus": "delivered"});
+        const currentMonth = new Date().getMonth() + 1;
+        const currentYear = new Date().getFullYear();
+
+
+
+        const currentDate = new Date();
+        const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+        const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+        sales = await Order.find({'products.productStatus':'delivered',
+            orderDate: {
+                $gte: startOfMonth,
+                $lte: endOfMonth
+            }
+        }).populate('products.productId');;
+        const monthlyIncome = sales.reduce((acc, curr) => {
+            return acc + curr.subtotal
+        }, 0);
+
+
+        
+       
+
+        console.log(monthlyIncome,"nfibsvjsajvn")
+
         
         const filter = req.query.filter
+        let labels
+        let graphData
         const revenue = await Order.aggregate([
             {$match:{'products.productStatus':"delivered"}},
             {
@@ -145,8 +171,90 @@ const loadDashboard = async (req, res) => {
             {$limit:3}
         ])
 
+
+            // FILTERS
+            if(filter ==='yearly'){
+                const currentYear = new Date().getFullYear();
+
+                const years = [currentYear-4,currentYear - 3,currentYear -2 ,currentYear-1,currentYear ]
+                labels = years
+
+                const yearlyRevenues = [];
+
+                for(const year of years){
+                    const startOfYear = new Date(year,0,1);
+                    const endOfYear = new Date(year +1,0,1);
+                    endOfYear.setMilliseconds(endOfYear.getMilliseconds()-1);
+
+                    const yearlyRevenue = await Order.aggregate([
+                        {
+                            $match:{
+                                'products.productStatus':'delivered',
+                                orderDate:{
+                                    $gte:startOfYear,
+                                    $lt:endOfYear
+                                }
+                            }
+                        },
+                        {
+                            $group:{
+                                _id:{$year:'$orderDate'},
+                                yearlyRevenue:{$sum:'$subtotal'}
+                            }
+                        }
+                    ]);
+
+                    yearlyRevenues.push({year,yearlyRevenue});
+                }
+                graphData = Array(5).fill(0);
+
+                yearlyRevenues.forEach((yearData,index)=>{
+                    graphData[index]=yearData.yearlyRevenue.length >0? yearData.yearlyRevenue[0].yearlyRevenue : 0 ;
+                })
+                console.log("fsd",yearlyRevenues,"fds",graphData)
+
+            }else{
+                console.log("else")
+                labels =  [1, 2, 3, 4, 5,6, 7, 8,9, 10, 11, 12];
+
+                const currentMonth= new Date();
+                const startMonth = new Date(currentMonth.getFullYear(),0,1);
+                const endOfMonth = new Date(currentMonth.getFullYear()+1,0,1)
+                endOfMonth.setMilliseconds(endOfMonth.getMilliseconds()-1)  
+
+                const monthlyRevenue = await Order.aggregate([
+                    {
+                        $match:{
+                            'products.productStatus':'delivered',
+                            orderDate:{
+                                $gte:startMonth,
+                                $lt:endOfMonth
+                            }
+                        }
+                    },
+                    {
+                        $group:{
+                            _id:{$month:'$orderDate'},
+                            monthlyRevenue:{$sum:'$subtotal'}
+                        }
+                    }
+
+                ]);
+
+                graphData = Array(12).fill(0)
+
+                monthlyRevenue.forEach(data =>{
+                    const month = data._id -1;
+                    graphData[month]= data.monthlyRevenue;
+                })
+                console.log(monthlyRevenue,"month" ,graphData,"revenue")
+
+            } 
+
+
+
         
-        res.render('home', { admin: userData ,products,categoreis,orders ,razporPayCount,codCount,walletCount,sellingProduct,sellingCategory});
+        res.render('home', { admin: userData,labels,graphData ,revenue,products,categoreis,orders ,razporPayCount,codCount,walletCount,sellingProduct,sellingCategory,monthlyIncome});
 
     } catch (error) {
         console.log(error.message);
@@ -351,8 +459,8 @@ const logout = async (req, res) => {
 }
 
 const users = async(req,res)=>{
-    const category = await Category.find()
-    res.render('add-products',{category})
+   
+   console.log(req.body)
 }
 
 

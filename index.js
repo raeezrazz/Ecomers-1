@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const nocache = require('nocache');
 const path = require('path');
-
-mongoose.connect('mongodb://127.0.0.1:27017/user_management_system');
+const dotenv = require('dotenv').config()
+const url = process.env.MONGODB_URL
+mongoose.connect(`mongodb://${url}`);
 
 const express = require('express');
 const app = express();
@@ -21,8 +22,8 @@ app.use('/multerImage', express.static(path.join(__dirname, 'public/multerImage'
 app.use('/js', express.static(path.join(__dirname, 'public/assets admin/')));
 
 
-const userRoute = require('./routes/userRoute');
-app.use('/', userRoute);
+const userRoute = require('./routes/userRoute'); 
+app.use('/', userRoute); 
 
 const adminRoute = require('./routes/adminRoute');
 app.use('/admin', adminRoute);

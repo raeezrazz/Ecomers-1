@@ -121,16 +121,25 @@ const submitCouponEdit =async(req,res)=>{
     try{
         console.log(req.body,"dcjoki")
         const{couponId,name,code,discount,criteria,start,expiry}=req.body
-        const exist = await Coupon.findOne({_id:couponId,couponCode:code})
-        if(exist){
-            res.json({success:false})
+        const data = await Coupon.findOne({_id:couponId})
+        if(data.couponCode===code){
+            const coupon = await Coupon.findOneAndUpdate({_id:couponId},{$set:{name:name,couponCode:code,discountAmount:discount,criteriaAmount:criteria,activationDate:start,expiryDate:expiry}})
+            console.log(coupon)
+        
+                res.json({success:true})
         }else{
-        const coupon = await Coupon.findOneAndUpdate({_id:couponId},{$set:{name:name,couponCode:code,discountAmount:discount,criteriaAmount:criteria,activationDate:start,expiryDate:expiry}})
-        console.log(coupon)
+            const exist = await Coupon.findOne({_id:couponId,couponCode:code})
+            if(exist){
+                res.json({success:false})
+            }else{
+                const coupon = await Coupon.findOneAndUpdate({_id:couponId},{$set:{name:name,couponCode:code,discountAmount:discount,criteriaAmount:criteria,activationDate:start,expiryDate:expiry}})
+                console.log(coupon)
+            
+                    res.json({success:true})
+            }
+      
+        }
     
-            res.json({success:true})
-       
-    }
     }catch(error){
         console.log(error.message)
     }

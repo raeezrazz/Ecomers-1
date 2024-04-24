@@ -23,9 +23,17 @@ const razorpay = new Razorpay({
 
 const loadOrders = async (req, res) => {
     try {
-        const order = await Order.find().sort({ orderDate: -1 })
+        console.log("orferef")
+        const page = parseInt(req.query.page) || 1; 
+        const limit = 10; // Display 12 products per page
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
 
-        res.render('orderPage', { order })
+        const order = await Order.find().sort({ orderDate: -1 }).skip(startIndex).limit(limit);
+        const totalOrder = await Order.countDocuments();
+        const totalPages = Math.ceil(totalOrder / limit);
+        console.log(totalPages,page)
+        res.render('orderPage', { order,totalPages,currentPage: page })
     } catch (error) {
         console.log(error.message);
 
@@ -139,8 +147,7 @@ const placeOrder = async (req, res) => {
 
         await order.save()
         const orderId = order._id;
-        const result = await Cart.deleteOne({ user: userId })
-        console.log("finished hogaya", result);
+     
         console.log("saved", orderId);
 
         console.log(method, "jkjk");
@@ -148,6 +155,8 @@ const placeOrder = async (req, res) => {
             for (const product of cartItem) {
                 const done = await Products.updateOne({ _id: product.productId }, { $inc: { quantity: -product.quantity, popularity: 1 } })
                 console.log(done, "divonjnbjznblnblnbmnnznbbnzbnzbnbznone")
+        await Cart.deleteOne({ user: userId })
+
             }
             console.log("cod");
 
@@ -177,6 +186,8 @@ const placeOrder = async (req, res) => {
 
         } else {
             console.log("wallet")
+        await Cart.deleteOne({ user: userId })
+
             for (const product of cartItem) {
                 const done = await Products.updateOne({ _id: product.productId }, { $inc: { quantity: -product.quantity, popularity: 1 } })
                 console.log(done, "divonjnbjznblnblnbmnnznbbnzbnzbnbznone")
@@ -396,28 +407,23 @@ const downloadPdf = async (req, res) => {
             return res.status(404).send({ message: 'Order not found' }).populate('products.productId')
         }
 
-        // Check if order items exist
         if (!order.products || !Array.isArray(order.products) || order.products.length === 0) {
             return res.status(400).send({ message: 'Order items not found' });
         }
 
-        // Create a new PDF document
         const doc = new pdf({
             margin: 50,
             layout: 'landscape',
             size: 'A4'
         });
 
-        // Set PDF metadata
         doc.info['Title'] = `Invoice_${order._id}`;
         doc.info['Author'] = 'Ecomers';
 
-        // Add header
         doc.fontSize(20).text('Invoice', { align: 'center' });
         doc.fontSize(10).text('Ecomers', { align: 'center' });
 
-        // Add content to the PDF
-        doc.moveDown(); // Add space between header and content
+        doc.moveDown();
         doc.fontSize(12).text(`Order ID: ${order._id}`);
         doc.moveDown();
         doc.fontSize(12).text(`Date: ${order.orderDate.toLocaleDateString('en-US',

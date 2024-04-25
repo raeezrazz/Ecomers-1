@@ -3,7 +3,7 @@ const nocache = require('nocache');
 const path = require('path');
 const dotenv = require('dotenv').config()
 const url = process.env.MONGODB_URL
-mongoose.connect(`mongodb://${url}`);
+mongoose.connect(url);
 
 const express = require('express');
 const app = express();

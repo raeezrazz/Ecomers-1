@@ -36,8 +36,8 @@ const submitCoupon = async(req,res)=>{
         const today = new Date().getFullYear()-new Date().getMonth()
           console.log(today,start)
         if(!exist){
-            console.log("not")
-        if(criteria>1000 &&discount <=100 && discount > 0 && expiry>start){
+            console.log("not ekjf")
+        // if(criteria>1000 &&discount <=100 && discount > 0 && expiry>start){
 
             console.log("not insie")
     
@@ -56,29 +56,30 @@ const submitCoupon = async(req,res)=>{
                 res.json({success:true})
        
         
-    }else{
+//     }else{
+//         console.log("here i")
+//         if(criteria<10){
+//             console.log("not crit")
 
-        if(criteria<10){
-            console.log("not crit")
+//             res.render('createCoupon',{criteria:"Criteria must be above 1000 rs"})
 
-            res.render('createCoupon',{criteria:"Criteria must be above 1000 rs"})
+//         }else if(start>today){
+//             console.log("star")
+// console.log("here found")
+//         res.render('createCoupon',{start:"Start date must be above today"})
+//     }else if(discount<=0){
+//         res.render('createCoupon',{discount:"Discount percentage must be above 0"})
 
-        }else if(start>today){
-            console.log("star")
+//     }else if(expiry<=start){
+//         console.log("fuedj");
+//         res.json({result:expired})
 
-        res.render('createCoupon',{start:"Start date must be above today"})
-    }else if(discount<=0){
-        res.render('createCoupon',{discount:"Discount percentage must be above 0"})
+//     }else{
+//         console.log("jfi")
+//         res.json({result:exist})
 
-    }else if(expiry<=start){
-        console.log("fuedj");
-        res.json({result:expired})
-
-    }else{
-        res.json({result:exist})
-
-    }
-}
+//     }
+// }
 }else{
     console.log("not in")
 

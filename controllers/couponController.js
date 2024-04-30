@@ -55,7 +55,7 @@ const submitCoupon = async(req,res)=>{
                 console.log(newCoupon,"f")
                 res.json({success:true})
        
-        
+        git 
 //     }else{
 //         console.log("here i")
 //         if(criteria<10){

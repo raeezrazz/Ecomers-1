@@ -506,6 +506,7 @@
 
                                                    
 <div class="wallet-actions">
+    <%if(slicedWalletHistory && slicedWalletHistory.length ){%>
     <table id="tablePagination"
         class="table table-bordered table-hover table-striped">
 
@@ -549,7 +550,11 @@
                 </tr>
             <% }) %>
         </tbody>
-    </table>                                                        <div class="pagination">
+    </table>   
+                                                    <% }else{%>
+                                                        <h7>No Wallet History Available</h7>
+
+                                                     <%}  %>                                                   <div class="pagination">
                                                             <% const maxVisiblePages = 5; %>
                                                             <% const half = Math.floor(maxVisiblePages / 2); %>
                                                         
@@ -602,6 +607,8 @@
                                                     
                                                   
                                                     <div style="max-width: 100vw; display: grid; grid-template-columns: repeat(auto-fill, minmax(23%, 1fr)); gap: 20px; padding: 20px;">
+                                                        <%if(coupon && coupon.length){%>
+                                                            
                                                         <% coupon.forEach((val, index) => { %>
                                                             <% if( val.expiryDate < new Date() ){ %>
                                                                 <div class="card" style="width: 100%; padding: 15px; margin-bottom: 20px; background-color: #f2f2f2; border: 1px solid #ccc;">
@@ -699,6 +706,9 @@
                                                                 </div>
                                                             <% } %>
                                                         <% }) %>
+                                                        <%}else{%>
+                                                            <h7>No coupons Available</h7>
+                                                        <%}%>
                                                     </div>
                                                     
                                             </div>

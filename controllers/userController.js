@@ -457,6 +457,7 @@ const loadDashboard = async(req, res) => {
         const totalPages = Math.ceil(total / limit);
 
         const slicedWalletHistory = user.walletHistory.slice(startIndex, endIndex);
+        console.log(coupon,"fkijuv")
 
         res.render('dashboard', { address,subtotal,cart, user, order, totalPages, currentPage: page, coupon, wallet, slicedWalletHistory });
 
@@ -486,7 +487,6 @@ const userLogout = async(req,res)=>{
     try {
         req.session.destroy();
         res.redirect('/');
-
     } catch (error) {
         console.log(error.message);
     }

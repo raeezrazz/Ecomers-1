@@ -78,7 +78,7 @@ const loadDashboard = async (req, res) => {
         const products= await Products.find()
         const categoreis = await Category.find()
         const orders = await Order.find()
-        const razporPayCount = await Order.countDocuments({payment: "Razor Pay","products.productStatus": "delivered"});
+        const razorPayCount = await Order.countDocuments({payment:"Razor Pay","products.productStatus": "delivered"});
         const codCount = await Order.countDocuments({payment: "Cash on Delivery","products.productStatus": "delivered"});
         const walletCount = await Order.countDocuments({payment: "wallet","products.productStatus": "delivered"});
         const currentMonth = new Date().getMonth() + 1;
@@ -140,7 +140,8 @@ const loadDashboard = async (req, res) => {
             {$sort:{totalSold:-1}},
             {$limit:3}
         ])
-
+const topProductLabel = sellingProduct.map(product =>product.productName)
+const topProductCount = sellingProduct.map(product=>product.totalsold)
 
 
         const sellingCategory = await Order.aggregate([
@@ -170,6 +171,9 @@ const loadDashboard = async (req, res) => {
             {$sort:{totalSold:-1}},
             {$limit:3}
         ])
+        const topCategoryLabel = sellingCategory.map(product =>product.categoryName)
+        const topCategoryCount = sellingCategory.map(product =>product.totalSold)
+
 
 
             // FILTERS
@@ -248,13 +252,15 @@ const loadDashboard = async (req, res) => {
                     graphData[month]= data.monthlyRevenue;
                 })
                 console.log(monthlyRevenue,"month" ,graphData,"revenue")
+                console.log(sellingCategory,"sellingctgryyyy");
+                console.log(sellingProduct,"prdcttlnggg")
 
             } 
 
 
 
         
-        res.render('home', { admin: userData,labels,graphData ,revenue,products,categoreis,orders ,razporPayCount,codCount,walletCount,sellingProduct,sellingCategory,monthlyIncome});
+        res.render('home', { admin: userData,labels,graphData ,revenue,products,categoreis,orders ,razorPayCount,codCount,walletCount,topProductLabel,topProductCount,topCategoryLabel,topCategoryCount,monthlyIncome});
 
     } catch (error) {
         console.log(error.message);

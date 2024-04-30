@@ -253,7 +253,7 @@ const topProductCount = sellingProduct.map(product=>product.totalsold)
                 })
                 console.log(monthlyRevenue,"month" ,graphData,"revenue")
                 console.log(sellingCategory,"sellingctgryyyy");
-                console.log(sellingProduct,"prdcttlnggg",razorPayCount)
+                console.log(sellingProduct,"prdcttlnggg")
 
             } 
 

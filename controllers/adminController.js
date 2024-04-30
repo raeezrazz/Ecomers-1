@@ -78,7 +78,7 @@ const loadDashboard = async (req, res) => {
         const products= await Products.find()
         const categoreis = await Category.find()
         const orders = await Order.find()
-        const razorPayCount = await Order.countDocuments({payment:"Razor Pay","products.productStatus": "delivered"});
+        const razporPayCount = await Order.countDocuments({payment:"Razor Pay","products.productStatus": "delivered"});
         const codCount = await Order.countDocuments({payment: "Cash on Delivery","products.productStatus": "delivered"});
         const walletCount = await Order.countDocuments({payment: "wallet","products.productStatus": "delivered"});
         const currentMonth = new Date().getMonth() + 1;
@@ -253,14 +253,14 @@ const topProductCount = sellingProduct.map(product=>product.totalsold)
                 })
                 console.log(monthlyRevenue,"month" ,graphData,"revenue")
                 console.log(sellingCategory,"sellingctgryyyy");
-                console.log(sellingProduct,"prdcttlnggg")
+                console.log(sellingProduct,"prdcttlnggg",razorPayCount)
 
             } 
 
 
 
         
-        res.render('home', { admin: userData,labels,graphData ,revenue,products,categoreis,orders ,razorPayCount,codCount,walletCount,topProductLabel,topProductCount,topCategoryLabel,topCategoryCount,monthlyIncome});
+        res.render('home', { admin: userData,labels,graphData ,revenue,products,categoreis,orders ,razporPayCount,codCount,walletCount,topProductLabel,topProductCount,topCategoryLabel,topCategoryCount,monthlyIncome});
 
     } catch (error) {
         console.log(error.message);

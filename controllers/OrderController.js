@@ -480,7 +480,7 @@ doc.moveDown();doc.moveDown();
                 discount = 0
             }
             const discountAmount =`${discount.toFixed(2).toString()}`
-            return `${productName}  ${quantity}${price}${discountAmount}    ${total}`;
+            return `${productName}  ${quantity}${price}${discountAmount}   ${total}`;
         }).join('\n \n');
 
         doc.font('Courier').text(tableHeader + '\n \n' + tableRows, {

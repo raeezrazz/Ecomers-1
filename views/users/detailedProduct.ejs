@@ -100,7 +100,7 @@
                    
 
                         <div class="dropdown cart-dropdown">
-                            <% if(cart&&cart.product.length){ %>
+                            <% if(cart&&cart.product.length >1){ %>
                                 <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                                     <i class="icon-shopping-cart"></i>
                                     <span class="cart-count"><%=cart.product.length %></span>
@@ -116,7 +116,7 @@
                                
     
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <% if(cart&&cart.product.length){ %>
+                                    <% if(cart&&cart.product.length >1){ %>
                                     <div class="dropdown-cart-products">
                                       
                                         <%cart.product.forEach((val)=>{ %>
@@ -136,7 +136,7 @@
     
                                             <figure class="product-image-container">
                                                 <a href="product.html" class="product-image">
-                                                    <img src="/multerImage/<%=val.productId.images[0]%>" alt="<%=val.productId.name%>">
+                                                    <img src="/multerImage/<%=val.productId.images%>" alt="<%=val.productId.name%>">
                                                 </a>
                                             </figure>
                                             <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>

@@ -452,7 +452,7 @@ const loadDashboard = async(req, res) => {
         const limit = 10; // Display 10 wallet history details per page
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
-        const order = await Order.find({ user: userId }).populate('products.productId').sort({ orderDate: -1 }).skip(startIndex).limit(limit);
+        const order = await Order.find({ user: userId }).populate('products.productId').sort({ orderDate: -1 })
         const totalOrderPage = Math.ceil(order.length/limit)
         const total = user.walletHistory.length;
         const totalPages = Math.ceil(total / limit);

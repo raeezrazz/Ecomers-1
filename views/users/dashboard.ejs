@@ -435,22 +435,7 @@
                                                                 </tbody>
                                                                 
                                                         </table>
-                                                        <div class="pagination-area mt-15 mb-50">
-                                                            <nav aria-label="Page navigation example">
-                                                                <ul class="pagination justify-content-start">
-                                                                <%for (let i = 1; i <= totalOrderPage; i++){%>
-                                                                    <% if (i === currentPage){%>
-                                                                        <span class="btn btn-sm btn-outline-secondary"><%= i %></span>
-
-                                                                    <% }else{%>
-                                                                        <li class="page-item" style="color: grey;">
-                                                                            <a class="page-link" href="/dashboard?page=<%= i %>"  style="background-color: grey;"><%= i %></a>
-                                                                        </li>
-                                                                    <% } %>
-                                                                <% } %>
-                                                            </ul>
-                                                            </nav>
-                                                        </div>
+                                                      
                                                     </div>
                                                 </div>
                                             </div>

@@ -201,13 +201,20 @@ const loadProducts = async (req, res) => {
   
           
           const id = req.params.id
-          
+          const userId=req.session.userId
+          const cart =await Cart.findOne({user:userId})
+          let subtotal
+          if(cart){
+            subtotal = cart.product.reduce((acc,curr)=>{
+              return acc +curr.productId.price
+          },0)
+          }
           console.log(id,"this is id");
           const data = await Products.findOne({_id:id}).populate('categoryId')
           console.log(data,"data is here");
           const images = data.images
           console.log(images);
-          res.render('detailedProduct',{data})
+          res.render('detailedProduct',{data,cart,subtotal})
       } catch (error) {
           console.log(error.message);
       }

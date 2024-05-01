@@ -29,7 +29,7 @@ const loadOrders = async (req, res) => {
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
 
-        const order = await Order.find().sort({ orderDate: -1 }).skip(startIndex).limit(limit);
+        const order = await Order.find().sort({ orderDate: -1 })    
         const totalOrder = await Order.countDocuments();
         const totalPages = Math.ceil(totalOrder / limit);
         console.log(totalPages,page)
@@ -120,8 +120,13 @@ const placeOrder = async (req, res) => {
         } else {
             amount = subtotal
         }
+        let couponPercentage
         console.log(subtotal,"g");
-
+        if(couponDiscount !== 0){
+            couponPercentage =couponDiscount
+        }else{
+            couponPercentage=1
+        }
         const cartItem = productTotal.product
         const addressIndex = req.body.Address
         const address = await Address.findOne({ user: userId })
@@ -141,6 +146,7 @@ const placeOrder = async (req, res) => {
             products: cartItem,
             subtotal: amount,
             orderStatus: status,
+            coupon:couponPercentage,
             orderDate: new Date()
 
         })
@@ -418,10 +424,11 @@ const downloadPdf = async (req, res) => {
         });
 
         doc.info['Title'] = `Invoice_${order._id}`;
-        doc.info['Author'] = 'Ecomers';
+        doc.info['Author'] = 'ZELLA  FASHIONS';
 
-        doc.fontSize(20).text('Invoice', { align: 'center' });
-        doc.fontSize(10).text('Ecomers', { align: 'center' });
+        doc.fontSize(25).text('ZELLA FASHIONS', { align: 'center' });
+        doc.fontSize(10).text('Invoice', { align: 'center' });
+
 
         doc.moveDown();
         doc.fontSize(12).text(`Order ID: ${order._id}`);
@@ -452,7 +459,7 @@ const downloadPdf = async (req, res) => {
 
 doc.moveDown();doc.moveDown();
         // Create table for order items
-        const tableHeader = 'Product              Quantity      Price       Total';
+        const tableHeader = 'Product              Quantity      Price    Discount    Total';
         doc.moveDown();
 
         const tableRows = order.products.map(item => {
@@ -466,8 +473,14 @@ doc.moveDown();doc.moveDown();
             }
             
             const total = `₹ ${totalValue.toFixed(2).toString()}`;
-            
-            return `${productName}${quantity}${price}${total}`;
+            let discount
+            if(order.coupon !==0){
+                discount =item.productId.price/order.coupon
+            }else{
+                discount = 0
+            }
+            const discountAmount =`${discount.toFixed(2).toString()}`
+            return `${productName}  ${quantity}${price}${discountAmount}    ${total}`;
         }).join('\n \n');
 
         doc.font('Courier').text(tableHeader + '\n \n' + tableRows, {

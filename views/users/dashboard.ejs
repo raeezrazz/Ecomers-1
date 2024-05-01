@@ -217,57 +217,68 @@
                         </div><!-- End .compare-dropdown -->
 
                         <div class="dropdown cart-dropdown">
-                            <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false" data-display="static">
-                                <i class="icon-shopping-cart"></i>
-                            </a>
-
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <% if(cart&& cart.length>0){ %>
-                                <div class="dropdown-cart-products">
-                                  
-                                    <%cart.product.forEach((val)=>{ %>
-                                    <div class="product">
-                                        
-                                        <div class="product-cart-details">
-                                            <h4 class="product-title">
-                                                <a href=""><%=val.productId.name%></a>
-                                            </h4>
-
-                                            <span class="cart-product-info">
-                                                <span class="cart-product-qty"><%= val.quantity%></span>
-                                                x ₹<%= val.productId.price%>
-                                            </span>
-                                        </div><!-- End .product-cart-details -->
-                                   
-
-                                        <figure class="product-image-container">
-                                            <a href="product.html" class="product-image">
-                                                <img src="/multerImage/<%=val.productId.images[0]%>" alt="<%=val.productId.name%>">
-                                            </a>
-                                        </figure>
-                                        <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
-                                    </div><!-- End .product -->
-                                    <%})%>
-                                </div><!-- End .cart-product -->
-
-                                <div class="dropdown-cart-total">
-                                    <span>Total</span>
-                                   
-                                    <span class="cart-total-price">₹<%=subtotal%></span>
-                            
-                                </div><!-- End .dropdown-cart-total -->
-
-                                <div class="dropdown-cart-action">
-                                    <a href="/loadCart" class="btn btn-primary">View Cart</a>
-                                    <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
-                                </div><!-- End .dropdown-cart-total -->
+                            <% if(cart&&cart.product.length){ %>
+                                <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                                    <i class="icon-shopping-cart"></i>
+                                    <span class="cart-count"><%=cart.product.length %></span>
+                                    <span class="cart-txt" style="font-size: medium;">₹<%=subtotal%></span>
+                                </a>
                                 <%}else{%>
-                                    <h6>No Items in the Cart</h6>
-                                    <a href="/loadCart" class="btn btn-primary">View Cart</a>
-
-                                    <%}%>
-                            </div><!-- End .dropdown-menu -->
+                                    <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                                        <i class="icon-shopping-cart"></i>
+                                      
+                                        <span class="cart-txt"></span>
+                                    </a>  
+                                <%}%>
+                               
+    
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <% if(cart&&cart.product.length){ %>
+                                    <div class="dropdown-cart-products">
+                                      
+                                        <%cart.product.forEach((val)=>{ %>
+                                        <div class="product">
+                                            
+                                            <div class="product-cart-details">
+                                                <h4 class="product-title">
+                                                    <a href=""><%=val.productId.name%></a>
+                                                </h4>
+    
+                                                <span class="cart-product-info">
+                                                    <span class="cart-product-qty"><%= val.quantity%></span>
+                                                    x ₹<%= val.productId.price%>
+                                                </span>
+                                            </div><!-- End .product-cart-details -->
+                                       
+    
+                                            <figure class="product-image-container">
+                                                <a href="product.html" class="product-image">
+                                                    <img src="/multerImage/<%=val.productId.images[0]%>" alt="<%=val.productId.name%>">
+                                                </a>
+                                            </figure>
+                                            <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
+                                        </div><!-- End .product -->
+                                        <%})%>
+                                    </div><!-- End .cart-product -->
+    
+                                    <div class="dropdown-cart-total">
+                                        <span>Total</span>
+                                       
+                                        <span class="cart-total-price">₹<%=subtotal%></span>
+                                
+                                    </div><!-- End .dropdown-cart-total -->
+    
+                                    <div class="dropdown-cart-action">
+                                        <a href="/loadCart" class="btn btn-primary">View Cart</a>
+                                        <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
+                                    </div><!-- End .dropdown-cart-total -->
+                                    <%}else{%>
+                                        <h6>no items</h6>
+                                        <a href="/loadCart" class="btn btn-primary">View Cart</a>
+    
+                                        <%}%>
+                                </div><!-- End .dropdown-menu -->
+                              
                         </div><!-- End .cart-dropdown -->
                     </div><!-- End .header-right -->
                 </div><!-- End .container -->
@@ -422,16 +433,35 @@
                                                                         </tr>
                                                                         <% } %>
                                                                 </tbody>
+                                                                
                                                         </table>
+                                                        <div class="pagination-area mt-15 mb-50">
+                                                            <nav aria-label="Page navigation example">
+                                                                <ul class="pagination justify-content-start">
+                                                                <%for (let i = 1; i <= totalOrderPage; i++){%>
+                                                                    <% if (i === currentPage){%>
+                                                                        <span class="btn btn-sm btn-outline-secondary"><%= i %></span>
+
+                                                                    <% }else{%>
+                                                                        <li class="page-item" style="color: grey;">
+                                                                            <a class="page-link" href="/dashboard?page=<%= i %>"  style="background-color: grey;"><%= i %></a>
+                                                                        </li>
+                                                                    <% } %>
+                                                                <% } %>
+                                                            </ul>
+                                                            </nav>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                            
                                             <% } else { %>
                                                 <h5>No order has been made yet.</h5>
                                                 <% } %>
-                                                    <a href="category.html"
-                                                        class="go-shop-button btn btn-outline-primary-2"><span>GO
-                                                            SHOP</span><i class="icon-long-arrow-right"></i></a>
+                                                <%= console.log(totalOrderPage,currentPage)%>
+
+                                              
+                                                    
                                     </div><!-- .End .tab-pane -->
 
 
@@ -550,7 +580,8 @@
                                                     <% }else{%>
                                                         <h7>No Wallet History Available</h7>
 
-                                                     <%}  %>                                                   <div class="pagination">
+                                                     <%}  %>                                                 
+                                                       <div class="pagination">
                                                             <% const maxVisiblePages = 5; %>
                                                             <% const half = Math.floor(maxVisiblePages / 2); %>
                                                         

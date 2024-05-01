@@ -112,6 +112,8 @@
                             <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                                 <i class="icon-shopping-cart"></i>
                                 <span class="cart-count"><%=cart.product.length %></span>
+                                <span class="cart-txt" style="font-size: medium;">₹<%=subtotal%></span>
+
                                 
                             </a>
                             <%}else{%>
@@ -249,9 +251,7 @@
                                                     <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
                                                 </div><!-- End .product-action-vertical -->
 
-                                                <div class="product-action">
-                                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                                </div><!-- End .product-action -->
+                                                
                                             </figure><!-- End .product-media -->
 
                                             <div class="product-body">
@@ -379,12 +379,8 @@
 									<div class="collapse show" id="widget-5">
 										<div class="widget-body">
                                             <div class="filter-price">
-                                                <div class="filter-price-text">
-                                                    Price Range:
-                                                    <span id="filter-price-range"></span>
-                                                </div><!-- End .filter-price-text -->
+                                               
 
-                                                <div id="price-slider"></div><!-- End #price-slider -->
                                             </div><!-- End .filter-price -->
 										</div><!-- End .widget-body -->
 									</div><!-- End .collapse -->

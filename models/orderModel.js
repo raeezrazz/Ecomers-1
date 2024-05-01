@@ -17,6 +17,10 @@ const orderSchema =new mongoose.Schema({
         require:true,
         methode:String,
     },
+    coupon:{
+        type:Number,
+        default:1
+    },
     products:[{
         productId:{
             type: ObjectId,

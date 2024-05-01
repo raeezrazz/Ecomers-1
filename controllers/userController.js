@@ -435,8 +435,8 @@ const loadDashboard = async(req, res) => {
     try {
         const userId = req.session.userId;
 
+        // const totalPages = Math.ceil(totalOrder / limit);
         const address = await Address.findOne({ user: userId });
-        const order = await Order.find({ user: userId }).populate('products.productId').sort({ orderDate: -1 });
         const user = await User.findOne({ _id: userId });
         const wallet = await User.findOne({ _id: userId }).select('wallet walletHistory').sort({walletHistory:-1})
         const coupon = await Coupon.find({});
@@ -452,14 +452,16 @@ const loadDashboard = async(req, res) => {
         const limit = 10; // Display 10 wallet history details per page
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
-
+        const order = await Order.find({ user: userId }).populate('products.productId').sort({ orderDate: -1 }).skip(startIndex).limit(limit);
+        const totalOrderPage = Math.ceil(order.length/limit)
         const total = user.walletHistory.length;
         const totalPages = Math.ceil(total / limit);
 
         const slicedWalletHistory = user.walletHistory.slice(startIndex, endIndex);
         console.log(coupon,"fkijuv")
+         console.log(totalOrderPage,page,"gs")
 
-        res.render('dashboard', { address,subtotal,cart, user, order, totalPages, currentPage: page, coupon, wallet, slicedWalletHistory });
+        res.render('dashboard', { address,subtotal,cart, user, order, totalPages, currentPage: page, coupon, wallet, slicedWalletHistory ,totalOrderPage,currentPage: page});
 
     } catch (error) {
         console.log(error.message);
@@ -497,7 +499,7 @@ const userHome = async(req,res)=>{
         const userd=req.session.userId
         
         const cart= await Cart.findOne({user:userd}).populate('product.productId')
-        const wishlist = await Wishlist.findOne()
+        const wishlist = await Wishlist.findOne({user:userd})
         console.log("rached inside",req.session.userId)
         let subtotal
         if(cart){
@@ -506,7 +508,7 @@ const userHome = async(req,res)=>{
             },0)
         }
       
-        console.log(cart," crtttttttttt",userd)
+        console.log(cart," crtttttttttt",wishlist)
         res.render('home',{userd,cart,subtotal,wishlist})
 
     } catch (error) {

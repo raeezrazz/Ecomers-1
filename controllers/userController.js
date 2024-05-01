@@ -506,7 +506,7 @@ const userHome = async(req,res)=>{
             },0)
         }
       
-        console.log(cart," crtttttttttt")
+        console.log(cart," crtttttttttt",userd)
         res.render('home',{userd,cart,subtotal,wishlist})
 
     } catch (error) {

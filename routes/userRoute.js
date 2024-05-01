@@ -232,7 +232,7 @@ user_route.get('/sort',productController.sortProducts)
 
 //cart
 user_route.get('/loadCart',auth.isLogin,cartController.loadCart)
-user_route.post('/addCart',auth.isLogin,cartController.addCart)
+user_route.post('/addCart',cartController.addCart)
 user_route.patch('/cartRemove',auth.isLogin,cartController.removeCart)
 user_route.get('/loadCheckout',auth.isLogin,cartController.loadCheckout)
 user_route.post('/updateQuantity',auth.isLogin,cartController.updateQuantity)

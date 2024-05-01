@@ -201,7 +201,7 @@ const loadProducts = async (req, res) => {
   
           
           const id = req.params.id
-        
+          
           console.log(id,"this is id");
           const data = await Products.findOne({_id:id}).populate('categoryId')
           console.log(data,"data is here");

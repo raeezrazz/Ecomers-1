@@ -133,12 +133,7 @@
                                 <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
                                 <div class="text">
                                     <h6 class="mb-1 card-title">Revenue</h6>
-<%if(revenue){%>
                                     <span>₹<%=revenue[0].revenue%></span>
-<%}else{%>
-                                    <span>₹<%=0000%></span>
-
-<%}%>
                                     <span class="text-sm"> Shipping fees are not included </span>
                                 </div>
                             </article>
@@ -186,8 +181,7 @@
                         <div class="card mb-4">
                             <article class="card-body">
                                 <h5 class="card-title">Sale statistics</h5>
-                                <select onchange="
-                                loChart(value)" class="form-select" style="width: 100px;">
+                                <select onchange="filterChart(value)" class="form-select" style="width: 100px;">
                                     <option selected>Filter by</option>
                                     <option value="monthly">Monthly</option>
                                     <option value="yearly">Yearly</option>
@@ -238,6 +232,7 @@
         <!-- Main Script -->
         <script src="/assets admin/js/main.js?v=1.1" type="text/javascript"></script>
         <script>
+            console.log("chart reached")
             function filterChart(val){
                 var newUrl = `/admin/home?filter=${val}`;
                 window.location.href = newUrl
@@ -315,20 +310,20 @@
         });
     } //end if 
 
-    let k = <%=sellingProduct[0].totalSold%>+<%=sellingProduct[1].totalSold%>+<%=sellingProduct[2].totalSold%>
+   
 
     if($('#myChart3').length) {
     var ctx3 = document.getElementById("myChart3");
     var myChart3 = new Chart(ctx3, {
         type: 'pie',
         data: {
-            labels: ["<%=sellingProduct[0].productName%>","<%=sellingProduct[1].productName%>","<%=sellingProduct[2].productName%> Pay","others"],
+            labels: ["<%=topProductLabel[0]%>","<%=topProductLabel[1]%>","<%=topProductLabel[2]%> Pay","others"],
             datasets: [
                 {
                     label: "payments",
                     backgroundColor:['#A5E69E', '#a87bc7', '#64b7f6','#6666'],
                     barThickness:20,
-                    data: ["<%=sellingProduct[0].totalSold%>",'<%=sellingProduct[1].totalSold%>','<%=sellingProduct[2].totalSold%>',<%= orders.length%>-k]
+                    data: ["<%=topProductCount[0]%>",'<%=topProductCount[1]%>','<%=topProductCount[2]%>']
                 }
             ]
         },
@@ -348,19 +343,18 @@
         }
     });
 }
-let m =<%=sellingCategory[0].totalSold%>+<%=sellingCategory[1].totalSold%>+<%=sellingCategory[2].totalSold%>
 if ($('#myChart4').length) {
     var ctx4 = document.getElementById("myChart4");
     var myChart4 = new Chart(ctx4, {
         type: 'pie',
         data: {
-            labels: ["<%=sellingCategory[0].categoryName%>","<%=sellingCategory[1].categoryName%>","<%=sellingCategory[2].categoryName%>",'Others'],
+            labels: ["<%=topCategoryLabel[0]%>","<%=topCategoryLabel[1]%>","<%=topCategoryLabel[2]%>",'Others'],
             datasets: [
                 {
                     label: "payments",
                     backgroundColor:['#A5E69E', '#a87bc7', '#64b7f6','#6666'],
                     barThickness:20,
-                    data: ["<%=sellingCategory[0].totalSold%>",'<%=sellingCategory[1].totalSold%>','<%=sellingCategory[2].totalSold%>',<%= categoreis.length%>-m]
+                    data: ["<%=topCategoryCount[0]%>",'<%=topCategoryCount[1]%>','<%=topCategoryCount[2]%>']
                 }
             ]
         },

@@ -157,11 +157,7 @@ const addCart = async (req, res) => {
             }
 
         }
-        // console.log(newCartProduct,"new");
-        // newCartProduct.save()
-        // .then((result)=>{
-        //     res.redirect('/loadProducts')
-        // })
+       
     } catch (error) {
         console.log(error.message);
     }

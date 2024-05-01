@@ -89,7 +89,7 @@ const loadDashboard = async (req, res) => {
         const currentDate = new Date();
         const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
         const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-        sales = await Order.find({'products.productStatus':'delivered',
+        const sales = await Order.find({'products.productStatus':'delivered',
             orderDate: {
                 $gte: startOfMonth,
                 $lte: endOfMonth
@@ -141,7 +141,7 @@ const loadDashboard = async (req, res) => {
             {$limit:3}
         ])
 const topProductLabel = sellingProduct.map(product =>product.productName)
-const topProductCount = sellingProduct.map(product=>product.totalsold)
+const topProductCount = sellingProduct.map(product=>product.totalSold)
 
 
         const sellingCategory = await Order.aggregate([
@@ -252,8 +252,8 @@ const topProductCount = sellingProduct.map(product=>product.totalsold)
                     graphData[month]= data.monthlyRevenue;
                 })
                 console.log(monthlyRevenue,"month" ,graphData,"revenue")
-                console.log(sellingCategory,"sellingctgryyyy");
-                console.log(sellingProduct,"prdcttlnggg")
+                console.log(sellingCategory,"sellingctgryyyy",topCategoryCount,"kg",topCategoryLabel);
+                console.log(sellingProduct,"prdcttlnggg",topProductLabel,topProductCount)
 
             } 
 

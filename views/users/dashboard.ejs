@@ -378,7 +378,7 @@
 
                                     <div class="tab-pane fade" id="tab-orders" role="tabpanel"
                                         aria-labelledby="tab-orders-link">
-                                        <% if(typeof order !=='undefined' ) { %>
+                                        <% if(order.length != 0 ) { %>
                                             <div class="order-container">
                                                 <div class="order-table" style="width: 112%;">
                                                     <div class="table-responsive">
@@ -491,8 +491,6 @@
                                                         </div><!-- End .col-lg-6 -->
                                                         <% }) %>
                                                             <div class="product-details-action">
-                                                                <a href="#" class="btn-product btn-cart"><span>Show All
-                                                                        Address</span></a>
                                                             </div><!-- End .product-details-action -->
                                                             <% } else { %>
                                                                 <p>No address has been added yet.</p>
@@ -1092,8 +1090,7 @@
 
                                             </div><!-- End .form-group -->
                                         </div>
-                                        <input type="hidden" name="redirect" value="checkout">
-
+  
                                         <div class="form-footer">
                                             <button type="submit" class="btn btn-outline-primary-2"
                                                 onclick="validateForm(event)">
@@ -1149,14 +1146,14 @@
                             <div class="tab-content" id="tab-content-5">
                                 <div class="tab-pane fade show active" id="signin" role="tabpanel"
                                     aria-labelledby="signin-tab">
-                                    <form action="/editProfile" id="addForm" method="post">
+                                    <form  id="addForm" >
                                         <div class="row">
 
                                             <div class="form-group">
                                                 <label for="singin-email">Name *</label>
-                                                <input type="text" class="form-control" id="add-name" name="name"
+                                                <input type="text" class="form-control" id="edit-name" name="name"
                                                     value="<%= user.name%>">
-                                                <span class="text-danger" id="pnameError"></span>
+                                                <span class="text-danger" id="pnameError3"></span>
                                             </div><!-- End .form-group -->
 
 
@@ -1166,7 +1163,7 @@
 
                                             <div class="form-group ml-5 pl-4">
                                                 <label for="">Phone Number *</label>
-                                                <input type="number" class="form-control" id="add-phone" name="phone"
+                                                <input type="number" class="form-control" id="edit-phone" name="phone"
                                                     value="<%= user.mobile%>">
                                                 <span class="text-danger" id="pphoneError"></span>
 
@@ -1511,19 +1508,36 @@
     <script>
         function validateProfile(event) {
             event.preventDefault()
-            let name = document.getElementById('add-name').value;
-            let phone = document.getElementById('add-phone').value
-            console.log("hiiiiiiiiiiiiiiiiiiiiiiiiiii");
+            let name = document.getElementById('edit-name').value;
+            let phone = document.getElementById('edit-phone').value
+            console.log("hiiiiiiiiiiiiiiiiiiiiiiiiiii",name,phone,"fdik");
 
-            if (name.trim() == '') {
-                document.getElementById('pnameError').innerHTML = 'Leading space not allowed'
+            if (name.trim() =='') {
+                console.log("here")
+                document.getElementById('pnameError3').innerHTML = 'Leading space not allowed'
             } else if (phone.length != 10) {
+                console.log("here number")
+
                 document.getElementById('pphoneError').innerHTML = 'Enter 10 Digit phone Number'
 
             } else {
                 document.getElementById('add-name').value = name;
                 document.getElementById('add-phone').value = phone
-                document.querySelector('form').submit()
+                console.log("gjsnol")
+                obj={
+                    name:name,
+                    phone:phone
+                }
+                fetch('/editProfile',{
+                    method: 'POST',
+                    headers:{
+                        'Content-Type':'application/json',
+                    },
+                    body:JSON.stringify(obj)
+                }).then(resposnse =>{
+                    location.reload()
+                } )
+                
             }
         }
     </script>

@@ -43,33 +43,6 @@ const transporter = nodemailer.createTransport({
 });
 
 
-// passport.use(
-//     new FacebookStrategy(
-//         {
-//             clientID: process.env.FACEBOOK_CLIENT_ID,
-//             clientSecret:process.env.FACEBOOK_SECRET_KEY,
-//             callbackURL: process.env.FACEBOOK_CALLBACK_URL,
-//         },
-//         async function(accessToken, refreshToken, profile, cb){
-//             const user = await User.findO({
-//                 accountId: profile.id,
-//                 provider: 'facebook',
-//             });
-//             if (!user){
-//                 console.log('Adding new facebook user to DB');
-//                 const user = new User({
-//                     accountId : profile.id,
-//                     name : profile.displayName,
-//                     provider: profile.provider,
-//                 });
-//                 await user.save();
-//                 console.log(user);
-//                 return cb(null,profile);
-//             }
-//         }
-//     )
-// )
-
 
 
 
@@ -92,7 +65,6 @@ const mailOption = {
         await userOtpVerification.updateOne({ userId: result._id }, { otp: hashedOtp, createAt: Date.now() });
     } else {
     const newhash = await bcrypt.hash(otp,saltRounds)
-console.log(typeof otp, 'dkfdhf')
     
     const newOTPVerification  = await new userOtpVerification({
         userId: result._id,
@@ -104,9 +76,7 @@ console.log(typeof otp, 'dkfdhf')
     await newOTPVerification.save();
 }
    
-   console.log("else runnning")
     await transporter.sendMail(mailOption);
-    console.log(result.email,"  hhhu ",result._id)
     res.render('otp',{message:"Verification otp  sented",
            
             email:result.email,
@@ -141,7 +111,6 @@ const mailOption = {
         await userOtpVerification.updateOne({ userId: result._id }, { otp: hashedOtp, createAt: Date.now() });
     } else {
     const newhash = await bcrypt.hash(otp,saltRounds)
-console.log(typeof otp, 'dkfdhf')
     
     const newOTPVerification  = await new userOtpVerification({
         userId: result._id,
@@ -189,7 +158,6 @@ const verifyRegister = async(req,res)=>{
  email:email;
  password:password;
  mobile:mobile;
- console.log(name,email,password,mobile);
  const exist1 = await User.findOne({email})
 
         if(name ==""|| email =="" || password == "" || mobile ==""){
@@ -220,13 +188,10 @@ const verifyRegister = async(req,res)=>{
                             referalCode:req.body.referal?req.body.referal:null
                         });
                         
-                        console.log(newUser,"new user log");
                         newUser.save()
                         .then((result)=>{
-                            console.log(newUser,"new userr",result);
                             // req.session.userId=result._id
-                            console.log("hellothere");
-                            console.log(result,"reslllllttttttt")
+                          
                             sendOtpVerificationEmail(result,res);
 
                         }).catch((error)=>{
@@ -243,63 +208,7 @@ const verifyRegister = async(req,res)=>{
         console.log(error.message);
     }
 }
-// const userOtpVerify = async(req,res)=>{
-//     try{
-        
-//         console.log("otp verification running");
-//         const{userId,otp,email}=req.body;
-//         // console.log(req.session.userId);
 
-//         // console.log(await bcrypt.hash(otp, 10),'aaaaa')
-        
-   
-        
-//         // console.log(req.body);
-//         if(!userId ||!otp){
-//             throw new Error("Empty otp details are not allowed")
-//         }else{
-//             const UserOTPVerifivationRecords= await userOtpVerification.findOne({userId
-//             });
-//             // console.log(UserOTPVerifivationRecords,"hhhhhh");
-//             if(UserOTPVerifivationRecords.length <=0){
-//                 //no records found
-//                 throw new Error(
-//                     "Account record doesn't exist or has been verified already.Please sign up or log in")
-                
-//                 }else{
-//                     //user otp exist
-//                     const {expiresAt}=UserOTPVerifivationRecords;
-//                     console.log(UserOTPVerifivationRecords,"bbbbbbb");
-//                     const hashedOTP = UserOTPVerifivationRecords.otp;
-//                         console.log(hashedOTP,"ccccccccc");
-//                     if(expiresAt < Date.now()){
-//                         //user otp has expires
-//                         userOtpVerification.deleteMany({userId});
-//                         throw new Error("Code has expired. Please request again.");
-//                     }else{
-//                         console.log(typeof otp)
-//                         const validOTP = await bcrypt.compare(otp,hashedOTP);
-//                         console.log(validOTP,otp);
-//                         if(!validOTP){
-//                             //supplied otp is wrong
-//                             throw new Error("Invalid code passed.Check your OTP again");
-//                         }else{
-//                             //succes
-//                             console.log(userId,typeof(userId));
-
-//                             await User.updateOne({_id:userId},{verified: true})
-
-//                             await userOtpVerification.deleteMany({userId});
-//                             res.render('home',{log:"hi"})
-//                         }
-//                     }
-//                 }
-//         }
-//     }catch(error){
-//         console.log(error.message);
-//     }
-
-// }
 
 
 
@@ -308,15 +217,8 @@ const verifyRegister = async(req,res)=>{
 const userOtpVerify = async(req,res)=>{
     try{
         
-        console.log("otp verification running");
         const{userId,otp,email,forgot}=req.body;
-       
 
-        // console.log(await bcrypt.hash(otp, 10),'aaaaa')
-        
-   
-        
-        // console.log(req.body);
         if(!otp){
             throw new Error("Empty otp details are not allowed")
         }else if(!user){
@@ -324,7 +226,6 @@ const userOtpVerify = async(req,res)=>{
         }else{
             const UserOTPVerifivationRecords= await userOtpVerification.findOne({userId
             });
-            // console.log(UserOTPVerifivationRecords,"hhhhhh");
             if(UserOTPVerifivationRecords.length <=0){
                 //no records found
                 throw new Error(
@@ -333,17 +234,14 @@ const userOtpVerify = async(req,res)=>{
                 }else{
                     //user otp exist
                     const {expiresAt}=UserOTPVerifivationRecords;
-                    console.log(UserOTPVerifivationRecords,"bbbbbbb");
                     const hashedOTP = UserOTPVerifivationRecords.otp;
-                        console.log(hashedOTP,"ccccccccc");
                     if(expiresAt < Date.now()){
+                        
                         //user otp has expires
                         userOtpVerification.deleteMany({userId});
                         throw new Error("Code has expired. Please request again.");
                     }else{
-                        console.log(typeof otp)
                         const validOTP = await bcrypt.compare(otp,hashedOTP);
-                        console.log(validOTP,otp);
                         req.session.userId=userId
                         if(!validOTP){
                             //supplied otp is wrong
@@ -351,7 +249,6 @@ const userOtpVerify = async(req,res)=>{
                         }else{
                             //succes
                             if(forgot){
-                                console.log(userId,typeof(userId));
 
                                 
     
@@ -359,7 +256,6 @@ const userOtpVerify = async(req,res)=>{
                                 res.render('newpass',{log:"hi"})
 
                             }else{
-                            console.log(userId,typeof(userId));
                         
                                 const user =  await  User.findOne({_id:userId})
                                 if(user.referalCode !== null){
@@ -374,7 +270,6 @@ const userOtpVerify = async(req,res)=>{
                                     }
                                     await User.findOneAndUpdate({referalCode:code}, { $inc: { wallet: 1000 }, $push: { walletHistory: data } })
                                     await User.findOneAndUpdate({_id:userId}, { $inc: { wallet: 200 }, $push: { walletHistory: data2 } })
-                                    console.log('fs',User.findOne({referalCode:code}),'refera codede')
                                 }
                             await User.updateOne({_id:userId},{verified: true})
                                 let referal = Math.floor(Math.random() * 90000) + 10000;
@@ -411,14 +306,12 @@ const loadHome=async (req,res)=>{
 
 const forgotPassword = async(req,res)=>{
     try {
-        console.log(req.body.email);
         const email = req.body.email
         const result = await User.findOne({email:email})
         const forgotPassword = 1
 
        if(result){
         req.session.userId=result._id
-        console.log("no user found");
         sendOtpVerificationForgot(result,res);
        }else{
         res.render('login1',{message:"No Use found on the provided Email"})
@@ -458,8 +351,6 @@ const loadDashboard = async(req, res) => {
         const totalPages = Math.ceil(total / limit);
 
         const slicedWalletHistory = user.walletHistory.slice(startIndex, endIndex);
-        console.log(coupon,"fkijuv")
-         console.log(totalOrderPage,page,"gs")
 
         res.render('dashboard', { address,subtotal,cart, user, order, totalPages, currentPage: page, coupon, wallet, slicedWalletHistory ,totalOrderPage,currentPage: page});
 
@@ -475,9 +366,8 @@ const editProfile = async(req,res)=>{
         const name = req.body.name
         const phone = req.body.phone
         const userId = req.session.userId
-        console.log(name,phone,userId);
         await User.updateOne({_id:userId},{$set:{name:name,mobile:phone}})    
-        res.redirect('/dashboard') 
+        res.json({success:true}) 
     } catch (error) {
         console.log(error.message);
     }
@@ -500,7 +390,6 @@ const userHome = async(req,res)=>{
         
         const cart= await Cart.findOne({user:userd}).populate('product.productId')
         const wishlist = await Wishlist.findOne({user:userd})
-        console.log("rached inside",req.session.userId)
         let subtotal
         if(cart){
             subtotal = cart.product.reduce((acc,curr)=>{
@@ -508,7 +397,6 @@ const userHome = async(req,res)=>{
             },0)
         }
       
-        console.log(cart," crtttttttttt",wishlist)
         res.render('home',{userd,cart,subtotal,wishlist})
 
     } catch (error) {
@@ -524,18 +412,13 @@ const loadLogin = async(req,res)=>{
 }
 const verifyLogin = async(req,res)=>{
     try {
-        console.log('etheetund');
 
         const email = req.body.email;
         const password= req.body.password;
-console.log(email,passport);
         const userData =await User.findOne({email:email});
-        console.log(userData);
         if(userData){
-            // console.log('matched');
             const passwordMatch = await bcrypt.compare(password,userData.password);
             if(passwordMatch){
-                console.log('match hogaya');
 
                 if(userData.is_blocked == true){
                     res.render('login1',{blockMessage:"Your accound has been blocked"})
@@ -546,7 +429,6 @@ console.log(email,passport);
                     }
                     sendOtpVerificationEmail(result,res);
                 }else{
-                console.log(userData._id,"here reached")
                req.session.userId=userData._id;
               
                res.redirect('/')
@@ -566,14 +448,9 @@ console.log(email,passport);
 
 const resentOTPVerification = async(req,res)=>{
     try {
-        console.log("ethi   ihiyghqfjqevphofubufjepiv");
       const email=req.body.userId
       const forgot=req.body.forgot
-       console.log(req.body);
-    //    console.log(req.session.email,"helloemail");
-       console.log(req.session.userId," ","sessionnnnnnnnnnn",email,forgot);
        const userId = req.session.userId
-       console.log(userId)
         if(!userId || !email){
             throw new Error("Empty user details are not allowed")
         }else{
@@ -588,13 +465,11 @@ const resentOTPVerification = async(req,res)=>{
 
 
 const user = async(req,res)=>{
-console.log(req.body,"uvnij")
    
 }
 
 
 const registerWithGoogle =  async (oauthUser) => {
-    console.log("google");
       const isUserExists = await googleUser.findOne({
         accountId: oauthUser.id,
         provider: oauthUser.provider,
@@ -605,7 +480,6 @@ const registerWithGoogle =  async (oauthUser) => {
         
           
         };
-        console.log(failure);
         return { failure };
       }
   
@@ -621,37 +495,18 @@ const registerWithGoogle =  async (oauthUser) => {
       const success = {
         message: 'User Registered.',
       };
-      console.log(success);
       return { success };
     };
-  
-    // loginUser: async (oauthUser) => {
-    //   const userExists = await User.findOne({ email: oauthUser.emails[0].value });
-    //   if (userExists) {
-    //     const success = {
-    //       message: 'User successfully logged In.',
-    //     };
-    //     return { success };
-    //   }
-    //   const failure = {
-    //     message: 'Email not Registered. You need to sign up first',
-    //   };
-    //   return { failure };
-    // },
+ 
 const changePassword = async(req,res)=>{
     try{
-        console.log(req.session.userId);
         const userId = req.session.userId
         const user = await User.findOne({_id:userId})
         const password=req.body.password
-        console.log(user);
         const saltRounds=10;
-        console.log("before");
         const hashedPassword = await bcrypt.hash(password,saltRounds)
-        console.log(hashedPassword,"eu",password);
         await  User.findOneAndUpdate({_id:userId},{$set:{password:hashedPassword}})
         
-        console.log("finished");
         res.redirect('/logining')
     }catch(error){
         console.log(error.message);
@@ -664,7 +519,6 @@ const loadWhishlist = async (req, res) => {
         const wishlist = await Wishlist.findOne({ user: userId })
             .populate({ path: 'products.productId', model: 'Product', populate: { path: 'offer', model: 'offer' } });
 
-        console.log(wishlist, "it is here");
         res.render('whishlist', { wishlist });
 
     } catch (error) {
@@ -675,41 +529,32 @@ const loadWhishlist = async (req, res) => {
 
 const addToWishlist= async(req,res)=>{
     try{
-        console.log("hello widhlist",req.body.id);
         const productId = req.body.id
         const userId=req.session.userId
         if(!userId){
             res.json({removed:true , message:"Please login "})
         }else{
         const exist = await Wishlist.findOne({user:userId})
-        console.log("hello widhlist",exist);
         if(!exist){
             const newWishlist = new Wishlist({
                 user: userId,
                 products: [{productId:productId}]
             })
             await newWishlist.save();
-            console.log(newWishlist,"hello")
-            console.log("added");
             res.json({ added: true, message: 'Item added to wishlist' })
         }else{
-            console.log("user Exist");
             const productExist = await Wishlist.findOne({user:userId,'products.productId':productId})
-            console.log("her is the product xist ",productExist);
             if(productExist){
-                console.log("user product Exist");
                 await Wishlist.findOneAndUpdate(
                     { user: userId, 'products.productId': productId }, 
                     { $pull: { products: { productId: productId } } }, 
                     { new: true })
-                    console.log("removed");
                     res.json({remove:true,message:'Item Removed from Wishlist'})
             }else{
                     await Wishlist.findOneAndUpdate({
                         user:userId },
                         {$addToSet:{products:{productId:productId}}},
                         {upsert:true,new:true})
-                        console.log("added");
                     res.json({ added: true, message: 'Item added to wishlist' })
             }
         }
@@ -736,8 +581,7 @@ const removeWishlist = async(req,res)=>{
 }
 const sendOtpVerificationForgot = async(result,res)=>{
     try {
-        console.log(result.email,"emilllllll",result)
-        console.log(result.userId,"idddddddddddddddddddd")
+       
         const otp =`${Math.floor(1000 + Math.random() * 9000)}`
         console.log(otp,"THIS IS THE OTP");
 //mail option
@@ -752,11 +596,10 @@ const mailOption = {
     
     if (userOtpVerificationRecord) {
         const hashedOtp = await bcrypt.hash(otp,saltRounds)
-        console.log(hashedOtp,"kfdkakvn")
+    
         await userOtpVerification.updateOne({ userId: result._id }, { otp:hashedOtp, createAt: Date.now() });
     } else {
     const newhash = await bcrypt.hash(otp,saltRounds)
-console.log(typeof otp, 'dkfdhf')
     
     const newOTPVerification  = await new userOtpVerification({
         userId: result._id,
@@ -768,7 +611,6 @@ console.log(typeof otp, 'dkfdhf')
     await newOTPVerification.save();
 }
    
-   console.log("else runnning")
     await transporter.sendMail(mailOption);
     res.render('otp copy',{message:"Verification otp  sented",
            
@@ -787,15 +629,12 @@ console.log(typeof otp, 'dkfdhf')
 const userForgotOtpVerify = async(req,res)=>{
     try{
         
-        console.log("otp verification running forgot");
         const{userId,otp,email}=req.body;
        
 
-        console.log(await bcrypt.hash(otp, 10),'aaaaa')
         
    
         
-        // console.log(req.body);
         if(!otp){
             throw new Error("Empty otp details are not allowed")
         }else if(!user){
@@ -803,26 +642,20 @@ const userForgotOtpVerify = async(req,res)=>{
         }else{
             const UserOTPVerifivationRecords= await userOtpVerification.findOne({userId
             });
-            // console.log(UserOTPVerifivationRecords,"hhhhhh");
             if(UserOTPVerifivationRecords.length <=0){
-                //no records found
                 throw new Error(
                     "Account record doesn't exist or has been verified already.Please sign up or log in")
                 
                 }else{
                     //user otp exist
                     const {expiresAt}=UserOTPVerifivationRecords;
-                    console.log(UserOTPVerifivationRecords,"bbbbbbb");
                     const hashedOTP = UserOTPVerifivationRecords.otp;
-                        console.log(hashedOTP,"ccccccccc");
                     if(expiresAt < Date.now()){
                         //user otp has expires
                         userOtpVerification.deleteMany({userId});
                         throw new Error("Code has expired. Please request again.");
                     }else{
-                        console.log(typeof otp)
                         const validOTP = await bcrypt.compare(otp,hashedOTP);
-                        console.log(validOTP,otp);
                         req.session.userId=userId
                         if(!validOTP){
                             //supplied otp is wrong
@@ -830,7 +663,6 @@ const userForgotOtpVerify = async(req,res)=>{
                         }else{
                             //succes
                            
-                                console.log(userId,typeof(userId));
 
                                 
     

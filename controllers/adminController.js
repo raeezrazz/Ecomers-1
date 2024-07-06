@@ -37,9 +37,7 @@ const verifyLoginAdmin = async (req, res) => {
 
         const email = req.body.email;
         const password = req.body.password;
-        console.log('adminbhai')
         const userData = await User.findOne({ email: email })
-        console.log(userData);
         if (userData) {
 
             const passwordMatch = await bcrypt.compare(password, userData.password)
@@ -98,14 +96,6 @@ const loadDashboard = async (req, res) => {
         const monthlyIncome = sales.reduce((acc, curr) => {
             return acc + curr.subtotal
         }, 0);
-
-
-        
-       
-
-        console.log(monthlyIncome,"nfibsvjsajvn")
-
-        
         const filter = req.query.filter
         let labels
         let graphData
@@ -118,7 +108,6 @@ const loadDashboard = async (req, res) => {
             }
         ]);
 
-        console.log(revenue,"nuaoj")
 
 
         const sellingProduct = await Order.aggregate([
@@ -215,10 +204,8 @@ const topProductCount = sellingProduct.map(product=>product.totalSold)
                 yearlyRevenues.forEach((yearData,index)=>{
                     graphData[index]=yearData.yearlyRevenue.length >0? yearData.yearlyRevenue[0].yearlyRevenue : 0 ;
                 })
-                console.log("fsd",yearlyRevenues,"fds",graphData)
 
             }else{
-                console.log("else")
                 labels =  [1, 2, 3, 4, 5,6, 7, 8,9, 10, 11, 12];
 
                 const currentMonth= new Date();
@@ -251,10 +238,7 @@ const topProductCount = sellingProduct.map(product=>product.totalSold)
                     const month = data._id -1;
                     graphData[month]= data.monthlyRevenue;
                 })
-                console.log(monthlyRevenue,"month" ,graphData,"revenue")
-                console.log(sellingCategory,"sellingctgryyyy",topCategoryCount,"kg",topCategoryLabel);
-                console.log(sellingProduct,"prdcttlnggg",topProductLabel,topProductCount)
-
+               
             } 
 
 
@@ -269,7 +253,6 @@ const topProductCount = sellingProduct.map(product=>product.totalSold)
 const LoadUsers = async(req,res)=>{
     try {
        const users=await User.find()
-        // console.log(users);
         res.render('users',{users})
     } catch (error) {
         console.log(error.message);
@@ -278,7 +261,6 @@ const LoadUsers = async(req,res)=>{
 const blockUser =async(req,res)=>{
     try {
         const user = req.params.id
-        // console.log(user);
         const value = await User.findOne({_id:user})
         value.is_blocked = !value.is_blocked
         await value.save()
@@ -293,10 +275,8 @@ const blockUser =async(req,res)=>{
 const loadCategories =async(req,res)=>{
 
     try {
-        // console.log("first");
         const categories = await Category.find().populate('offer')
         const offer = await Offer.find()
-        // console.log(categories);
         res.render('categories',{categories,offer})
     } catch (error) {
         console.log(error.message);
@@ -312,19 +292,15 @@ const loadAddCategories =async(req,res)=>{
 }
 const addCategory=async(req,res)=>{
     try {
-        console.log("first");
         const name =req.body.name.trim();
         const isExists = await Category.findOne({ name: { $regex: '.*' + name + '.*', $options: 'i' } })
-        console.log(isExists);
         if(!isExists){
             const category = new Category({
             name    
             })
             await category.save();
-            console.log("if running");
             res.redirect('/admin/categories')
         }else{
-            console.log("else runing");
             res.render('addCategories',{message:'Category name already exists'})
         }
     } catch (error) {
@@ -334,7 +310,6 @@ const addCategory=async(req,res)=>{
 
 const blockCategories =async(req,res)=>{
     try {
-        console.log("first  block");
         const user = req.params.id
        
         const value = await Category.findOne({_id:user})
@@ -358,7 +333,6 @@ const LoadUpdateCategories = async (req, res) => {
 
     try {
         const id = req.query.id;
-        console.log("hi",id);
         
         const catData = await Category.findById({ _id: id });
         
@@ -375,20 +349,14 @@ const LoadUpdateCategories = async (req, res) => {
 
 const updateCategories = async (req, res) => {
     try {
-    console.log("looo");
      const id = await req.body.id;
         const exist = await Category.findOne({name:req.body.name});
-        console.log("searching",id);
         const catData = await Category.findById({ _id: id });
-        console.log("searchingthe again");
-        console.log(exist);
 
         if(exist){
             res.render('edit-cat',{message1:"This Category already exist",user:catData});
         }else{
-            console.log("saving");
         const userData = await Category.findByIdAndUpdate({_id: req.body.id }, { $set: { name: req.body.name,} })
-console.log("done");
         res.redirect('/admin/categories');
         }
     } catch (error) {
@@ -398,7 +366,6 @@ console.log("done");
 }
 const deleteCategories = async (req,res)=>{
     try {
-        console.log("1",req.body.id);
         const id = req.body.id;
         await Category.deleteOne({ _id: id });
         
@@ -420,7 +387,6 @@ const deleteCategories = async (req,res)=>{
 const loadProducts =async(req,res)=>{
 
     try {
-        console.log(req.query,"profdi nfijd")
         const page = parseInt(req.query.page) || 1; 
         const limit = 10; // Display 12 products per page
         const startIndex = (page - 1) * limit;
@@ -435,7 +401,6 @@ const loadProducts =async(req,res)=>{
   
         const today = new Date()
         const offer = await Offer.find({ expiryDate: { $gte: today } });
-        console.log(category);
         
         res.render('products',{products,category,offer,totalPages,currentPage: page})
     } catch (error) {
@@ -455,7 +420,6 @@ const addProducts = async (req,res)=>{
 const logout = async (req, res) => {
 
     try {
-        console.log("ivide ethi");
         req.session.destroy();
         res.redirect('/admin');
 

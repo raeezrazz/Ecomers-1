@@ -31,17 +31,14 @@ const createOffer =async (req,res)=>{
 
 const submitOffer = async(req,res)=>{
     try {
-        console.log(req.body,"submited")
         const {name,discount,start,expiry}=req.body
 
         const exist = await Offer.findOne({name:name})
         if(exist){
-console.log("exist")
 
             res.json({success:false})
 
         }else{
-console.log("not")
 
             const newOffer = new Offer({
                 name:name,
@@ -50,8 +47,6 @@ console.log("not")
                 
                 expiryDate:expiry
             }).save()
-console.log("reached")
-            console.log(newOffer)
             res.json({success:true})
         }
 
@@ -63,7 +58,6 @@ console.log("reached")
 const deleteOffer=async(req,res)=>{
     try {
         const offerId = req.params.id
-        console.log(offerId)
         const removeOffer = await Offer.findOneAndDelete({_id:offerId})
         if(removeOffer){
             res.redirect('/admin/offer')
@@ -82,7 +76,6 @@ const applyOffer = async(req,res)=>{
         const product = await productModel.findOneAndUpdate({_id:productId},{
             offer: offerId,
         })
-        console.log("success ")
         res.json({applied:true})
     }catch(error){
         console.log(error.message)
@@ -91,10 +84,8 @@ const applyOffer = async(req,res)=>{
 
 const removeOffer = async(req,res)=>{
     try {
-        console.log("reched remve")
         const productId = req.body.productId
         const product = await productModel.findOneAndUpdate({_id:productId},{offer:null})
-         console.log(product)
          res.json({remove:true})
     } catch (error) {
         console.log(error.message)
@@ -111,7 +102,6 @@ const categiresOffer = async(req,res)=>{
         const category = await Category.findOneAndUpdate({_id:categoryId},{
             offer: offerId,
         })
-        console.log("success ",category)
         res.json({applied:true})
     } catch (error) {
         console.log(error.message)
@@ -120,10 +110,8 @@ const categiresOffer = async(req,res)=>{
 
 const categiresOfferRemove = async(req,res)=>{
     try {
-        console.log("reched remve")
         const categoryId = req.body.categoryId
         const category = await Category.findOneAndUpdate({_id:categoryId},{offer:null})
-         console.log(category)
          res.json({remove:true})
     } catch (error) {
         console.log(error.message)

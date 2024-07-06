@@ -9,13 +9,10 @@ const Coupon =require('../models/couponModel')
 
 const addAddress=async(req,res)=>{
     try {
-        console.log("reached");
         const data = req.body
         const userId = req.session.userId
-        // console.log(userId,"this is id",data);
         const exist = await Address.findOne({user:userId})
         if(exist){
-            console.log("exist");
             await Address.findOneAndUpdate({user:userId},{$push:{
                 address:[{
                     name:data.name,
@@ -51,7 +48,6 @@ const addAddress=async(req,res)=>{
             })
             await address.save()
             .then((result)=>{
-                // console.log(result,"success",req.body.redirect);
                 if(req.body.redirect ==='checkout'){
                     res.redirect('/loadCheckout')
                 }else{
@@ -75,15 +71,7 @@ const editAddress = async(req,res)=>{
             district,
             state,id}=req.body
        const userId = req.session.userId
-            console.log(address,
-                name,
-                email,
-                phone,
-                pincode,
-                landmark,
-                city,
-                district,
-                state,id)
+           
        const oldAddress = await Address.findOneAndUpdate({$and:[{user:userId},{'address._id':id}]},{address:{address:address,
         name:name,
         email:email,
@@ -102,12 +90,9 @@ const editAddress = async(req,res)=>{
 }
 const deleteAddress = async(req,res)=>{
     try{
-        console.log("reached")
         const id = req.body.id
         const userId=req.session.userId
-        console.log(id,userId)
         await Address.findOneAndUpdate({user:userId},{$pull:{address:{_id:id}}})
-        console.log("finished");
         res.redirect('/Dashboard')
     }catch(error){
         console.log(error.message)

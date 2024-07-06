@@ -648,8 +648,8 @@
             .then(data => {
                 if (data.exist) {
                     swalWithBootstrapButtons.fire({
-                        title: "Are you sure?",
-                        text: "Product Already Exist In the Cart!",
+                       
+                        title: "Product Already Exist In the Cart!",
                         icon: "warning",
                         showCancelButton: true,
                         confirmButtonText: "Go to Carty",
@@ -664,9 +664,9 @@
                     })
                 } else if (data.success) {
                     swalWithBootstrapButtons.fire({
-                        title: "Are you sure?",
-                        text: "Product Added to Cart!",
-                        icon: "warning",
+                        title: "Product Added to Cart!",
+                    
+                        icon: "success",
                         showCancelButton: true,
                         confirmButtonText: "Go to Cart",
                         cancelButtonText: "cancel!",

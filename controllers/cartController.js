@@ -13,19 +13,14 @@ const Coupon = require('../models/couponModel')
 const loadCart = async (req, res) => {
     try {
         const userId = req.session.userId
-        console.log("kjhgfdsazxcvbnmk")
-        console.log(userId, req.session.userId);
         if (userId) {
             const userCart= await Cart.findOne({ user: userId }) .populate({ path: 'product.productId', model: 'Product', populate: { path: 'offer', model: 'offer' } });
             if (userCart) {
-                console.log(userCart, "hello");
 
                 const subtotal = userCart.product.reduce((acc, val) => {
                     const discount = val.productId.offer&&val.productId.offer.expiryDate > new Date() ? val.productId.offer.discountAmount : 0;
                     return acc + (val.productId.price - discount) * val.quantity;
                 }, 0);
-            //    const subtotal=3
-                console.log(subtotal,"kkkoi");
 
                 res.render('cart', { userCart, subtotal })
 
@@ -42,28 +37,21 @@ const loadCart = async (req, res) => {
 }
 const addCart = async (req, res) => {
     try {
-        console.log("reached")
 
         const id = req.body.id
         const userId = req.session.userId
         const wish = req.body.wish
         if (wish ==true) {
-                 console.log("wish true")
             const product = await Products.findOne({ _id: id })
             const productId = product._id
             const userExist = await Cart.findOne({ user: userId })
-            console.log(product, "jhjvghcfgcgvh,");
-            // const subtotal=product.price *quantity
-            console.log('quantity');
             if (userExist) {
 
                 const exist = await Cart.findOne({ user: userId, 'product.productId': productId })
                 if (exist) {
-                    console.log("producte exist");
 
                     res.json({ exist: true })
                 } else {
-                    console.log(" exist user");
                     await Cart.findOneAndUpdate({ user: userId }, {
                         $push: {
                             product: [{
@@ -78,11 +66,9 @@ const addCart = async (req, res) => {
                     const wishRemove =await Wishlist.findOneAndUpdate({user:userId},
                         { $pull: { products: { productId: id} } }, 
                         { new: true })
-                   console.log(wishRemove,"final")
                     res.json({ success: true })
                 }
             } else {
-                console.log("new user");
                 const newCartProduct = new Cart({
                     user: req.session.userId,
                     product: [{
@@ -104,23 +90,17 @@ const addCart = async (req, res) => {
 
 
         } else {
-            console.log("wish false")
 
             const product = await Products.findOne({ _id: id })
             const productId = product._id
             const userExist = await Cart.findOne({ user: userId })
-            console.log(product, "jhjvghcfgcgvh,");
-            // const subtotal=product.price *quantity
-            console.log('quantity');
             if (userExist) {
 
                 const exist = await Cart.findOne({ user: userId, 'product.productId': productId })
                 if (exist) {
-                    console.log("producte exist");
 
                     res.json({ exist: true })
                 } else {
-                    console.log(" exist user");
                     await Cart.findOneAndUpdate({ user: userId }, {
                         $push: {
                             product: [{
@@ -136,7 +116,6 @@ const addCart = async (req, res) => {
                     res.json({ success: true })
                 }
             } else {
-                console.log("new user");
                 const newCartProduct = new Cart({
                     user: req.session.userId,
                     product: [{
@@ -169,7 +148,6 @@ const removeCart = async (req, res) => {
         const userId = req.session.userId
         const result = await Cart.findOneAndUpdate({ user: userId }, { $pull: { product: { productId: productId } } })
 
-        console.log(result, "hi");
 
         res.json({remove:true})
 
@@ -202,11 +180,9 @@ const loadCheckout = async (req, res) => {
             usedUser: { $nin: [userId] }
         });
         
-        console.log(coupon,"hdajdkvnlkjnvnjkas")
         if (address) {
          
             const data = address.address
-            console.log(coupon,"fuewosdfjo")
             res.render('checkout', { data, address,product, subtotal,coupon,couponDiscount,wallet})
         } else {
             const data = null
@@ -219,17 +195,14 @@ const loadCheckout = async (req, res) => {
 }
 const updateQuantity = async (req, res) => {
     try {
-        console.log(req.body,"hytnvuvsjnvjsnjvsnjnwubwt")
         const userId = req.session.userId
         const productId = req.body.productId
         const count = req.body.count
         const cart = await Cart.findOne({ user: userId })
         const product = await Products.findOne({ _id: productId })
-        console.log(cart, "this is cart");
         
         if (count == -1) {
             const productQuantity = cart.product.find((p) => p.productId == productId).quantity
-            console.log(productQuantity, "final")
             if (productQuantity <= 1) {
                 return res.json({ success: false, message: 'Quantity cannot be decreased further. ' })
             }
@@ -250,7 +223,6 @@ const updateQuantity = async (req, res) => {
             },
             { new: true }
         );
-        console.log("reached at the end");
         const Allquantity = await Cart.findOne({user:userId,'product.productId':productId}).populate({ path: 'product.productId', model: 'Product', populate: { path: 'offer', model: 'offer' } });
         const allCart = await Cart.findOne({user:userId}).populate({ path: 'product.productId', model: 'Product', populate: { path: 'offer', model: 'offer' } });
         const quantity=Allquantity.product[0].quantity
@@ -265,7 +237,6 @@ const updateQuantity = async (req, res) => {
             return acc + (val.productId.price - discount) * val.quantity;
         }, 0);
      
-        console.log(quantity,stock,subtotal,price,total)
         res.json({ success: true,quantity:quantity,remainingStock:stock,subtotal:subtotal,total:total })
 
     } catch (error) {

@@ -23,7 +23,6 @@ const razorpay = new Razorpay({
 
 const loadOrders = async (req, res) => {
     try {
-        console.log("orferef")
         const page = parseInt(req.query.page) || 1; 
         const limit = 10; // Display 12 products per page
         const startIndex = (page - 1) * limit;
@@ -32,7 +31,6 @@ const loadOrders = async (req, res) => {
         const order = await Order.find().sort({ orderDate: -1 })    
         const totalOrder = await Order.countDocuments();
         const totalPages = Math.ceil(totalOrder / limit);
-        console.log(totalPages,page)
         res.render('orderPage', { order,totalPages,currentPage: page })
     } catch (error) {
         console.log(error.message);
@@ -42,7 +40,6 @@ const loadOrders = async (req, res) => {
 
 const applyCoupon = async (req, res) => {
     try {
-        console.log(req.body, "jjjjjjj")
 
         const couponId = req.body.couponId;
         const userId = req.session.userId;
@@ -53,17 +50,14 @@ const applyCoupon = async (req, res) => {
         if (!exists) {
             const existingCart = await Cart.findOne({ user: userId });
             if (existingCart && existingCart.couponDiscount == null) {
-                console.log("pplting prfecetly")
                 await Coupon.findOneAndUpdate({ _id: couponId }, { $push: { usedUser: userId } });
 
                 await Cart.findOneAndUpdate({ user: userId }, { $set: { couponDiscount: couponData._id } });
                 res.json({ success: true });
             } else {
-                console.log("it worked")
                 res.json({ success: false });
             }
         } else {
-            console.log("it ")
 
             res.json({ success: false });
         }
@@ -74,14 +68,12 @@ const applyCoupon = async (req, res) => {
 
 const removeCoupon = async (req, res) => {
     try {
-        console.log(req.body)
         const couponId = req.body.couponId
         const userId = req.session.userId
 
 
         const couponData = await Coupon.findOneAndUpdate({ _id: couponId }, { $pull: { usedUser: userId } })
         const updateCart = await Cart.findOneAndUpdate({ user: userId }, { $set: { couponDiscount: null } })
-        console.log(couponData, updateCart)
         res.json({ success: true })
 
 
@@ -94,13 +86,10 @@ const removeCoupon = async (req, res) => {
 
 const placeOrder = async (req, res) => {
     try {
-        console.log(req.body, 'oijhoijbojboknvsdlkmzvksmvs;dV');
         const userId = req.session.userId
         const method = req.body.methode
 
-        console.log(method, "firsy")
         const productTotal = await Cart.findOne({ user: userId }).populate({ path: 'product.productId', model: 'Product', populate: { path: 'offer', model: 'offer' } }).populate('couponDiscount');
-        console.log("hdfkanvo")
         const couponId = productTotal.couponDiscount
         const user = await User.findOne({ _id: userId })
         const couponDiscount = productTotal.couponDiscount ? productTotal.couponDiscount.discountAmount : 0;
@@ -114,14 +103,12 @@ const placeOrder = async (req, res) => {
         }, 0);
         
         let amount = 0
-        console.log(couponDiscount, "giurdhgfjgfv")
         if (couponDiscount) {
             amount = subtotal - (subtotal / couponDiscount)
         } else {
             amount = subtotal
         }
         let couponPercentage
-        console.log(subtotal,"g");
         if(couponDiscount !== 0){
             couponPercentage =couponDiscount
         }else{
@@ -130,14 +117,11 @@ const placeOrder = async (req, res) => {
         const cartItem = productTotal.product
         const addressIndex = req.body.Address
         const address = await Address.findOne({ user: userId })
-        console.log("here", "ended here rewif", address);
         const addre = address.address[addressIndex]
 
 
-        console.log(addressIndex, "fbagvyhbfzbvzb", addre);
 
 
-        console.log(amount, "amunt svbvvn;l")
         const order = new Order({
             user: userId,
 
@@ -154,35 +138,27 @@ const placeOrder = async (req, res) => {
         await order.save()
         const orderId = order._id;
      
-        console.log("saved", orderId);
 
-        console.log(method, "jkjk");
         if (method == "Cash on Delivery") {
             for (const product of cartItem) {
                 const done = await Products.updateOne({ _id: product.productId }, { $inc: { quantity: -product.quantity, popularity: 1 } })
-                console.log(done, "divonjnbjznblnblnbmnnznbbnzbnzbnbznone")
         await Cart.deleteOne({ user: userId })
 
             }
-            console.log("cod");
 
             res.json({ success: true })
         } else if (method == 'Razor Pay') {
-            console.log("online hogaya");
             for (const product of cartItem) {
                 const done = await Products.updateOne({ _id: product.productId }, { $inc: { quantity: -product.quantity, popularity: 1 } })
-                console.log(done, "divonjnbjznblnblnbmnnznbbnzbnzbnbznone")
             }
             let options = {
                 amount: amount*100,
                 currency: "INR",
                 receipt: "" + orderId
             }
-            console.log("elet");
             const ordering = await razorpay.orders.create(options)
                 .then((result) => {
                     const order = result
-                    console.log(order)
                     res.json({ success: false, order })
                 }).catch(err => {
                     console.log(err)
@@ -191,12 +167,10 @@ const placeOrder = async (req, res) => {
 
 
         } else {
-            console.log("wallet")
         await Cart.deleteOne({ user: userId })
 
             for (const product of cartItem) {
                 const done = await Products.updateOne({ _id: product.productId }, { $inc: { quantity: -product.quantity, popularity: 1 } })
-                console.log(done, "divonjnbjznblnblnbmnnznbbnzbnzbnbznone")
             }
 
 
@@ -205,8 +179,6 @@ const placeOrder = async (req, res) => {
                 date: Date.now(),
             }
             await User.findOneAndUpdate({ _id: userId }, { $inc: { wallet: amount }, $push: { walletHistory: data } })
-            console.log("wallet finished");
-            console.log(req.body)
             res.json({ success: true })
         }
 
@@ -221,7 +193,6 @@ const verifyPayment = async (req, res) => {
         const userId = req.session.userId;
         const data = req.body
         const cart = await Cart.findOne({ user: userId }).populate({ path: 'product.productId', model: 'Product', populate: { path: 'offer', model: 'offer' } });
-        console.log(req.body)
 
         const hmac = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET);
         hmac.update(data.razorpay_order_id + "|" + data.razorpay_payment_id);
@@ -248,7 +219,6 @@ const verifyPayment = async (req, res) => {
 
 
         await Cart.deleteOne({ user: userId });
-        console.log('endedjfaifoankgkgaknkhmdmk')
 
 
         res.json({ success: true })
@@ -269,16 +239,13 @@ const loadSuccess = async (req, res) => {
 
 const loadOrderDetails = async (req, res) => {
     try {
-        console.log(req.params);
         const userId = req.session.userId
         const orderNum = req.params.id
         const allOrder = await Order.findOne({ user: userId })
-        console.log("gretdsbfefdg", allOrder);
         const order = allOrder.order[orderNum]
 
         const addressId = order.delivery_address
         const address = await Address.findOne({ _id: addressId })
-        console.log(order, "ggs", address);
         const product = await Products.findOne({ _id: 'order' })
         res.render('orderDetails', {})
     } catch (error) {
@@ -291,8 +258,6 @@ const detailedPageLoad = async (req, res) => {      //adminSide
         const id = req.params.index
         const detials = await Order.findOne({ _id: id }).populate('products.productId')
 
-        // console.log(order);
-        console.log("igyebuncjadnvuasvnoa   suhair", detials);
         res.render('detailedOrderView', { detials })
     } catch (error) {
         console.log(error.message);
@@ -302,13 +267,10 @@ const detailedPageLoad = async (req, res) => {      //adminSide
 const viewFullOrder = async (req, res) => {    //userSide
     try {
         const id = req.params.id
-        console.log("hihlwownwdwe");
         const detials = await Order.findOne({ _id: id }).populate('products.productId')
-        console.log(detials, "this is detials")
         const product = detials.products
         const userId = req.session.userId
         const user = await User.findOne({ _id: userId })
-        console.log(detials, user);
         res.render('detailedOrder', { detials, user })
     } catch (error) {
         console.log(error.message)
@@ -316,13 +278,10 @@ const viewFullOrder = async (req, res) => {    //userSide
 }
 const updateStatus = async (req, res) => {
     try {
-        console.log('status')
         const productId = req.body.productId
         const status = req.body.status
-        console.log(productId, status);
         const updateorder = await Order.findOneAndUpdate({ 'products._id': productId }, { $set: { 'products.$.productStatus': status } }, { new: true })
         return res.json({ success: true })
-        console.log("done")
     } catch (error) {
         console.log(error.message);
     }
@@ -335,15 +294,12 @@ const cancelOrder = async (req, res) => {
         const orderId = req.body.orderId
         const payment = await Order.findOne({ _id: orderId })
        
-        // console.log(orderId, 'order')
         const orderDetails = await Order.findOne({ user: userId, 'products._id': productId }).populate('products.productId')
         const quantity = orderDetails.products[0].quantity
         const done = await Products.updateOne({ _id: orderDetails.products[0].productId }, { $inc: { quantity:quantity, popularity: -1 } })
 
-        // console.log(orderDetails,"order detialnva",quantity)
         if (payment.payment == 'wallet' || 'Razor Pay') {
             const Walletamount = (orderDetails.products[0].productId.price) * orderDetails.products[0].quantity
-            // console.log(Walletamount, "wallet amount")
 
             const data = {
                 amount: Walletamount,
@@ -356,7 +312,6 @@ const cancelOrder = async (req, res) => {
 
 
         const order = await Order.findOneAndUpdate({ user: userId, 'products._id': productId }, { $set: { 'products.$.productStatus': "cancelled", 'products.$.cancelReason': reason } }, { new: true })
-        // console.log("finish", order)
 
         res.json({ cancel: true })
 
@@ -371,7 +326,6 @@ const returnOrder = async (req, res) => {
         const reason = req.body.returnReason
         const userId = req.session.userId
         const order = await Order.findOneAndUpdate({ user: userId, 'products._id': productId }, { $set: { 'products.$.productStatus': "returned", 'products.$.returnReason': reason } })
-        console.log("finish", order)
         res.json({ return: true })
     } catch (error) {
         console.log(error.message)
@@ -382,7 +336,6 @@ const retryOrder = async(req,res)=>{
     try{
         const subtotal=req.body.subtotal
         const orderId=req.body.orderId
-        console.log(req.body)
         let options = {
             amount: (subtotal*100).toFixed(0),
             currency: "INR",
@@ -390,9 +343,7 @@ const retryOrder = async(req,res)=>{
         }
         const ordering = await razorpay.orders.create(options)
         .then((result) => {
-            console.log("frtfnd", result, "jaguinjbczj");
             const order = result
-            console.log(order, "killed")
             res.json({ success: false, order })
         }).catch(err => {
             console.log(err)

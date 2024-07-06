@@ -113,7 +113,7 @@ user_route.get(
       failureRedirect: '/auth/facebook/error',
     }),
     function (req, res) {
-        console.log("hiii1");
+       
       // Successful authentication, redirect to success screen.
       res.redirect('/success');
     }

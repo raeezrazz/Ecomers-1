@@ -1179,7 +1179,7 @@ console.log(formData,"gd");
                 if(response.success===true){
                     location.href='/successOrder'
                 }else{
-                    console.log("reached here")
+                    console.log("reached here",response.order)
                     razorpayPayment(response.order)
                 }
             }
@@ -1212,7 +1212,7 @@ var options = {
     "theme": {
         "color": "#3399cc"
     }
-};
+}
 console.log("razor pay reached here")
 var rzp1 = new Razorpay(options);
 await rzp1.open()

@@ -158,8 +158,9 @@ const placeOrder = async (req, res) => {
             }
             const ordering = await razorpay.orders.create(options)
                 .then((result) => {
+                    console.log(result,"kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
                     const order = result
-                    res.json({ success: false, order })
+                    res.json({ success: false, order  })
                 }).catch(err => {
                     console.log(err)
                 })
